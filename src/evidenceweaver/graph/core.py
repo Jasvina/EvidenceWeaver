@@ -160,6 +160,25 @@ class EvidenceGraph:
                 claim_ids.append(claim.claim_id)
         return tuple(claim_ids)
 
+    @property
+    def covered_focus_tokens(self) -> tuple[str, ...]:
+        tokens: list[str] = []
+        for claim in self.claim_nodes:
+            for token in claim.focus_tokens:
+                if token not in tokens:
+                    tokens.append(token)
+        return tuple(tokens)
+
+    @property
+    def prompt_focus_coverage_ratio(self) -> float:
+        if not self.prompt_focus:
+            return 1.0
+        return len(self.covered_focus_tokens) / len(self.prompt_focus)
+
+    @property
+    def opened_source_count(self) -> int:
+        return len(self.opened_source_ids)
+
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
@@ -255,6 +274,15 @@ class EvidenceGraphBuilder:
         )
         self._open_questions.append(question)
         return question
+
+    def refresh_open_questions(self, max_tokens: int = 6) -> None:
+        uncovered = self.uncovered_focus_tokens
+        self._open_questions = []
+        if uncovered:
+            self.add_open_question(
+                text=f"Need stronger support for prompt focus terms: {', '.join(uncovered[:max_tokens])}",
+                focus_tokens=uncovered[:max_tokens],
+            )
 
     def build(self) -> EvidenceGraph:
         ordered_sources = tuple(self._source_nodes[source_id] for source_id in sorted(self._source_nodes))

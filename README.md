@@ -268,11 +268,20 @@ The baseline loop is now explicitly graph-aware:
 - opened documents are marked in the evidence graph
 - each generated claim becomes a claim node with support edges back to cited sources
 - uncovered prompt-focus tokens are recorded as open questions
+- those open questions can trigger follow-up search queries on tasks with enough budget
 - the evaluator can enrich a run artifact with a decomposed `reward_bundle`
 
 This gives the repository a concrete closed loop:
 
 `task bundle -> baseline agent -> evidence graph -> run artifact -> evaluator -> reward bundle`
+
+The run artifact now also includes `diagnostics`, including:
+
+- executed search queries
+- iteration count
+- opened source IDs
+- prompt-focus coverage ratio
+- remaining uncovered focus tokens
 
 ## Benchmark Seeds
 

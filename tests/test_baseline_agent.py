@@ -74,9 +74,11 @@ class BaselineAgentTests(unittest.TestCase):
         task = load_task_bundle(REALISTIC_TASK)
         run = BaselineAgent().run(task)
         self.assertIsNotNone(run.evidence_graph)
+        self.assertIsNotNone(run.diagnostics)
         self.assertIsNotNone(run.reward_bundle)
         self.assertEqual(len(run.evidence_graph.claim_nodes), len(run.claims))
         self.assertGreaterEqual(len(run.evidence_graph.opened_source_ids), 1)
+        self.assertEqual(run.diagnostics.opened_source_count, len(run.evidence_graph.opened_source_ids))
         report = evaluate_run(task, run)
         self.assertEqual(run.reward_bundle.total_score, report.metrics["overall_score"])
 
@@ -119,6 +121,16 @@ class BaselineAgentTests(unittest.TestCase):
             scored_run = load_run_artifact(scored_path)
             self.assertIsNotNone(scored_run.reward_bundle)
             self.assertIsNotNone(scored_run.evidence_graph)
+            self.assertIsNotNone(scored_run.diagnostics)
+
+    def test_graph_driven_follow_up_search_occurs_on_snapshot_suite(self) -> None:
+        benchmark_dir = REPO_ROOT / "benchmarks" / "snapshot_v0" / "tasks"
+        iteration_counts = []
+        for path in sorted(benchmark_dir.glob("*.json")):
+            run = run_task(path)
+            iteration_counts.append(run.diagnostics.iteration_count)
+            self.assertGreaterEqual(len(run.diagnostics.search_queries), 1)
+        self.assertTrue(any(count > 1 for count in iteration_counts))
 
 
 if __name__ == "__main__":

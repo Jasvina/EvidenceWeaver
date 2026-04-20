@@ -202,6 +202,31 @@ class RewardBundle:
 
 
 @dataclass(frozen=True, slots=True)
+class RunDiagnostics:
+    search_queries: tuple[str, ...] = ()
+    iteration_count: int = 0
+    opened_source_ids: tuple[str, ...] = ()
+    opened_source_count: int = 0
+    claim_count: int = 0
+    covered_prompt_focus_ratio: float = 0.0
+    uncovered_focus_tokens: tuple[str, ...] = ()
+    notes: tuple[str, ...] = ()
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "RunDiagnostics":
+        return cls(
+            search_queries=_string_tuple(data.get("search_queries", []), "diagnostics.search_queries"),
+            iteration_count=int(data.get("iteration_count", 0)),
+            opened_source_ids=_string_tuple(data.get("opened_source_ids", []), "diagnostics.opened_source_ids"),
+            opened_source_count=int(data.get("opened_source_count", 0)),
+            claim_count=int(data.get("claim_count", 0)),
+            covered_prompt_focus_ratio=float(data.get("covered_prompt_focus_ratio", 0.0)),
+            uncovered_focus_tokens=_string_tuple(data.get("uncovered_focus_tokens", []), "diagnostics.uncovered_focus_tokens"),
+            notes=_string_tuple(data.get("notes", []), "diagnostics.notes"),
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class RunArtifact:
     schema_version: str
     run_id: str
@@ -211,6 +236,7 @@ class RunArtifact:
     actions: tuple[Action, ...] = ()
     final_citations: tuple[str, ...] = ()
     evidence_graph: EvidenceGraph | None = None
+    diagnostics: RunDiagnostics | None = None
     reward_bundle: RewardBundle | None = None
 
     @classmethod
@@ -225,7 +251,9 @@ class RunArtifact:
         )
         raw_reward = data.get("reward_bundle")
         raw_graph = data.get("evidence_graph")
+        raw_diagnostics = data.get("diagnostics")
         evidence_graph = None if raw_graph is None else EvidenceGraph.from_dict(_expect_mapping(raw_graph, "evidence_graph"))
+        diagnostics = None if raw_diagnostics is None else RunDiagnostics.from_dict(_expect_mapping(raw_diagnostics, "diagnostics"))
         reward_bundle = None if raw_reward is None else RewardBundle.from_dict(_expect_mapping(raw_reward, "reward_bundle"))
         return cls(
             schema_version=_expect_string(data.get("schema_version"), "schema_version"),
@@ -236,6 +264,7 @@ class RunArtifact:
             actions=actions,
             final_citations=_string_tuple(data.get("final_citations", []), "final_citations"),
             evidence_graph=evidence_graph,
+            diagnostics=diagnostics,
             reward_bundle=reward_bundle,
         )
 
@@ -244,6 +273,9 @@ class RunArtifact:
 
     def with_evidence_graph(self, evidence_graph: EvidenceGraph) -> "RunArtifact":
         return replace(self, evidence_graph=evidence_graph)
+
+    def with_diagnostics(self, diagnostics: RunDiagnostics) -> "RunArtifact":
+        return replace(self, diagnostics=diagnostics)
 
     def with_reward_bundle(self, reward_bundle: RewardBundle) -> "RunArtifact":
         return replace(self, reward_bundle=reward_bundle)

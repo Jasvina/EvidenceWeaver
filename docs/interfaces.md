@@ -76,6 +76,7 @@ Current repository status:
 - current node types are `SourceNode`, `ClaimNode`, and `OpenQuestion`
 - current edge type is `supports`
 - the baseline agent already emits an `evidence_graph` inside `run-artifact.v0`
+- the baseline agent now uses `open_questions` to drive a follow-up search iteration when budget allows
 
 ## 4. Reward Server Interface
 
@@ -131,7 +132,8 @@ Every run should produce a compact artifact with:
 Current repository status:
 
 - `run-artifact.v0` now supports `evidence_graph` plus `reward_bundle`
-- the baseline agent writes both fields
+- `run-artifact.v0` now also supports `diagnostics`
+- the baseline agent writes all three fields
 
 If these artifacts are easy to read, the project will be much easier to debug and much easier to trust.
 

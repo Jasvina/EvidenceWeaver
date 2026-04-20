@@ -213,3 +213,44 @@
 3. 设计真正的 reward decomposition generation pipeline，而不只是从 evaluator metrics 映射到 `RewardBundle`。
 4. 扩展 benchmark，加入更复杂、更异构、更接近真实 research workflow 的 snapshot tasks。
 5. 在 trainer 选型前，先把 graph + benchmark + reward 的实验合同钉得更牢。
+
+04月21日00时33分
+- 工作：继续把 graph 从“只落在 artifact 里”推进到“真正影响 baseline 行为”。现在 baseline agent 会基于 `open_questions` 和未覆盖的 prompt focus token 构造 follow-up search query，并在预算允许时执行第二轮检索与补充 claim。
+- 结果：EvidenceWeaver 已经不只是 graph-aware output，而是出现了 graph-driven retrieval refinement。至少在 `snapshot_v0` 任务集上，agent 的第二轮检索路径已经真实发生。
+
+04月21日00时33分
+- 工作：新增 `RunDiagnostics`，并把 `diagnostics` 挂到 `run-artifact.v0`。目前包含：
+  - `search_queries`
+  - `iteration_count`
+  - `opened_source_ids`
+  - `opened_source_count`
+  - `claim_count`
+  - `covered_prompt_focus_ratio`
+  - `uncovered_focus_tokens`
+  - `notes`
+- 结果：run artifact 现在不仅有 answer、graph、reward，也有更适合调参与回归分析的 diagnostics 层。
+
+04月21日00时33分
+- 工作：更新 schema、模型、baseline agent、测试与文档，使 `diagnostics` 与 iterative follow-up search 成为正式支持的仓库能力。
+- 结果：README、interfaces、benchmark 文档和 paper draft 已经同步说明：当前 baseline 支持 graph-driven follow-up iteration，而不只是一次性检索。
+
+04月21日00时33分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json --output /tmp/ew_stack_followup.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json /tmp/ew_stack_followup.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json --output /tmp/ew_stability_followup.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json /tmp/ew_stability_followup.json`
+- 验证结果：
+  - 11 个单元测试全部通过。
+  - snapshot suite 中至少一个任务已经发生 `iteration_count > 1` 的 follow-up search。
+  - `agent_training_stack_task` 当前基线分数约为 `0.6667`。
+  - `agentic_rl_stability_task` 当前基线分数约为 `0.9`。
+
+=== 更新后的下一步计划（04月21日00时33分） ===
+
+1. 在 `graph/` 上加入更丰富的 edge / state 语义，例如 contradiction、derived_from、duplicate。
+2. 把 diagnostics 从 run artifact 进一步扩到专门的 eval / debug sidecar，支持更系统的 failure analysis。
+3. 开始设计独立的 reward generation module，而不是仅由 evaluator report 映射得到 reward bundle。
+4. 让 benchmark 中的 task provenance 更标准化，例如加入 source metadata 或 refresh recipe。
+5. 在 trainer 集成前继续扩大 graph-aware baseline 与 benchmark 的实验合同。

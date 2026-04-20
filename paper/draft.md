@@ -175,6 +175,7 @@ The current baseline agent does four things:
 3. selects salient sentences as claim candidates
 4. records claim-to-source support edges in an evidence graph
 5. emits a cited final answer, a structured action trace, and a reward bundle
+6. records diagnostics such as search queries, iteration count, and remaining uncovered prompt-focus terms
 
 This creates a very small but concrete "agent loop" that future RL work can refine.
 
@@ -199,6 +200,8 @@ The current graph implementation is simple, but it still changes the repository 
 - which prompt-focus terms remain under-supported
 
 This is exactly the kind of inspectable state that later reward design and graph-aware policies can build on.
+
+The latest repository version also allows those open questions to drive a second retrieval step when task budget permits. This is still heuristic, but it is a meaningful shift from a graph that merely records state to a graph that already influences behavior.
 
 ## 8. Evaluation Protocol
 

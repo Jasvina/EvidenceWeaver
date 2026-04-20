@@ -131,6 +131,31 @@
         }
       }
     },
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "search_queries": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "iteration_count": {"type": "integer", "minimum": 0},
+        "opened_source_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "opened_source_count": {"type": "integer", "minimum": 0},
+        "claim_count": {"type": "integer", "minimum": 0},
+        "covered_prompt_focus_ratio": {"type": "number"},
+        "uncovered_focus_tokens": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "notes": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
     "reward_bundle": {
       "type": "object",
       "properties": {

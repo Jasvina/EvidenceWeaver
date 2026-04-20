@@ -9,7 +9,7 @@ from typing import Iterable
 
 from evidenceweaver.eval.offline import evaluate_run
 from evidenceweaver.graph import EvidenceGraphBuilder
-from evidenceweaver.models import Action, Document, GeneratedClaim, RunArtifact, TaskBundle, load_task_bundle
+from evidenceweaver.models import Action, Document, GeneratedClaim, RunArtifact, RunDiagnostics, TaskBundle, load_task_bundle
 
 
 STOPWORDS = {
@@ -143,12 +143,27 @@ class BaselineAgent:
         self.max_docs = max_docs
         self.max_claims = max_claims
 
-    def _select_documents(self, task: TaskBundle, hits: list[SearchHit]) -> list[Document]:
+    def _select_documents(self, task: TaskBundle, hits: list[SearchHit], opened_doc_ids: set[str], limit: int) -> list[Document]:
         budget_reads = task.budget.max_document_reads if task.budget and task.budget.max_document_reads else len(task.documents)
-        max_docs = min(self.max_docs or 3, budget_reads, len(hits))
-        return [hit.document for hit in hits[:max_docs]]
+        max_docs = min(limit, budget_reads, len(hits))
+        selected: list[Document] = []
+        for hit in hits:
+            if hit.document.doc_id in opened_doc_ids:
+                continue
+            selected.append(hit.document)
+            if len(selected) >= max_docs:
+                break
+        return selected
 
-    def _select_claims(self, task: TaskBundle, documents: Iterable[Document], graph: EvidenceGraphBuilder) -> list[GeneratedClaim]:
+    def _select_claims(
+        self,
+        task: TaskBundle,
+        documents: Iterable[Document],
+        graph: EvidenceGraphBuilder,
+        seen_claim_texts: set[str],
+        start_index: int,
+        max_claims: int,
+    ) -> list[GeneratedClaim]:
         prompt_tokens = set(_tokenize(task.prompt))
         document_list = list(documents)
         sentence_pool: list[tuple[set[str], float, str, str]] = []
@@ -158,13 +173,7 @@ class BaselineAgent:
                 score = _overlap_score(prompt_tokens, sentence) + _signal_bonus(sentence) + (0.1 if len(sentence) <= 260 else 0.0)
                 sentence_pool.append((sentence_tokens, score, sentence.strip(), document.doc_id))
 
-        max_steps = task.budget.max_steps if task.budget else 8
-        open_count = len(document_list)
-        max_claim_budget = max(1, max_steps - open_count - 2)
-        max_claims = min(self.max_claims or max_claim_budget, max_claim_budget)
-
         claims: list[GeneratedClaim] = []
-        seen: set[str] = set()
         remaining_tokens = set(graph.uncovered_focus_tokens) or set(prompt_tokens)
         while sentence_pool and len(claims) < max_claims:
             best_index = None
@@ -178,13 +187,13 @@ class BaselineAgent:
             assert best_index is not None
             sentence_tokens, _, sentence, doc_id = sentence_pool.pop(best_index)
             key = _dedupe_key(sentence)
-            if not sentence or key in seen:
+            if not sentence or key in seen_claim_texts:
                 continue
-            seen.add(key)
+            seen_claim_texts.add(key)
             remaining_tokens -= sentence_tokens
             claims.append(
                 GeneratedClaim(
-                    claim_id=f"claim-{len(claims) + 1}",
+                    claim_id=f"claim-{start_index + len(claims)}",
                     text=sentence if sentence.endswith((".", "!", "?")) else f"{sentence}.",
                     citations=(doc_id,),
                 )
@@ -193,34 +202,121 @@ class BaselineAgent:
             remaining_tokens = set(graph.uncovered_focus_tokens) or set(prompt_tokens)
         return claims
 
+    def _remaining_read_budget(self, task: TaskBundle, opened_doc_ids: set[str]) -> int:
+        max_reads = task.budget.max_document_reads if task.budget and task.budget.max_document_reads else len(task.documents)
+        return max(0, max_reads - len(opened_doc_ids))
+
+    def _remaining_action_budget(self, task: TaskBundle, actions: list[Action]) -> int:
+        max_steps = task.budget.max_steps if task.budget else 8
+        return max(0, max_steps - len(actions))
+
+    def _build_follow_up_query(self, graph: EvidenceGraphBuilder) -> str | None:
+        uncovered = graph.uncovered_focus_tokens
+        if not uncovered:
+            return None
+        return "evidence for " + " ".join(uncovered[:6])
+
     def run(self, task: TaskBundle, run_id: str | None = None) -> RunArtifact:
         environment = SnapshotEnvironment(task)
         graph = EvidenceGraphBuilder(graph_id=f"graph-{task.task_id}", prompt=task.prompt, documents=task.documents)
         actions: list[Action] = []
+        opened_doc_ids: set[str] = set()
+        seen_claim_texts: set[str] = set()
+        claims: list[GeneratedClaim] = []
+        search_queries: list[str] = []
+        iteration_count = 0
 
-        search_query = task.prompt
-        hits = environment.search(search_query, limit=5)
-        actions.append(Action(kind="search", argument=search_query))
+        while self._remaining_action_budget(task, actions) > 1:
+            if iteration_count == 0:
+                search_query = task.prompt
+            else:
+                search_query = self._build_follow_up_query(graph)
+                if not search_query:
+                    break
 
-        documents = self._select_documents(task, hits)
-        for document in documents:
-            environment.open(document.doc_id)
-            graph.mark_source_opened(document.doc_id)
-            actions.append(Action(kind="open", argument=document.title, document_ids=(document.doc_id,)))
+            iteration_count += 1
+            hits = environment.search(search_query, limit=5)
+            search_queries.append(search_query)
+            actions.append(Action(kind="search", argument=search_query))
 
-        claims = self._select_claims(task, documents, graph)
-        for claim in claims:
-            actions.append(Action(kind="write_claim", argument=claim.text, document_ids=claim.citations))
+            remaining_reads = self._remaining_read_budget(task, opened_doc_ids)
+            if remaining_reads <= 0:
+                break
+            remaining_action_budget = self._remaining_action_budget(task, actions)
+            if remaining_action_budget <= 1:
+                break
+            if iteration_count == 1:
+                total_budget = task.budget.max_steps if task.budget else 8
+                allow_follow_up = total_budget >= 9 and remaining_reads > 0 and len(task.documents) > 2
+                initial_doc_cap = 2 if allow_follow_up else (self.max_docs or 3)
+                target_doc_limit = min(initial_doc_cap, remaining_reads, max(1, remaining_action_budget - 1))
+            else:
+                target_doc_limit = min(1, remaining_reads, max(1, remaining_action_budget - 1))
+            documents = self._select_documents(task, hits, opened_doc_ids, limit=target_doc_limit)
+            if not documents:
+                break
+
+            for document in documents:
+                if self._remaining_action_budget(task, actions) <= 1:
+                    break
+                environment.open(document.doc_id)
+                opened_doc_ids.add(document.doc_id)
+                graph.mark_source_opened(document.doc_id)
+                actions.append(Action(kind="open", argument=document.title, document_ids=(document.doc_id,)))
+
+            documents = [document for document in documents if document.doc_id in opened_doc_ids]
+            if not documents:
+                break
+
+            remaining_unopened_docs = self._remaining_read_budget(task, opened_doc_ids)
+            reserve_actions = 1  # reserve finish
+            total_budget = task.budget.max_steps if task.budget else 8
+            if iteration_count == 1 and remaining_unopened_docs > 0 and total_budget >= 9:
+                reserve_actions += 4  # reserve search + open + one follow-up claim path
+            remaining_claim_budget = max(0, self._remaining_action_budget(task, actions) - reserve_actions)
+            if remaining_claim_budget <= 0:
+                break
+            new_claims = self._select_claims(
+                task,
+                documents,
+                graph,
+                seen_claim_texts=seen_claim_texts,
+                start_index=len(claims) + 1,
+                max_claims=remaining_claim_budget,
+            )
+            for claim in new_claims:
+                claims.append(claim)
+                actions.append(Action(kind="write_claim", argument=claim.text, document_ids=claim.citations))
+
+            graph.refresh_open_questions()
+            if not new_claims and iteration_count > 1:
+                break
+            if not graph.uncovered_focus_tokens:
+                break
 
         final_citations = tuple(dict.fromkeys(doc_id for claim in claims for doc_id in claim.citations))
         answer = " ".join(claim.text for claim in claims) if claims else "No grounded answer could be composed from the available snapshot."
-        uncovered = graph.uncovered_focus_tokens
-        if uncovered:
-            graph.add_open_question(
-                text=f"Need stronger support for prompt focus terms: {', '.join(uncovered[:6])}",
-                focus_tokens=uncovered[:6],
-            )
+        graph.refresh_open_questions()
         actions.append(Action(kind="finish", argument="return cited answer", document_ids=final_citations))
+
+        evidence_graph = graph.build()
+        diagnostics = RunDiagnostics(
+            search_queries=tuple(search_queries),
+            iteration_count=iteration_count,
+            opened_source_ids=evidence_graph.opened_source_ids,
+            opened_source_count=evidence_graph.opened_source_count,
+            claim_count=len(claims),
+            covered_prompt_focus_ratio=round(evidence_graph.prompt_focus_coverage_ratio, 4),
+            uncovered_focus_tokens=evidence_graph.open_questions[0].focus_tokens if evidence_graph.open_questions else (),
+            notes=tuple(
+                note
+                for note in [
+                    "follow-up search executed" if iteration_count > 1 else "",
+                    "remaining prompt focus tokens unresolved" if evidence_graph.open_questions else "",
+                ]
+                if note
+            ),
+        )
 
         run = RunArtifact(
             schema_version="run-artifact.v0",
@@ -230,7 +326,8 @@ class BaselineAgent:
             claims=tuple(claims),
             actions=tuple(actions),
             final_citations=final_citations,
-            evidence_graph=graph.build(),
+            evidence_graph=evidence_graph,
+            diagnostics=diagnostics,
         )
         report = evaluate_run(task, run)
         return run.with_reward_bundle(report.to_reward_bundle())

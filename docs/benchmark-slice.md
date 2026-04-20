@@ -101,6 +101,15 @@ PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
   --emit-scored-run /tmp/evidenceweaver_scored_run.json
 ```
 
+The current baseline is no longer purely one-shot. On tasks with enough budget it can:
+
+- search once
+- build a partial evidence graph
+- derive open questions from uncovered prompt-focus tokens
+- issue a follow-up search query
+- open an additional source
+- produce a richer scored artifact
+
 ## Metrics
 
 At minimum, the first benchmark slice should report:
