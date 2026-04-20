@@ -1,0 +1,45 @@
+<svg width="1400" height="720" viewBox="0 0 1400 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="720" rx="28" fill="#F7F4EE"/>
+  <rect x="72" y="72" width="1256" height="576" rx="24" fill="#FFFDF9" stroke="#D9D1C3" stroke-width="2"/>
+
+  <rect x="118" y="120" width="240" height="108" rx="20" fill="#10263D"/>
+  <rect x="424" y="120" width="240" height="108" rx="20" fill="#16445E"/>
+  <rect x="730" y="120" width="240" height="108" rx="20" fill="#8A5229"/>
+  <rect x="1036" y="120" width="240" height="108" rx="20" fill="#3B315E"/>
+
+  <text x="238" y="168" text-anchor="middle" fill="white" font-size="26" font-family="Verdana, sans-serif">Research Agent</text>
+  <text x="238" y="202" text-anchor="middle" fill="#C8D8E6" font-size="18" font-family="Verdana, sans-serif">plan, search, read, write</text>
+
+  <text x="544" y="168" text-anchor="middle" fill="white" font-size="26" font-family="Verdana, sans-serif">Evidence Graph</text>
+  <text x="544" y="202" text-anchor="middle" fill="#D2F0F2" font-size="18" font-family="Verdana, sans-serif">claims, sources, support</text>
+
+  <text x="850" y="168" text-anchor="middle" fill="white" font-size="26" font-family="Verdana, sans-serif">Reward Heads</text>
+  <text x="850" y="202" text-anchor="middle" fill="#FFE8D2" font-size="18" font-family="Verdana, sans-serif">answer, cite, chain, budget</text>
+
+  <text x="1156" y="168" text-anchor="middle" fill="white" font-size="26" font-family="Verdana, sans-serif">Trainer</text>
+  <text x="1156" y="202" text-anchor="middle" fill="#E0D9F6" font-size="18" font-family="Verdana, sans-serif">online or hybrid RL</text>
+
+  <path d="M358 174H424" stroke="#436D8F" stroke-width="6" stroke-linecap="round"/>
+  <path d="M664 174H730" stroke="#5A7A88" stroke-width="6" stroke-linecap="round"/>
+  <path d="M970 174H1036" stroke="#7D6187" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1156 228V314C1156 396 1086 464 1000 464H384C292 464 224 536 224 616" stroke="#8B7A64" stroke-width="6" stroke-linecap="round"/>
+  <path d="M224 616V562" stroke="#8B7A64" stroke-width="6" stroke-linecap="round"/>
+  <path d="M224 564L204 592" stroke="#8B7A64" stroke-width="6" stroke-linecap="round"/>
+  <path d="M224 564L244 592" stroke="#8B7A64" stroke-width="6" stroke-linecap="round"/>
+
+  <rect x="130" y="514" width="188" height="76" rx="18" fill="#FFFFFF" stroke="#A7A7A7" stroke-width="2"/>
+  <rect x="364" y="514" width="188" height="76" rx="18" fill="#FFFFFF" stroke="#A7A7A7" stroke-width="2"/>
+  <rect x="598" y="514" width="188" height="76" rx="18" fill="#FFFFFF" stroke="#A7A7A7" stroke-width="2"/>
+  <rect x="832" y="514" width="188" height="76" rx="18" fill="#FFFFFF" stroke="#A7A7A7" stroke-width="2"/>
+  <rect x="1066" y="514" width="188" height="76" rx="18" fill="#FFFFFF" stroke="#A7A7A7" stroke-width="2"/>
+
+  <text x="224" y="560" text-anchor="middle" fill="#1F1F1F" font-size="22" font-family="Verdana, sans-serif">Correctness</text>
+  <text x="458" y="560" text-anchor="middle" fill="#1F1F1F" font-size="22" font-family="Verdana, sans-serif">Grounding</text>
+  <text x="692" y="560" text-anchor="middle" fill="#1F1F1F" font-size="22" font-family="Verdana, sans-serif">Chain Quality</text>
+  <text x="926" y="560" text-anchor="middle" fill="#1F1F1F" font-size="22" font-family="Verdana, sans-serif">Source Diversity</text>
+  <text x="1160" y="560" text-anchor="middle" fill="#1F1F1F" font-size="22" font-family="Verdana, sans-serif">Efficiency</text>
+
+  <text x="700" y="660" text-anchor="middle" fill="#5B534B" font-size="26" font-family="Georgia, serif">
+    Reward the answer, but also reward the evidence behind it.
+  </text>
+</svg>

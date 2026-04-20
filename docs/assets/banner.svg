@@ -1,0 +1,44 @@
+<svg width="1600" height="620" viewBox="0 0 1600 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1F33"/>
+      <stop offset="0.5" stop-color="#103A5E"/>
+      <stop offset="1" stop-color="#7A4D2C"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="190" y1="160" x2="1340" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#44C4A1" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#97D5F5" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#F4B266" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="620" rx="28" fill="url(#bg)"/>
+  <rect x="72" y="72" width="1456" height="476" rx="24" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.14"/>
+
+  <circle cx="280" cy="290" r="72" fill="#44C4A1" fill-opacity="0.16" stroke="#44C4A1" stroke-width="2"/>
+  <circle cx="540" cy="190" r="58" fill="#97D5F5" fill-opacity="0.14" stroke="#97D5F5" stroke-width="2"/>
+  <circle cx="814" cy="314" r="76" fill="#F4B266" fill-opacity="0.14" stroke="#F4B266" stroke-width="2"/>
+  <circle cx="1088" cy="196" r="56" fill="#97D5F5" fill-opacity="0.14" stroke="#97D5F5" stroke-width="2"/>
+  <circle cx="1322" cy="328" r="66" fill="#44C4A1" fill-opacity="0.14" stroke="#44C4A1" stroke-width="2"/>
+
+  <path d="M280 290C356 254 434 220 540 190C640 160 726 254 814 314C900 372 1006 238 1088 196C1170 154 1252 242 1322 328" stroke="url(#beam)" stroke-width="8" stroke-linecap="round"/>
+
+  <rect x="196" y="250" width="168" height="80" rx="18" fill="#0A1624" stroke="#44C4A1" stroke-width="2"/>
+  <rect x="462" y="152" width="156" height="76" rx="18" fill="#0A1624" stroke="#97D5F5" stroke-width="2"/>
+  <rect x="724" y="274" width="180" height="82" rx="18" fill="#0A1624" stroke="#F4B266" stroke-width="2"/>
+  <rect x="1008" y="158" width="160" height="76" rx="18" fill="#0A1624" stroke="#97D5F5" stroke-width="2"/>
+  <rect x="1244" y="292" width="156" height="76" rx="18" fill="#0A1624" stroke="#44C4A1" stroke-width="2"/>
+
+  <text x="280" y="298" text-anchor="middle" fill="#EAF7F6" font-size="24" font-family="Verdana, sans-serif">Query</text>
+  <text x="540" y="198" text-anchor="middle" fill="#EAF2FB" font-size="22" font-family="Verdana, sans-serif">Search</text>
+  <text x="814" y="322" text-anchor="middle" fill="#FFF3E4" font-size="24" font-family="Verdana, sans-serif">Evidence Graph</text>
+  <text x="1088" y="204" text-anchor="middle" fill="#EAF2FB" font-size="22" font-family="Verdana, sans-serif">Claims</text>
+  <text x="1322" y="340" text-anchor="middle" fill="#EAF7F6" font-size="22" font-family="Verdana, sans-serif">Rewards</text>
+
+  <text x="120" y="120" fill="#DFF3F0" font-size="18" font-family="Verdana, sans-serif" letter-spacing="4">EVIDENCEWEAVER</text>
+  <text x="120" y="420" fill="white" font-size="68" font-family="Georgia, serif">Train research agents that</text>
+  <text x="120" y="494" fill="white" font-size="68" font-family="Georgia, serif">can show their work.</text>
+  <text x="120" y="548" fill="#D5E6F5" font-size="26" font-family="Verdana, sans-serif">
+    Citation-grounded reinforcement learning for deep research agents
+  </text>
+</svg>
