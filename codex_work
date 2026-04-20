@@ -1,0 +1,106 @@
+给后续 Codex / AI 代理的说明：本文件是当前仓库的持续工作交接文档。到目前为止，我做过的计划、执行过程、结果、验证证据、当前状态和下一步计划，都持续记录在这里。一个完全没有历史上下文的新 AI，接手时应先读这个文件，再看 `README.md`、`docs/`、`paper/`、`schemas/`、`src/` 和 `tests/`，这样可以最快恢复上下文，避免重复调研、重复搭架子或误判当前进度。
+
+项目名：EvidenceWeaver
+本地工作目录：/Users/jasvina/jasvina_github/EvidenceWeaver
+远端仓库：git@github.com:Jasvina/EvidenceWeaver.git
+主分支：main
+项目定位：citation-grounded reinforcement learning for deep research agents
+
+=== 时间线记录 ===
+
+04月20日23时11分
+- 工作：完成仓库第一轮公共叙事搭建，写出图文并茂的 `README.md`，补充 `docs/related-work.md`、`docs/research-agenda.md`、`docs/reward-design.md`、`docs/benchmark-slice.md`、`paper/outline.md`，并加入 `docs/assets/banner.svg` 与 `docs/assets/evidence-loop.svg`。
+- 结果：仓库从空白页变成一个可以对外介绍的研究项目首页，明确了项目 thesis、路线图、研究问题和早期方向。
+- 关联提交：`9559e61`
+
+04月20日23时15分
+- 工作：补充 `docs/interfaces.md`，并创建 `.github/ISSUE_TEMPLATE/` 下的 benchmark / reward / failure case issue 模板。
+- 结果：仓库从“只有想法”推进到“可以结构化收集协作输入”的状态，后续 benchmark、reward、failure case 可以用 GitHub issue 原生流程沉淀。
+- 关联提交：`85bb653`
+
+04月20日23时34分
+- 工作：把项目从纯文档仓库推进成可执行的最小研究 scaffold。新增 `pyproject.toml`、`src/evidenceweaver/`、`schemas/`、`examples/`、`tests/`、`paper/draft.md`、`LICENSE`，并更新 `README.md` 与 `docs/benchmark-slice.md`。
+- 结果：仓库现在已经有最小可运行骨架：
+  - `schemas/task-bundle.v0.json` 与 `schemas/run-artifact.v0.json` 定义了 benchmark 输入输出契约。
+  - `src/evidenceweaver/models.py` 提供任务、运行轨迹和评估报告的结构化加载与校验。
+  - `src/evidenceweaver/eval/offline.py` 提供离线 evaluator，可对一个 task bundle + run artifact 输出 evidence-centric metrics。
+  - `examples/tasks/synthetic_delay_task.json` 与 `examples/runs/*.json` 提供了一个 synthetic snapshot-based benchmark 样例。
+  - `tests/test_evaluator.py` 覆盖了解析、CLI 评估和 good run vs weak run 的对比检查。
+  - `paper/draft.md` 已经从 outline 扩成 pre-results working draft。
+- 关联提交：`22886a6`
+
+04月20日23时36分
+- 工作：按用户最新要求，将本地工作目录统一放到 `/Users/jasvina/jasvina_github/EvidenceWeaver`，并新增根目录工作交接文件 `codex_work`。
+- 结果：后续任何新 AI 都可以先读这一个文件快速接管，不需要依赖会话历史；本地工作路径也已经与用户指定目录统一。
+- 备注：此前仓库曾在 `/Users/jasvina/EvidenceWeaver` 工作，现已迁移到用户指定目录。
+
+=== 当前结果 ===
+
+1. 仓库已经不是空壳：
+- 有项目首页与视觉资产。
+- 有相关工作、研究议程、reward 设计、benchmark slice、接口草案。
+- 有 pre-results paper draft。
+- 有最小 Python 包、schema、example artifacts 和 tests。
+
+2. 当前已经落地的关键文件：
+- `README.md`
+- `docs/related-work.md`
+- `docs/research-agenda.md`
+- `docs/reward-design.md`
+- `docs/benchmark-slice.md`
+- `docs/interfaces.md`
+- `paper/outline.md`
+- `paper/draft.md`
+- `schemas/task-bundle.v0.json`
+- `schemas/run-artifact.v0.json`
+- `src/evidenceweaver/models.py`
+- `src/evidenceweaver/eval/offline.py`
+- `tests/test_evaluator.py`
+
+3. 当前 evaluator 输出的核心指标包括：
+- `answer_coverage`
+- `citation_coverage`
+- `citation_precision`
+- `chain_completeness`
+- `source_diversity`
+- `budget_efficiency`
+- `unsupported_claim_rate`
+- `overall_score`
+
+4. 当前的 benchmark/example 还只是 synthetic v0，不是正式实验 benchmark。
+- 这套样例的目的不是拿结果，而是固定接口、固定 artifact 形状、固定测试路径。
+
+=== 验证记录 ===
+
+已完成的本地验证：
+- `git diff --check`
+- `PYTHONPATH=src python3 -m compileall src`
+- `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+- `PYTHONPATH=src python3 -m evidenceweaver.eval.offline examples/tasks/synthetic_delay_task.json examples/runs/synthetic_delay_good_run.json`
+- 对 `schemas/*.json` 与 `examples/*.json` 进行了 JSON 解析检查
+
+已知验证结果：
+- 3 个单元测试通过。
+- synthetic good run 在当前 evaluator 下得到满分 `overall_score = 1.0`。
+- weak run 分数低于 good run，说明当前 evaluator 至少具备最基本的区分能力。
+
+=== 当前状态判断 ===
+
+当前仓库状态可以概括为：
+- 已完成：项目定位、对外叙事、协作入口、v0 schema、v0 evaluator、synthetic example、paper draft。
+- 未完成：真实 benchmark slice、真实 agent loop、evidence graph 实现、reward server、训练脚本、ablation、正式实验结果。
+- 风险点：
+  - evaluator 还是 heuristic，不是 learned reward model。
+  - example benchmark 还是 synthetic，尚未绑定真实研究任务数据。
+  - `paper/draft.md` 是 pre-results draft，不能误读成已有实验结论的论文。
+
+=== 下一步计划 ===
+
+优先级最高的下一步建议：
+1. 在 `examples/` 之外引入第一版更真实的 snapshot-based benchmark slice。
+2. 开始实现 `src/evidenceweaver/agent/` 的最小 search-read-write loop。
+3. 在 `src/evidenceweaver/` 内加入 evidence graph 数据结构，而不只是文档级 citation 检查。
+4. 把 `offline evaluator` 扩成更可解释的 claim-level diagnostics 输出。
+5. 让 `paper/draft.md` 与代码结构同步，逐步补成方法、实验、局限性更完整的论文草稿。
+
+如果未来有新的工作，请继续按“时间 + 做了什么 + 结果 + 下一步”的格式追加在本文件末尾。
