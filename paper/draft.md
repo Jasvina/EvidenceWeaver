@@ -4,144 +4,279 @@ Status: pre-results working draft
 
 ## Abstract
 
-Deep research agents increasingly rely on long-horizon tool use, retrieval, and synthesis, yet most training signals still prioritize final-task success over evidence quality. This creates a mismatch between what users need from research systems and what current agentic reinforcement learning objectives optimize. We propose EvidenceWeaver, a research-agent training framework centered on citation-grounded reinforcement learning, structured evidence memory, and evidence-centric evaluation. The core idea is to move from scalar outcome reward toward decomposed signals for answer coverage, citation support quality, evidence-chain completeness, source diversity, and budget efficiency. EvidenceWeaver pairs those signals with a lightweight evidence graph so the agent can track which claims are already supported, contradicted, or unresolved. Because long-horizon reinforcement learning is known to fail in subtle ways, the project also treats stability diagnostics as a first-class component rather than an afterthought. This draft describes the problem setting, method, benchmark recipe, and experimental agenda for a reproducible open-source research program.
+Deep research agents increasingly rely on long-horizon tool use, retrieval, and synthesis, yet most current training signals still over-index on final-task success and under-index on evidence quality. This creates a mismatch between what users need from research systems and what many agentic reinforcement learning objectives optimize. We propose EvidenceWeaver, a research program and open-source scaffold for citation-grounded reinforcement learning in deep research agents. The core idea is to move beyond scalar outcome reward and optimize decomposed signals for answer coverage, citation support quality, evidence-chain completeness, source diversity, and budget efficiency. EvidenceWeaver couples those signals with structured evidence memory and evidence-centric evaluation so the resulting agents can be inspected rather than merely admired. The repository already contains a `v0` task and run schema, a deterministic search-read-write baseline agent, a heuristic offline evaluator, and a small snapshot-based benchmark seed set. This draft lays out the motivation, problem setting, method hypothesis, executable artifact, benchmark strategy, and experimental agenda for turning EvidenceWeaver into a serious research artifact.
 
 ## 1. Introduction
 
-The most compelling research-agent demos today can search, browse, read, and synthesize across many steps. But practical usefulness depends on more than final answer quality. In real research workflows, a strong answer needs to be inspectable: a reviewer should be able to trace a claim back to its sources, understand what evidence was used, and notice where the support chain is weak.
+The strongest agent demos are no longer pure next-token systems. They plan, search, browse, inspect evidence, call tools, and synthesize across many steps. That shift from single-turn response generation to long-horizon interaction has made reinforcement learning newly relevant: the quality of an agent now depends on what actions it chooses, what evidence it collects, and how it spends a limited interaction budget.
 
-Current agentic RL work has pushed the field forward on long-horizon interaction, training infrastructure, and task-specific environments. Recent work such as [RAGEN](https://arxiv.org/abs/2504.20073), [RAGEN-2](https://arxiv.org/abs/2604.06268), and [ARLArena](https://arxiv.org/abs/2602.21534) has made it increasingly clear that long-horizon RL stability is its own problem, not just a scaling detail. In parallel, systems such as [Agent Lightning](https://arxiv.org/abs/2508.03680), [AgentRL](https://arxiv.org/abs/2510.04206), and [rLLM](https://github.com/rllm-org/rllm) have made it easier to train or fine-tune agent programs. Deep search agents such as [ASearcher](https://arxiv.org/abs/2508.07976), [DeepDive](https://github.com/THUDM/DeepDive), and [CaRR](https://github.com/THUDM/CaRR) suggest that evidence-sensitive optimization is both possible and valuable.
+At the same time, the standard of usefulness for research agents is different from the standard for chat-only assistants. A research agent should not merely return a plausible conclusion. It should return a conclusion that a human can inspect. That means a user should be able to ask: where did this claim come from, what evidence supports it, what evidence was ignored, and how strong is the support chain from sources to final answer?
 
-This draft argues that deep research agents are a particularly important setting for the next phase of agentic RL. They are useful enough to matter, open-ended enough to expose long-horizon failure modes, and structured enough to support evidence-centric evaluation. EvidenceWeaver is our attempt to turn that opportunity into a practical research program.
+This is the motivating gap behind EvidenceWeaver. In many settings, final-task success is necessary but not sufficient. A deep research agent that gives a correct answer for the wrong reasons is still operationally risky. A research agent that cannot show its work is harder to trust, harder to debug, and harder to improve.
 
-## 2. Problem Setting
+Recent agentic RL work has made three things increasingly clear.
 
-We consider tasks where an agent receives a research question and interacts with a bounded environment of searchable or browsable sources. The agent may issue tool calls, inspect documents, record intermediate claims, and produce a final cited answer. Unlike pure question answering, the system is not judged solely by whether it reaches a plausible final statement. It is also judged by whether its claims are actually supported.
+First, long-horizon interaction matters. Systems such as [ASearcher](https://arxiv.org/abs/2508.07976) show that search behavior can extend far beyond ten turns. Software and computer-use agents such as [SWE-RL](https://arxiv.org/abs/2502.18449), [SWE-Master](https://github.com/RUCAIBox/SWE-Master), and [ComputerRL](https://arxiv.org/abs/2508.14040) demonstrate that long trajectories and realistic tools reshape the learning problem.
 
-This setting creates three linked challenges.
+Second, training infrastructure matters. [Agent Lightning](https://arxiv.org/abs/2508.03680), [AgentRL](https://arxiv.org/abs/2510.04206), and [rLLM](https://github.com/rllm-org/rllm) make the space of trainable agent programs much more accessible by decoupling or abstracting parts of the training pipeline.
 
-First, reward design is hard. If we only reward final answers, the agent may learn to produce fluent but weakly supported conclusions. If we only reward local evidence matching, the agent may become conservative and stop exploring. Second, memory is hard. Flat context accumulation encourages repeated retrieval, weak source tracking, and fragile synthesis. Third, stability is hard. Long-horizon RL can look healthy in top-line reward while the policy quietly collapses into repetitive or shallow patterns.
+Third, stability matters. [RAGEN](https://arxiv.org/abs/2504.20073), [RAGEN-2](https://arxiv.org/abs/2604.06268), and [ARLArena](https://arxiv.org/abs/2602.21534) argue that multi-turn agentic RL can fail in subtle ways: repetitive action templates, collapsed exploration, and apparently healthy statistics masking degraded behavior.
 
-EvidenceWeaver treats these three problems as one design surface rather than as isolated modules.
+EvidenceWeaver is built on the claim that deep research agents are one of the most important places to bring these lessons together. They are practically useful, evaluation-relevant, and still under-served by current reward design.
 
-## 3. Method Overview
+## 2. Problem Statement
 
-EvidenceWeaver has three primary ingredients.
+We study bounded research tasks in which an agent receives a question, interacts with a finite snapshot environment, and returns a cited answer. The environment contains a collection of documents, metadata, and evaluation expectations. The agent may search, open documents, write intermediate claims, and finish with a final response.
 
-### 3.1 Decomposed evidence-centric rewards
+The project is motivated by three linked failures of current practice.
 
-Instead of a single scalar task reward, EvidenceWeaver proposes separate terms for:
+### 2.1 Outcome-only reward is too coarse
 
-- answer coverage or task success
-- citation support quality
-- evidence-chain completeness
-- source diversity
-- budget efficiency
+If we reward only final task success, then the agent can learn behaviors that look productive but are weakly grounded. A fluent answer with thin evidence can still score well if the final target is forgiving. In research workflows, that is not good enough.
 
-The immediate reason for decomposing reward is interpretability. If a training run improves, we should know whether it improved because the agent became more correct, because it started citing better evidence, or because it simply learned to exploit a narrower part of the environment.
+### 2.2 Flat memory hides evidence structure
 
-### 3.2 Evidence graph memory
+Many agent implementations reduce the trajectory to a text blob: searched queries, copied snippets, and partial summaries all collapse into a single context window. This makes it harder to tell which claims are already supported, which are contradictory, and which still need verification.
 
-The agent maintains a lightweight evidence graph with claim nodes, source nodes, and support or contradiction edges. This graph is intentionally small in the first version. Its purpose is not to implement sophisticated symbolic reasoning; its purpose is to avoid treating the agent's working memory as an unstructured text dump.
+### 2.3 Long-horizon RL is unstable
 
-A graph-based memory can support several useful operations early:
+Even if the task is well-defined, the learning dynamics can still be fragile. Exploration can collapse. Reward can become dominated by shortcuts. Template-like trajectories can emerge while top-line metrics remain deceptively calm.
 
-- listing unsupported claims
-- tracing a conclusion back to its sources
-- detecting duplicate or contradictory evidence
-- exposing what the agent still needs to verify
+EvidenceWeaver treats these as one design surface. The project is not only about training agents. It is about defining what should count as success for research agents and making that success measurable.
 
-### 3.3 Stability-aware training diagnostics
+## 3. Core Thesis
 
-EvidenceWeaver borrows its caution from recent long-horizon RL work. We expect collapse modes such as repeated action templates, citation stuffing, shallow source loops, and answers that look grounded but depend on redundant evidence. The project therefore treats diagnostics as first-class artifacts. A good run should ship not only trajectories and scores, but also the traces that explain why those scores moved.
+EvidenceWeaver is built around three research bets.
 
-## 4. Evaluation Philosophy
+### 3.1 Bet one: reward decomposition is better than scalar outcome reward
 
-A central claim of this project is that research-agent evaluation should separate answer quality from evidence quality.
+The first bet is that a research agent should be optimized with multiple interpretable reward terms rather than a single final score. A useful starting decomposition is:
 
-We therefore propose two metric families.
+- `R_answer`: does the answer cover the task?
+- `R_citation`: are key claims properly supported?
+- `R_chain`: is there a coherent evidence path from sources to conclusion?
+- `R_diversity`: did the agent use varied evidence rather than loop on one source?
+- `R_efficiency`: did the agent spend its budget well?
 
-### 4.1 Task-level metrics
+The point is not only better optimization. The point is better diagnosis. If a run improves, we want to know why.
 
-These metrics capture whether the answer is useful at all:
+### 3.2 Bet two: evidence should be explicit structure, not implicit residue
 
-- answer accuracy or coverage
-- answer completeness
-- latency
-- tool budget consumption
+The second bet is that a research agent should maintain a lightweight evidence graph. Even a minimal graph with claim nodes, source nodes, and support or contradiction edges can be more useful than an opaque pile of copied text. In the long run, the graph should help the agent identify unsupported claims, explain why a conclusion is justified, and support more targeted reward shaping.
 
-### 4.2 Evidence-level metrics
+### 3.3 Bet three: stability diagnostics are part of the method
 
-These metrics capture whether the answer deserves trust:
+The third bet is methodological. Long-horizon RL is not stable enough to treat diagnostics as optional. The repository should make it easy to inspect action repetition, support redundancy, source diversity collapse, and claim-level failures. A project that only reports top-line task reward is not good enough for this setting.
 
-- citation precision
-- citation coverage for key claims
-- evidence-chain completeness
-- unsupported-claim rate
-- source diversity
+## 4. Relation to Prior Work
 
-The current repository already contains a minimal offline evaluator implementing a first-pass version of this idea on a synthetic benchmark task. The evaluator is intentionally simple, but it forces the project to make its scoring assumptions explicit rather than vague.
+EvidenceWeaver is not trying to replace the recent wave of general agent-training frameworks. It is trying to specialize the objective and evaluation story for research agents.
 
-## 5. Benchmark Strategy
+### 4.1 Stability and training science
 
-The first benchmark should not aim for maximum realism. It should aim for reproducibility.
+The strongest immediate influence comes from work such as [RAGEN](https://arxiv.org/abs/2504.20073), [RAGEN-2](https://arxiv.org/abs/2604.06268), and [ARLArena](https://arxiv.org/abs/2602.21534). These papers reinforce a key lesson: agentic RL instability is not a corner case. It is central.
 
-That implies starting with a bounded, snapshot-based deep research setting in which:
+### 4.2 Training infrastructure
 
-- each task has a fixed prompt
-- the environment exposes a stable set of documents
-- the agent must answer with citations
-- evaluation is deterministic enough to compare runs over time
+Frameworks such as [Agent Lightning](https://arxiv.org/abs/2508.03680), [AgentRL](https://arxiv.org/abs/2510.04206), and [rLLM](https://github.com/rllm-org/rllm) make it increasingly plausible to train agent programs without rewriting everything from scratch. EvidenceWeaver should use that trend, not compete with it. The novelty target is not "yet another trainer"; it is evidence-sensitive optimization and evaluation.
 
-This does not replace live-web evaluation. It creates a controllable substrate that makes debugging reward and training behavior possible.
+### 4.3 Deep search and research agents
 
-## 6. Repository Agenda
+Systems such as [ASearcher](https://arxiv.org/abs/2508.07976), [DeepDive](https://github.com/THUDM/DeepDive), and [CaRR](https://github.com/THUDM/CaRR) are the closest conceptual neighbors. They suggest that long-horizon search, synthetic data, and citation-aware reward design are converging on a common insight: deep research agents need richer learning signals than outcome-only success.
 
-The open-source repository is designed to grow in three layers.
+## 5. Repository Artifact: What Exists Today
 
-### 6.1 Layer one: research contract
+EvidenceWeaver is still pre-results, but it is no longer just an idea. The repository already exposes a minimal executable artifact with enough structure to support iterative research.
 
-The docs define the problem, the benchmark slice, the interface boundaries, and the reward design surface.
+### 5.1 Schemas
 
-### 6.2 Layer two: executable baseline
+The repository defines:
 
-The codebase starts with a small Python package containing:
+- `schemas/task-bundle.v0.json`
+- `schemas/run-artifact.v0.json`
 
-- task and run schemas
-- a minimal offline evaluator
-- example task bundles and trajectories
-- tests that keep the scoring logic honest
+These schemas formalize the contract between benchmark tasks, agent outputs, and evaluation. That matters because many early research repositories fail by letting interfaces drift before evaluation is stable.
 
-### 6.3 Layer three: training system
+### 5.2 Python package
 
-Once the benchmark slice is stable, the project can add:
+The `src/evidenceweaver/` package currently includes:
 
-- a small search-read-write agent loop
-- evidence graph state updates
-- reward-server integration
-- trainer adapters for a chosen RL stack
+- typed data loaders and validation helpers
+- a deterministic search-read-write baseline agent
+- a heuristic offline evaluator that produces evidence-centric metrics
 
-This staged approach is deliberate. Many open-source research repositories become hard to reason about because they rush into infrastructure before they have agreed on what the system is supposed to prove.
+The baseline agent is intentionally modest. It searches a snapshot task, opens top-ranked documents, extracts sentence-level claims, and emits a `run-artifact.v0` JSON structure with citations and actions.
 
-## 7. Expected Failure Modes
+### 5.3 Example artifacts
 
-We do not expect the first training recipe to work cleanly. The most likely failure modes include:
+The repository includes a fully synthetic task under `examples/` and a more realistic seed benchmark under `benchmarks/snapshot_v0/`.
 
-- citation stuffing without genuine support
-- over-conservative policies that stop exploring too early
-- duplicate evidence that creates the illusion of confidence
-- policies that optimize local support but lose global synthesis quality
-- reward instability that encourages templated trajectories
+The synthetic task exists to lock down interfaces and tests. The snapshot benchmark exists to make the first "real-ish" research loop possible without waiting for a large frozen-web benchmark.
 
-Publishing these failures is part of the project, not a sign that the project failed.
+### 5.4 Tests
 
-## 8. Limitations
+The repository already verifies:
 
-EvidenceWeaver is currently a pre-results program. The present repository does not claim a state-of-the-art agent, a validated benchmark, or a stable RL recipe. The evaluator is heuristic, the benchmark slice is intentionally small, and the evidence graph design is still under active refinement. These limitations are acceptable at this stage because the current goal is to establish a crisp, reproducible research direction.
+- task and run loading
+- CLI output paths
+- evaluator behavior on strong versus weak runs
+- baseline-agent execution on both synthetic and realistic tasks
 
-## 9. Conclusion
+That is not glamorous, but it is essential. A research project that wants to study reward design should not have ambiguous artifact contracts.
 
-Agentic RL is moving from single-turn reasoning toward long-horizon interaction, but research agents still need better objectives. EvidenceWeaver proposes that correctness is only one part of the target: grounding, traceability, and evidence quality should also be optimized directly. If this thesis is right, then research-agent training should become easier to audit, easier to debug, and more aligned with how people actually decide whether an answer is trustworthy.
+## 6. Snapshot Benchmark v0
+
+A major step in this round of work is the creation of the first more realistic snapshot benchmark seeds.
+
+### 6.1 Why snapshot-based first
+
+The repository deliberately starts with snapshot tasks instead of live-web tasks because:
+
+- reproducibility is much higher
+- debugging is much easier
+- evaluation noise is lower
+- reward assumptions become visible sooner
+
+This is a strategic decision, not a philosophical one. The goal is eventually to support richer environments, but frozen tasks are a better place to begin reward and benchmark design.
+
+### 6.2 Current tasks
+
+The benchmark currently contains three tasks.
+
+#### Stability task
+
+`agentic_rl_stability_task` asks the agent to explain why recent agentic RL work treats stability as a first-class issue and to cite concrete failure modes or stabilization mechanisms.
+
+#### Training stack task
+
+`agent_training_stack_task` asks the agent to compare the structural emphasis of Agent Lightning, AgentRL, and rLLM.
+
+#### Deep search reward task
+
+`deep_search_reward_task` asks why deep search agents need evidence-sensitive rewards beyond outcome-only success.
+
+These tasks are all domain-relevant to the project itself, which makes them useful as both benchmark seeds and living design probes.
+
+### 6.3 Provenance model
+
+The benchmark documents are paraphrased digests anchored to primary-source URLs. That decision keeps the benchmark lightweight and avoids copying large web pages into the repository. The cost is that the benchmark is not yet a high-fidelity frozen-web benchmark. The benefit is that the project can already reason about realistic task shape, provenance, and evaluation.
+
+## 7. Minimal Baseline Agent
+
+The repository now contains a deterministic baseline agent. This is not the eventual research target. It is the first executable scaffold for the task format.
+
+### 7.1 Agent loop
+
+The current baseline agent does four things:
+
+1. searches over the snapshot documents using prompt-token overlap
+2. opens a bounded number of documents under a task budget
+3. selects salient sentences as claim candidates
+4. emits a cited final answer and a structured action trace
+
+This creates a very small but concrete "agent loop" that future RL work can refine.
+
+### 7.2 Why a deterministic baseline matters
+
+A deterministic baseline offers several practical benefits:
+
+- regression testing becomes easy
+- interface design becomes easier to reason about
+- evaluator changes can be tested without stochastic noise
+- the repository can begin collecting benchmark artifacts immediately
+
+In other words, a humble baseline is useful precisely because it is boring.
+
+## 8. Evaluation Protocol
+
+EvidenceWeaver's evaluator currently reports:
+
+- `answer_coverage`
+- `citation_coverage`
+- `citation_precision`
+- `chain_completeness`
+- `source_diversity`
+- `budget_efficiency`
+- `unsupported_claim_rate`
+- `overall_score`
+
+This metric set is intentionally interpretable. It is more important, at this stage, to expose what the evaluator thinks it is measuring than to maximize benchmark sophistication.
+
+The current evaluator is heuristic and should be described honestly as such. It uses keyword and phrase overlap plus citation checks over claim annotations. That means it is good enough to support iteration, but not yet good enough to support strong scientific claims.
+
+## 9. Planned Method Evolution
+
+The current repository suggests a staged path toward a real research contribution.
+
+### 9.1 Stage one: stabilize contracts
+
+This stage is already underway. The main goal is to freeze task and run formats, keep the evaluator inspectable, and widen the benchmark slowly.
+
+### 9.2 Stage two: add evidence graph memory
+
+The next major code change should be a lightweight evidence graph. At minimum, the graph should allow the agent to:
+
+- register claims explicitly
+- attach supporting evidence to claims
+- surface unsupported claims
+- emit compact reasoning traces
+
+### 9.3 Stage three: add reward-side experimentation
+
+Once the benchmark and artifact path are stable enough, the repository should add reward bundles that can be produced offline and then used online. This could begin with heuristic reward decomposition and later move toward verifier- or rubric-backed scoring.
+
+### 9.4 Stage four: train policies, not just evaluate them
+
+Only after the benchmark and reward surfaces are reasonably stable should the project pick a trainer stack and begin systematic RL experiments. Otherwise, the repository risks conflating benchmark instability, evaluator errors, and actual learning signal improvements.
+
+## 10. Experimental Agenda
+
+A credible paper from this project should eventually answer at least five questions.
+
+1. Does decomposed reward improve evidence quality relative to outcome-only reward?
+2. Does evidence-graph memory help training, inference, or both?
+3. Which diagnostics predict long-horizon collapse earliest?
+4. Which benchmark dimensions matter most for research-agent evaluation?
+5. How much performance tradeoff exists between answer quality and evidence quality?
+
+The first publishable evidence will likely come from ablations rather than from a huge absolute benchmark win.
+
+## 11. Risks and Failure Modes
+
+There are several obvious ways this project could go wrong.
+
+### 11.1 Reward hacking
+
+A policy could learn to cite frequently without citing meaningfully.
+
+### 11.2 Evaluator overfitting
+
+A simple heuristic evaluator can be gamed, especially if the benchmark remains small.
+
+### 11.3 Benchmark narrowness
+
+A too-small snapshot suite can produce optimistic conclusions that do not generalize.
+
+### 11.4 Infrastructure drift
+
+If the repository expands into a full framework before the benchmark contract is stable, it may become hard to interpret what any improvement actually means.
+
+These risks are not reasons to stop. They are reasons to document failure carefully.
+
+## 12. Limitations of the Current Draft
+
+This repository is still pre-results. It does not claim:
+
+- a state-of-the-art agent
+- a validated RL recipe
+- a mature evidence graph implementation
+- a production-quality research benchmark
+
+The current artifact is a scaffold, not a finished system. That limitation is acceptable because the repository is already useful as a design object: it makes the interfaces, benchmark assumptions, and evaluation philosophy concrete enough to test.
+
+## 13. Conclusion
+
+EvidenceWeaver starts from a simple idea: research agents should be optimized not just to answer, but to justify. If that idea is right, then the future of agentic RL for research systems will require better reward decomposition, better evidence structure, and better stability diagnostics. The current repository is an attempt to make that agenda executable, inspectable, and open to collaboration.
 
 ## References
 

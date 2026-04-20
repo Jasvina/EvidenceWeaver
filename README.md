@@ -61,9 +61,11 @@ EvidenceWeaver is built around three bets:
 
 This repository now includes a minimal Python scaffold so the project can move from ideas to inspectable artifacts:
 
+- `src/evidenceweaver/agent/` contains a deterministic search-read-write baseline agent
 - `src/evidenceweaver/` contains typed loaders and a small offline evaluator
 - `schemas/` defines `v0` JSON schemas for task bundles and run artifacts
 - `examples/` contains a synthetic snapshot-based task plus good and weak runs
+- `benchmarks/snapshot_v0/` contains the first more realistic paraphrased snapshot benchmark seeds
 - `tests/` verifies parsing, scoring, and the CLI path
 
 Quick local checks:
@@ -73,6 +75,8 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
   examples/tasks/synthetic_delay_task.json \
   examples/runs/synthetic_delay_good_run.json
+PYTHONPATH=src python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json
 ```
 
 ## What We Are Building
@@ -148,7 +152,7 @@ That first version is intentionally modest. The goal is not to solve all agentic
 
 ### Phase 1 - Minimal Research Baseline
 
-- [ ] Build a simple search-read-write agent loop
+- [x] Build a simple search-read-write agent loop
 - [ ] Implement evidence graph memory
 - [ ] Implement citation grounding reward
 - [x] Add offline evaluation for answer quality and citation quality
@@ -202,6 +206,8 @@ This repository is still at day zero, but the intended layout is already visible
 |-- CONTRIBUTING.md
 |-- .github/
 |   `-- ISSUE_TEMPLATE/
+|-- benchmarks/
+|   `-- snapshot_v0/
 |-- schemas/
 |-- src/
 |   `-- evidenceweaver/
@@ -222,9 +228,44 @@ This repository is still at day zero, but the intended layout is already visible
 - [`schemas/run-artifact.v0.json`](schemas/run-artifact.v0.json) - the `v0` run artifact contract
 - [`examples/tasks/synthetic_delay_task.json`](examples/tasks/synthetic_delay_task.json) - a synthetic snapshot-based benchmark example
 - [`examples/runs/synthetic_delay_good_run.json`](examples/runs/synthetic_delay_good_run.json) - a strong example trajectory artifact
+- [`benchmarks/snapshot_v0/README.md`](benchmarks/snapshot_v0/README.md) - the first realistic snapshot benchmark seeds and provenance notes
 - [`paper/draft.md`](paper/draft.md) - the current pre-results paper draft
 - [`paper/outline.md`](paper/outline.md) - an early paper structure for the project
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - how to contribute high-signal ideas and changes
+
+## Baseline Agent
+
+The repository now includes a deterministic baseline agent that can search, read, write claims, and emit a `run-artifact.v0` JSON file.
+
+Run the agent on a task:
+
+```bash
+PYTHONPATH=src python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  --output /tmp/evidenceweaver_run.json
+```
+
+Score the generated run:
+
+```bash
+PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json
+```
+
+This baseline is intentionally simple. It is not meant to be competitive; it is meant to give the project a stable executable reference point for interface design, evaluation changes, and future RL work.
+
+## Benchmark Seeds
+
+`benchmarks/snapshot_v0/` is the first step beyond the fully synthetic example in `examples/`.
+
+Current tasks:
+
+- `agentic_rl_stability_task` - why recent work treats stability as a core issue
+- `agent_training_stack_task` - how Agent Lightning, AgentRL, and rLLM structure training
+- `deep_search_reward_task` - why deep search agents need evidence-sensitive rewards
+
+These tasks use paraphrased snapshot digests anchored to primary-source URLs, which keeps the repository lightweight while still exercising research-style synthesis and citation behavior.
 
 ## Related Work Snapshot
 

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 
 class ValidationError(ValueError):
@@ -151,6 +151,9 @@ class TaskBundle:
             if missing_deps:
                 raise ValidationError(f"required claim {claim.claim_id} depends on missing claims: {sorted(missing_deps)}")
 
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
 
 @dataclass(frozen=True, slots=True)
 class GeneratedClaim:
@@ -229,6 +232,9 @@ class RunArtifact:
             final_citations=_string_tuple(data.get("final_citations", []), "final_citations"),
             reward_bundle=reward_bundle,
         )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass(frozen=True, slots=True)

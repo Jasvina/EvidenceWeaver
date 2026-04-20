@@ -1,0 +1,54 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "agentic-rl-stability-task",
+  "prompt": "Explain why recent agentic RL work treats stability as a first-class problem, and cite concrete failure modes or stabilization mechanisms.",
+  "reference_answer": "Recent agentic RL work treats stability as a first-class problem because long-horizon training can collapse even when surface metrics look healthy. RAGEN-2 highlights template collapse and input-agnostic reasoning hidden from entropy, while ARLArena emphasizes training collapse in longer interactive settings and proposes SAMPO as a stabilization method. RAGEN also helps frame multi-turn reasoning as trajectory-level RL rather than isolated prompting.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN overview digest",
+      "url": "https://arxiv.org/abs/2504.20073",
+      "content": "RAGEN frames interactive reasoning as trajectory-level multi-turn reinforcement learning in stochastic environments. The project treats agent reasoning as a sequential control problem instead of isolated single-turn prompting, which makes long-horizon stability and credit assignment important.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "RAGEN-2 stability digest",
+      "url": "https://arxiv.org/abs/2604.06268",
+      "content": "RAGEN-2 says recent multi-turn agentic RL treats stability as a first-class problem because long-horizon training can collapse. It identifies template collapse, where trajectories look diverse by entropy but become input-agnostic, and it proposes mutual information proxies plus SNR-aware filtering to diagnose and mitigate the problem.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "ARLArena digest",
+      "url": "https://arxiv.org/abs/2602.21534",
+      "content": "ARLArena says agentic RL often leads to training collapse in larger environments and longer interaction horizons. It builds a standardized testbed, decomposes instability sources, and proposes SAMPO as a stable agentic policy optimization method.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Recent agentic RL work treats stability as a first-class issue because long-horizon training can collapse.",
+      "supported_by": ["d2", "d3"],
+      "keywords": ["stability", "first-class", "training collapse", "long-horizon"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Template collapse is a concrete failure mode in which reasoning becomes input-agnostic even when entropy looks stable.",
+      "supported_by": ["d2"],
+      "keywords": ["template collapse", "input-agnostic", "entropy"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Stabilization mechanisms include mutual information diagnostics, SNR-aware filtering, and SAMPO.",
+      "supported_by": ["d2", "d3"],
+      "keywords": ["mutual information", "SNR-aware filtering", "SAMPO"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 8,
+    "max_document_reads": 3
+  }
+}

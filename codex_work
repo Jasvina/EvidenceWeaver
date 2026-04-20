@@ -104,3 +104,65 @@
 5. 让 `paper/draft.md` 与代码结构同步，逐步补成方法、实验、局限性更完整的论文草稿。
 
 如果未来有新的工作，请继续按“时间 + 做了什么 + 结果 + 下一步”的格式追加在本文件末尾。
+
+04月21日00时05分
+- 工作：实现了 `src/evidenceweaver/agent/baseline.py` 的最小 search-read-write baseline agent，并新增 `src/evidenceweaver/agent/__init__.py`。这个 agent 能在 snapshot task 上执行搜索、打开文档、抽取 claim、生成带 citation 的 `run-artifact.v0` JSON。
+- 结果：仓库不再只有 evaluator，已经具备一个可运行的最小 agent loop，后续可以在此基础上接 evidence graph、reward server 和 RL trainer。
+
+04月21日00时05分
+- 工作：新增 `benchmarks/snapshot_v0/README.md` 以及 3 个更真实的 snapshot benchmark task：
+  - `agentic_rl_stability_task`
+  - `agent_training_stack_task`
+  - `deep_search_reward_task`
+  这些任务都使用与真实 primary source URL 绑定的 paraphrased snapshot digest。
+- 结果：仓库现在同时有 synthetic task 和更真实的 research-style benchmark seed set，benchmark 不再只有玩具数据。
+
+04月21日00时05分
+- 工作：扩写 `paper/draft.md`，把原先较短的 pre-results draft 扩成更完整的论文工作草稿，增加了问题陈述、与现有工作的关系、当前仓库 artifact、benchmark 设计、baseline agent、实验议程、风险与局限性等章节。
+- 结果：论文材料已经从 outline + 短草稿升级为更接近正式 paper narrative 的版本，后续可以在此基础上继续补方法、实验和结果。
+
+04月21日00时05分
+- 工作：更新 `README.md` 与 `docs/benchmark-slice.md`，加入 baseline agent 的运行方式、snapshot benchmark v0 的入口、当前 repo layout 的新目录，以及更真实 benchmark 的说明。
+- 结果：GitHub 首页已经同步反映代码与 benchmark 的新进展，不会出现“README 落后于代码”的问题。
+
+04月21日00时05分
+- 工作：新增 `tests/test_baseline_agent.py`，并把验证扩展到 benchmark 目录加载、baseline agent CLI 输出、baseline agent 在全部 snapshot_v0 任务上的分数下界检查。
+- 结果：现在本地测试已经能覆盖 agent + evaluator + benchmark seed 的完整链路，后续改动更容易被回归测试拦住。
+
+04月21日00时05分
+- 验证：
+  - `git diff --check`
+  - `PYTHONPATH=src python3 -m compileall src`
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json /tmp/ew_stability_run.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json /tmp/ew_stack_run.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/deep_search_reward_task.json`
+  - `PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/deep_search_reward_task.json /tmp/ew_search_run.json`
+- 验证结果：
+  - 8 个单元测试全部通过。
+  - baseline agent 在 `snapshot_v0` 三个任务上的 `overall_score` 都 >= 0.55。
+  - 实测分数大致为：
+    - stability task: `0.9`
+    - training stack task: `0.9625`
+    - deep search reward task: `0.9667`
+
+=== 当前状态判断（04月21日更新） ===
+
+当前仓库状态可以概括为：
+- 已完成：项目定位、对外叙事、协作入口、v0 schema、v0 evaluator、synthetic example、snapshot_v0 benchmark seed、最小 baseline agent、paper draft。
+- 未完成：evidence graph、reward bundle 自动生成、trainer 集成、正式实验、ablation、真实冻结网页 benchmark。
+- 当前最重要的价值：仓库已经具备“任务 -> agent -> run artifact -> evaluator -> paper narrative”的最小闭环。
+- 当前最主要的风险：
+  - benchmark 仍然偏小，且 realistic slice 仍是 paraphrased snapshot，不是高保真 frozen-web snapshot。
+  - baseline agent 还是 deterministic heuristic，不代表真正的 RL agent 能力。
+  - evaluator 仍是 heuristic evaluator，未来要防止 benchmark / evaluator 被 baseline 过拟合。
+
+=== 更新后的下一步计划 ===
+
+1. 实现 `src/evidenceweaver/graph/`，把 claim-source-support 关系从 evaluator 逻辑外提成显式 evidence graph。
+2. 给 baseline agent 增加 graph-aware state，而不是仅靠 sentence extraction 直接写答案。
+3. 开始设计 `reward_bundle` 的离线生成逻辑，让 run artifact 可以自动带上 decomposed reward。
+4. 进一步扩展 snapshot benchmark，增加更异构的任务类型和更难的 held-out tasks。
+5. 继续扩写 `paper/draft.md` 的方法、实验设计和 failure analysis 部分。

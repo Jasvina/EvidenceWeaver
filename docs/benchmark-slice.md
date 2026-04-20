@@ -70,6 +70,24 @@ The repository now ships a tiny synthetic benchmark artifact that exercises the 
 
 This is intentionally small. It exists to make the interfaces, scoring assumptions, and test path concrete before the first real benchmark slice is locked down.
 
+## First More Realistic Slice
+
+The repository now also includes a first lightweight realistic slice under [`benchmarks/snapshot_v0/`](../benchmarks/snapshot_v0/README.md).
+
+That slice is still small, but it is a real step up from the synthetic task because:
+
+- the questions are research-style synthesis prompts rather than fabricated release-note summaries
+- the documents are paraphrased digests anchored to real primary-source URLs
+- the tasks already exercise comparison, stability analysis, and reward-design reasoning
+
+Current seed tasks:
+
+- `agentic_rl_stability_task`
+- `agent_training_stack_task`
+- `deep_search_reward_task`
+
+This benchmark layer is meant to be the bridge between interface prototyping and a richer frozen-web benchmark.
+
 ## Metrics
 
 At minimum, the first benchmark slice should report:
