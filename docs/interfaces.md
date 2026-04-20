@@ -74,7 +74,7 @@ Current repository status:
 
 - implemented as `src/evidenceweaver/graph/`
 - current node types are `SourceNode`, `ClaimNode`, and `OpenQuestion`
-- current edge type is `supports`
+- current edge types implemented are `supports`, `derived_from`, and `duplicates`
 - the baseline agent already emits an `evidence_graph` inside `run-artifact.v0`
 - the baseline agent now uses `open_questions` to drive a follow-up search iteration when budget allows
 
@@ -99,6 +99,7 @@ score(trajectory, final_answer, evidence_graph) -> RewardBundle
 Current repository status:
 
 - `RewardBundle` is now materialized from `EvalReport`
+- reward composition now also lives in `src/evidenceweaver/reward/compose.py`
 - the baseline agent attaches a reward bundle automatically after self-evaluation
 - the evaluator CLI can also emit a scored copy of any run via `--emit-scored-run`
 

@@ -203,6 +203,8 @@ This is exactly the kind of inspectable state that later reward design and graph
 
 The latest repository version also allows those open questions to drive a second retrieval step when task budget permits. This is still heuristic, but it is a meaningful shift from a graph that merely records state to a graph that already influences behavior.
 
+The graph also now records simple claim-to-claim relationships such as `derived_from` and `duplicates`. These edges are still heuristic, but they create a path toward analyzing whether the agent is expanding the evidence frontier or merely restating prior claims.
+
 ## 8. Evaluation Protocol
 
 EvidenceWeaver's evaluator currently reports:
@@ -228,18 +230,19 @@ The current repository suggests a staged path toward a real research contributio
 
 This stage is already underway. The main goal is to freeze task and run formats, keep the evaluator inspectable, and widen the benchmark slowly.
 
-### 9.2 Stage two: add evidence graph memory
+### 9.2 Stage two: deepen evidence graph memory
 
-The next major code change should be a lightweight evidence graph. At minimum, the graph should allow the agent to:
+The repository already has a lightweight evidence graph. The next major step is to deepen it. At minimum, the graph should allow the agent to:
 
 - register claims explicitly
 - attach supporting evidence to claims
 - surface unsupported claims
 - emit compact reasoning traces
+- represent contradiction and stronger provenance semantics
 
-### 9.3 Stage three: add reward-side experimentation
+### 9.3 Stage three: deepen reward-side experimentation
 
-Once the benchmark and artifact path are stable enough, the repository should add reward bundles that can be produced offline and then used online. This could begin with heuristic reward decomposition and later move toward verifier- or rubric-backed scoring.
+The repository now has heuristic reward composition in a dedicated reward module. The next step is to make the reward story richer and more independent from the evaluator, first with stronger heuristics and later with verifier- or rubric-backed scoring.
 
 ### 9.4 Stage four: train policies, not just evaluate them
 

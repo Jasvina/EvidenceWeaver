@@ -254,3 +254,39 @@
 3. 开始设计独立的 reward generation module，而不是仅由 evaluator report 映射得到 reward bundle。
 4. 让 benchmark 中的 task provenance 更标准化，例如加入 source metadata 或 refresh recipe。
 5. 在 trainer 集成前继续扩大 graph-aware baseline 与 benchmark 的实验合同。
+
+04月21日00时42分
+- 工作：把 reward 逻辑从 evaluator 内部进一步拆成独立模块，新增 `src/evidenceweaver/reward/compose.py` 与 `src/evidenceweaver/reward/__init__.py`。
+- 结果：仓库现在不仅能在 evaluator 路径里生成 reward bundle，也可以通过独立的 reward CLI 对 task + run artifact 进行 reward 组合与说明输出，为后续独立 reward pipeline 打下基础。
+
+04月21日00时42分
+- 工作：扩展 evidence graph 的 claim-to-claim 关系边，目前在 `graph/core.py` 中加入了 `derived_from` 与 `duplicates` 的启发式生成逻辑。
+- 结果：evidence graph 不再只有 source-to-claim 的 `supports` 边，已经开始具有更丰富的结构语义，这对未来做 graph-level diagnostics 和 reward shaping 很重要。
+
+04月21日00时42分
+- 工作：新增 `tests/test_reward_graph.py`，覆盖：
+  - reward module 与 baseline reward bundle 的一致性
+  - graph 中存在非 `supports` 的关系边
+  - reward CLI 可以输出 reward bundle 与 notes
+- 结果：当前测试已经从 agent/evaluator 扩展到 graph semantics 与独立 reward 模块。
+
+04月21日00时42分
+- 工作：更新 `README.md`、`docs/interfaces.md`、`paper/draft.md`，把 reward module、claim-to-claim graph edges 与新的 CLI 入口写入文档。
+- 结果：文档与代码继续保持同步，没有出现“实现变了、文档没跟上”的情况。
+
+04月21日00时42分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.reward.compose benchmarks/snapshot_v0/tasks/agent_training_stack_task.json /tmp/evidenceweaver_reward_test_run.json`
+- 验证结果：
+  - 14 个单元测试全部通过。
+  - reward CLI 已经可以稳定输出 `reward_bundle` 与 `notes`。
+  - graph 中已能观察到 `derived_from` / `duplicates` 这类非 `supports` 边。
+
+=== 更新后的下一步计划（04月21日00时42分） ===
+
+1. 继续丰富 evidence graph 语义，逐步把 `contradicts` 等更强关系补进来。
+2. 把 reward pipeline 与 evaluator 进一步解耦，形成更清晰的 reward-generation contract。
+3. 为 benchmark task 增加更系统的 provenance 和 refresh metadata。
+4. 把 diagnostics 从 run artifact 扩成更丰富的 debug / analysis surface。
+5. 在 trainer 选型前，继续扩大 baseline、graph、reward、benchmark 四者之间的实验合同。

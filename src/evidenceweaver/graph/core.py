@@ -69,6 +69,15 @@ def _tokenize(text: str) -> tuple[str, ...]:
     return tuple(token for token in _normalize(text).split() if token and token not in STOPWORDS)
 
 
+def _jaccard(lhs: set[str], rhs: set[str]) -> float:
+    if not lhs or not rhs:
+        return 0.0
+    union = lhs | rhs
+    if not union:
+        return 0.0
+    return len(lhs & rhs) / len(union)
+
+
 @dataclass(frozen=True, slots=True)
 class SourceNode:
     source_id: str
@@ -264,6 +273,7 @@ class EvidenceGraphBuilder:
                     to_id=claim_id,
                 )
             )
+        self._refresh_relationship_edges()
         return claim_node
 
     def add_open_question(self, text: str, focus_tokens: Iterable[str]) -> OpenQuestion:
@@ -283,6 +293,34 @@ class EvidenceGraphBuilder:
                 text=f"Need stronger support for prompt focus terms: {', '.join(uncovered[:max_tokens])}",
                 focus_tokens=uncovered[:max_tokens],
             )
+
+    def _refresh_relationship_edges(self) -> None:
+        support_edges = [edge for edge in self._edges if edge.kind == "supports"]
+        relationship_edges: list[GraphEdge] = []
+        for index, current in enumerate(self._claim_nodes):
+            current_tokens = set(_tokenize(current.text))
+            current_citations = set(current.citations)
+            for previous in self._claim_nodes[:index]:
+                previous_tokens = set(_tokenize(previous.text))
+                previous_citations = set(previous.citations)
+                token_overlap = _jaccard(current_tokens, previous_tokens)
+                focus_overlap = set(current.focus_tokens) & set(previous.focus_tokens)
+                citation_overlap = current_citations & previous_citations
+                kind = None
+                if citation_overlap and token_overlap >= 0.65:
+                    kind = "duplicates"
+                elif (citation_overlap and focus_overlap) or token_overlap >= 0.35:
+                    kind = "derived_from"
+                if kind is not None:
+                    relationship_edges.append(
+                        GraphEdge(
+                            edge_id=f"edge-{len(support_edges) + len(relationship_edges) + 1}",
+                            kind=kind,
+                            from_id=current.claim_id,
+                            to_id=previous.claim_id,
+                        )
+                    )
+        self._edges = support_edges + relationship_edges
 
     def build(self) -> EvidenceGraph:
         ordered_sources = tuple(self._source_nodes[source_id] for source_id in sorted(self._source_nodes))

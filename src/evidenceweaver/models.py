@@ -308,16 +308,6 @@ class EvalReport:
             "notes": list(self.notes),
         }
 
-    def to_reward_bundle(self) -> RewardBundle:
-        return RewardBundle(
-            answer_score=float(self.metrics.get("answer_coverage", 0.0)),
-            citation_score=float(self.metrics.get("citation_coverage", 0.0)),
-            chain_score=float(self.metrics.get("chain_completeness", 0.0)),
-            diversity_score=float(self.metrics.get("source_diversity", 0.0)),
-            efficiency_score=float(self.metrics.get("budget_efficiency", 0.0)),
-            total_score=float(self.metrics.get("overall_score", 0.0)),
-        )
-
 
 def load_json(path: str | Path) -> Any:
     with Path(path).open("r", encoding="utf-8") as handle:

@@ -63,6 +63,7 @@ This repository now includes a minimal Python scaffold so the project can move f
 
 - `src/evidenceweaver/agent/` contains a deterministic search-read-write baseline agent
 - `src/evidenceweaver/graph/` contains explicit evidence-graph primitives and a mutable builder
+- `src/evidenceweaver/reward/` contains reward composition helpers and a reward CLI
 - `src/evidenceweaver/` contains typed loaders and a small offline evaluator
 - `schemas/` defines `v0` JSON schemas for task bundles and run artifacts
 - `examples/` contains a synthetic snapshot-based task plus good and weak runs
@@ -82,6 +83,9 @@ PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
   benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json \
   /tmp/evidenceweaver_run.json \
   --emit-scored-run /tmp/evidenceweaver_scored_run.json
+PYTHONPATH=src python3 -m evidenceweaver.reward.compose \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json
 ```
 
 ## What We Are Building
@@ -282,6 +286,12 @@ The run artifact now also includes `diagnostics`, including:
 - opened source IDs
 - prompt-focus coverage ratio
 - remaining uncovered focus tokens
+
+The graph layer also now emits simple claim-to-claim relationship edges:
+
+- `supports`
+- `derived_from`
+- `duplicates`
 
 ## Benchmark Seeds
 

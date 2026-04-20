@@ -10,6 +10,7 @@ from typing import Iterable
 from evidenceweaver.eval.offline import evaluate_run
 from evidenceweaver.graph import EvidenceGraphBuilder
 from evidenceweaver.models import Action, Document, GeneratedClaim, RunArtifact, RunDiagnostics, TaskBundle, load_task_bundle
+from evidenceweaver.reward.compose import compose_reward_bundle, reward_notes
 
 
 STOPWORDS = {
@@ -330,7 +331,17 @@ class BaselineAgent:
             diagnostics=diagnostics,
         )
         report = evaluate_run(task, run)
-        return run.with_reward_bundle(report.to_reward_bundle())
+        enriched_diagnostics = RunDiagnostics(
+            search_queries=diagnostics.search_queries,
+            iteration_count=diagnostics.iteration_count,
+            opened_source_ids=diagnostics.opened_source_ids,
+            opened_source_count=diagnostics.opened_source_count,
+            claim_count=diagnostics.claim_count,
+            covered_prompt_focus_ratio=diagnostics.covered_prompt_focus_ratio,
+            uncovered_focus_tokens=diagnostics.uncovered_focus_tokens,
+            notes=tuple(dict.fromkeys((*diagnostics.notes, *reward_notes(report)))),
+        )
+        return run.with_diagnostics(enriched_diagnostics).with_reward_bundle(compose_reward_bundle(report))
 
 
 def run_task(task_path: str | Path, run_id: str | None = None, max_docs: int | None = None, max_claims: int | None = None) -> RunArtifact:

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Iterable
 
 from evidenceweaver.models import ClaimMatch, EvalReport, GeneratedClaim, RunArtifact, TaskBundle, load_run_artifact, load_task_bundle
+from evidenceweaver.reward.compose import compose_reward_bundle
 
 
 def _normalize(text: str) -> str:
@@ -173,7 +174,7 @@ def score_paths(task_path: str | Path, run_path: str | Path) -> tuple[EvalReport
     task = load_task_bundle(task_path)
     run = load_run_artifact(run_path)
     report = evaluate_run(task, run)
-    return report, run.with_reward_bundle(report.to_reward_bundle())
+    return report, run.with_reward_bundle(compose_reward_bundle(report))
 
 
 def main() -> None:
