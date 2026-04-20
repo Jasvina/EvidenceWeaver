@@ -70,6 +70,13 @@ The evidence graph should remain deliberately simple.
 - list unsupported claims
 - export a compact trace
 
+Current repository status:
+
+- implemented as `src/evidenceweaver/graph/`
+- current node types are `SourceNode`, `ClaimNode`, and `OpenQuestion`
+- current edge type is `supports`
+- the baseline agent already emits an `evidence_graph` inside `run-artifact.v0`
+
 ## 4. Reward Server Interface
 
 The reward server should evaluate a trajectory or final answer and emit decomposed scores.
@@ -87,6 +94,12 @@ score(trajectory, final_answer, evidence_graph) -> RewardBundle
 - `efficiency_score`
 - `total_score`
 - diagnostic metadata
+
+Current repository status:
+
+- `RewardBundle` is now materialized from `EvalReport`
+- the baseline agent attaches a reward bundle automatically after self-evaluation
+- the evaluator CLI can also emit a scored copy of any run via `--emit-scored-run`
 
 ## 5. Evaluator Interface
 
@@ -114,6 +127,11 @@ Every run should produce a compact artifact with:
 - final answer
 - reward bundle
 - evaluation report
+
+Current repository status:
+
+- `run-artifact.v0` now supports `evidence_graph` plus `reward_bundle`
+- the baseline agent writes both fields
 
 If these artifacts are easy to read, the project will be much easier to debug and much easier to trust.
 

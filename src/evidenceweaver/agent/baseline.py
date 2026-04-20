@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+from evidenceweaver.eval.offline import evaluate_run
+from evidenceweaver.graph import EvidenceGraphBuilder
 from evidenceweaver.models import Action, Document, GeneratedClaim, RunArtifact, TaskBundle, load_task_bundle
 
 
@@ -146,7 +148,7 @@ class BaselineAgent:
         max_docs = min(self.max_docs or 3, budget_reads, len(hits))
         return [hit.document for hit in hits[:max_docs]]
 
-    def _select_claims(self, task: TaskBundle, documents: Iterable[Document]) -> list[GeneratedClaim]:
+    def _select_claims(self, task: TaskBundle, documents: Iterable[Document], graph: EvidenceGraphBuilder) -> list[GeneratedClaim]:
         prompt_tokens = set(_tokenize(task.prompt))
         document_list = list(documents)
         sentence_pool: list[tuple[set[str], float, str, str]] = []
@@ -163,7 +165,7 @@ class BaselineAgent:
 
         claims: list[GeneratedClaim] = []
         seen: set[str] = set()
-        remaining_tokens = set(prompt_tokens)
+        remaining_tokens = set(graph.uncovered_focus_tokens) or set(prompt_tokens)
         while sentence_pool and len(claims) < max_claims:
             best_index = None
             best_score = None
@@ -187,10 +189,13 @@ class BaselineAgent:
                     citations=(doc_id,),
                 )
             )
+            graph.add_claim(claims[-1].claim_id, claims[-1].text, claims[-1].citations)
+            remaining_tokens = set(graph.uncovered_focus_tokens) or set(prompt_tokens)
         return claims
 
     def run(self, task: TaskBundle, run_id: str | None = None) -> RunArtifact:
         environment = SnapshotEnvironment(task)
+        graph = EvidenceGraphBuilder(graph_id=f"graph-{task.task_id}", prompt=task.prompt, documents=task.documents)
         actions: list[Action] = []
 
         search_query = task.prompt
@@ -200,17 +205,24 @@ class BaselineAgent:
         documents = self._select_documents(task, hits)
         for document in documents:
             environment.open(document.doc_id)
+            graph.mark_source_opened(document.doc_id)
             actions.append(Action(kind="open", argument=document.title, document_ids=(document.doc_id,)))
 
-        claims = self._select_claims(task, documents)
+        claims = self._select_claims(task, documents, graph)
         for claim in claims:
             actions.append(Action(kind="write_claim", argument=claim.text, document_ids=claim.citations))
 
         final_citations = tuple(dict.fromkeys(doc_id for claim in claims for doc_id in claim.citations))
         answer = " ".join(claim.text for claim in claims) if claims else "No grounded answer could be composed from the available snapshot."
+        uncovered = graph.uncovered_focus_tokens
+        if uncovered:
+            graph.add_open_question(
+                text=f"Need stronger support for prompt focus terms: {', '.join(uncovered[:6])}",
+                focus_tokens=uncovered[:6],
+            )
         actions.append(Action(kind="finish", argument="return cited answer", document_ids=final_citations))
 
-        return RunArtifact(
+        run = RunArtifact(
             schema_version="run-artifact.v0",
             run_id=run_id or f"baseline-{task.task_id}",
             task_id=task.task_id,
@@ -218,7 +230,10 @@ class BaselineAgent:
             claims=tuple(claims),
             actions=tuple(actions),
             final_citations=final_citations,
+            evidence_graph=graph.build(),
         )
+        report = evaluate_run(task, run)
+        return run.with_reward_bundle(report.to_reward_bundle())
 
 
 def run_task(task_path: str | Path, run_id: str | None = None, max_docs: int | None = None, max_claims: int | None = None) -> RunArtifact:

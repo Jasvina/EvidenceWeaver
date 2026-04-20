@@ -62,6 +62,7 @@ EvidenceWeaver is built around three bets:
 This repository now includes a minimal Python scaffold so the project can move from ideas to inspectable artifacts:
 
 - `src/evidenceweaver/agent/` contains a deterministic search-read-write baseline agent
+- `src/evidenceweaver/graph/` contains explicit evidence-graph primitives and a mutable builder
 - `src/evidenceweaver/` contains typed loaders and a small offline evaluator
 - `schemas/` defines `v0` JSON schemas for task bundles and run artifacts
 - `examples/` contains a synthetic snapshot-based task plus good and weak runs
@@ -77,6 +78,10 @@ PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
   examples/runs/synthetic_delay_good_run.json
 PYTHONPATH=src python3 -m evidenceweaver.agent.baseline \
   benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json
+PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agentic_rl_stability_task.json \
+  /tmp/evidenceweaver_run.json \
+  --emit-scored-run /tmp/evidenceweaver_scored_run.json
 ```
 
 ## What We Are Building
@@ -254,6 +259,20 @@ PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
 ```
 
 This baseline is intentionally simple. It is not meant to be competitive; it is meant to give the project a stable executable reference point for interface design, evaluation changes, and future RL work.
+
+## Evidence Graph Loop
+
+The baseline loop is now explicitly graph-aware:
+
+- source nodes are created for the task snapshot
+- opened documents are marked in the evidence graph
+- each generated claim becomes a claim node with support edges back to cited sources
+- uncovered prompt-focus tokens are recorded as open questions
+- the evaluator can enrich a run artifact with a decomposed `reward_bundle`
+
+This gives the repository a concrete closed loop:
+
+`task bundle -> baseline agent -> evidence graph -> run artifact -> evaluator -> reward bundle`
 
 ## Benchmark Seeds
 

@@ -59,6 +59,78 @@
         }
       }
     },
+    "evidence_graph": {
+      "type": "object",
+      "properties": {
+        "graph_id": {"type": "string", "minLength": 1},
+        "prompt_focus": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source_nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_id", "title", "url", "opened"],
+            "properties": {
+              "source_id": {"type": "string", "minLength": 1},
+              "title": {"type": "string", "minLength": 1},
+              "url": {"type": "string", "minLength": 1},
+              "source_type": {"type": "string"},
+              "opened": {"type": "boolean"}
+            }
+          }
+        },
+        "claim_nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim_id", "text"],
+            "properties": {
+              "claim_id": {"type": "string", "minLength": 1},
+              "text": {"type": "string", "minLength": 1},
+              "citations": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "focus_tokens": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              },
+              "status": {"type": "string"}
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["edge_id", "kind", "from_id", "to_id"],
+            "properties": {
+              "edge_id": {"type": "string", "minLength": 1},
+              "kind": {"type": "string", "minLength": 1},
+              "from_id": {"type": "string", "minLength": 1},
+              "to_id": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["question_id", "text"],
+            "properties": {
+              "question_id": {"type": "string", "minLength": 1},
+              "text": {"type": "string", "minLength": 1},
+              "focus_tokens": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    },
     "reward_bundle": {
       "type": "object",
       "properties": {

@@ -169,12 +169,25 @@ def evaluate_paths(task_path: str | Path, run_path: str | Path) -> EvalReport:
     return evaluate_run(task, run)
 
 
+def score_paths(task_path: str | Path, run_path: str | Path) -> tuple[EvalReport, RunArtifact]:
+    task = load_task_bundle(task_path)
+    run = load_run_artifact(run_path)
+    report = evaluate_run(task, run)
+    return report, run.with_reward_bundle(report.to_reward_bundle())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate a run artifact against an EvidenceWeaver task bundle")
     parser.add_argument("task", help="Path to a task bundle JSON file")
     parser.add_argument("run", help="Path to a run artifact JSON file")
+    parser.add_argument(
+        "--emit-scored-run",
+        help="Optional path to write a copy of the run artifact enriched with reward_bundle",
+    )
     args = parser.parse_args()
-    report = evaluate_paths(args.task, args.run)
+    report, scored_run = score_paths(args.task, args.run)
+    if args.emit_scored_run:
+        Path(args.emit_scored_run).write_text(json.dumps(scored_run.to_dict(), indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report.to_dict(), indent=2))
 
 

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import json
 from pathlib import Path
 from typing import Any
+
+from evidenceweaver.graph import EvidenceGraph
 
 
 class ValidationError(ValueError):
@@ -208,6 +210,7 @@ class RunArtifact:
     claims: tuple[GeneratedClaim, ...] = ()
     actions: tuple[Action, ...] = ()
     final_citations: tuple[str, ...] = ()
+    evidence_graph: EvidenceGraph | None = None
     reward_bundle: RewardBundle | None = None
 
     @classmethod
@@ -221,6 +224,8 @@ class RunArtifact:
             for index, item in enumerate(_expect_list(data.get("actions", []), "actions"))
         )
         raw_reward = data.get("reward_bundle")
+        raw_graph = data.get("evidence_graph")
+        evidence_graph = None if raw_graph is None else EvidenceGraph.from_dict(_expect_mapping(raw_graph, "evidence_graph"))
         reward_bundle = None if raw_reward is None else RewardBundle.from_dict(_expect_mapping(raw_reward, "reward_bundle"))
         return cls(
             schema_version=_expect_string(data.get("schema_version"), "schema_version"),
@@ -230,11 +235,18 @@ class RunArtifact:
             claims=claims,
             actions=actions,
             final_citations=_string_tuple(data.get("final_citations", []), "final_citations"),
+            evidence_graph=evidence_graph,
             reward_bundle=reward_bundle,
         )
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    def with_evidence_graph(self, evidence_graph: EvidenceGraph) -> "RunArtifact":
+        return replace(self, evidence_graph=evidence_graph)
+
+    def with_reward_bundle(self, reward_bundle: RewardBundle) -> "RunArtifact":
+        return replace(self, reward_bundle=reward_bundle)
 
 
 @dataclass(frozen=True, slots=True)
@@ -263,6 +275,16 @@ class EvalReport:
             "claim_results": [asdict(result) for result in self.claim_results],
             "notes": list(self.notes),
         }
+
+    def to_reward_bundle(self) -> RewardBundle:
+        return RewardBundle(
+            answer_score=float(self.metrics.get("answer_coverage", 0.0)),
+            citation_score=float(self.metrics.get("citation_coverage", 0.0)),
+            chain_score=float(self.metrics.get("chain_completeness", 0.0)),
+            diversity_score=float(self.metrics.get("source_diversity", 0.0)),
+            efficiency_score=float(self.metrics.get("budget_efficiency", 0.0)),
+            total_score=float(self.metrics.get("overall_score", 0.0)),
+        )
 
 
 def load_json(path: str | Path) -> Any:

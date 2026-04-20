@@ -103,9 +103,10 @@ The `src/evidenceweaver/` package currently includes:
 
 - typed data loaders and validation helpers
 - a deterministic search-read-write baseline agent
+- an explicit evidence-graph module and builder
 - a heuristic offline evaluator that produces evidence-centric metrics
 
-The baseline agent is intentionally modest. It searches a snapshot task, opens top-ranked documents, extracts sentence-level claims, and emits a `run-artifact.v0` JSON structure with citations and actions.
+The baseline agent is intentionally modest. It searches a snapshot task, opens top-ranked documents, extracts sentence-level claims, builds an explicit evidence graph, and emits a `run-artifact.v0` JSON structure with citations, graph state, actions, and a decomposed reward bundle.
 
 ### 5.3 Example artifacts
 
@@ -172,7 +173,8 @@ The current baseline agent does four things:
 1. searches over the snapshot documents using prompt-token overlap
 2. opens a bounded number of documents under a task budget
 3. selects salient sentences as claim candidates
-4. emits a cited final answer and a structured action trace
+4. records claim-to-source support edges in an evidence graph
+5. emits a cited final answer, a structured action trace, and a reward bundle
 
 This creates a very small but concrete "agent loop" that future RL work can refine.
 
@@ -186,6 +188,17 @@ A deterministic baseline offers several practical benefits:
 - the repository can begin collecting benchmark artifacts immediately
 
 In other words, a humble baseline is useful precisely because it is boring.
+
+### 7.3 Why explicit graph state matters even in a weak baseline
+
+The current graph implementation is simple, but it still changes the repository in an important way. The project no longer has to infer every structural assumption from free-form text. The artifact now records:
+
+- which sources were opened
+- which claims were written
+- which support edges were asserted
+- which prompt-focus terms remain under-supported
+
+This is exactly the kind of inspectable state that later reward design and graph-aware policies can build on.
 
 ## 8. Evaluation Protocol
 

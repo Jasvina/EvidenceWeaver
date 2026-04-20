@@ -88,6 +88,19 @@ Current seed tasks:
 
 This benchmark layer is meant to be the bridge between interface prototyping and a richer frozen-web benchmark.
 
+The repository can already run the baseline closed loop on these tasks:
+
+```bash
+PYTHONPATH=src python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  --output /tmp/evidenceweaver_run.json
+
+PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json \
+  --emit-scored-run /tmp/evidenceweaver_scored_run.json
+```
+
 ## Metrics
 
 At minimum, the first benchmark slice should report:

@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from evidenceweaver.agent.baseline import BaselineAgent, run_task
 from evidenceweaver.eval.offline import evaluate_run
-from evidenceweaver.models import load_task_bundle
+from evidenceweaver.models import load_run_artifact, load_task_bundle
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -68,6 +69,56 @@ class BaselineAgentTests(unittest.TestCase):
             run = run_task(path)
             report = evaluate_run(task, run)
             self.assertGreaterEqual(report.metrics["overall_score"], 0.55, path.name)
+
+    def test_agent_emits_evidence_graph_and_reward_bundle(self) -> None:
+        task = load_task_bundle(REALISTIC_TASK)
+        run = BaselineAgent().run(task)
+        self.assertIsNotNone(run.evidence_graph)
+        self.assertIsNotNone(run.reward_bundle)
+        self.assertEqual(len(run.evidence_graph.claim_nodes), len(run.claims))
+        self.assertGreaterEqual(len(run.evidence_graph.opened_source_ids), 1)
+        report = evaluate_run(task, run)
+        self.assertEqual(run.reward_bundle.total_score, report.metrics["overall_score"])
+
+    def test_evaluator_cli_can_emit_scored_run(self) -> None:
+        env = dict(os.environ)
+        src_path = str(REPO_ROOT / "src")
+        env["PYTHONPATH"] = src_path if not env.get("PYTHONPATH") else f"{src_path}:{env['PYTHONPATH']}"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            run_path = Path(temp_dir) / "baseline_run.json"
+            scored_path = Path(temp_dir) / "scored_run.json"
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "evidenceweaver.agent.baseline",
+                    str(REALISTIC_TASK),
+                    "--output",
+                    str(run_path),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "evidenceweaver.eval.offline",
+                    str(REALISTIC_TASK),
+                    str(run_path),
+                    "--emit-scored-run",
+                    str(scored_path),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+            scored_run = load_run_artifact(scored_path)
+            self.assertIsNotNone(scored_run.reward_bundle)
+            self.assertIsNotNone(scored_run.evidence_graph)
 
 
 if __name__ == "__main__":
