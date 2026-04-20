@@ -1,0 +1,40 @@
+{
+  "schema_version": "run-artifact.v0",
+  "run_id": "synthetic-delay-good-run",
+  "task_id": "synthetic-delay-task",
+  "answer": "AuroraDB delayed v4 after load testing found replication lag above 200ms during failover, and the steering group then moved launch by six weeks to finish recovery tooling and backup verification. Together, those sources show the team chose reliability over the original schedule.",
+  "final_citations": ["d1", "d2"],
+  "claims": [
+    {
+      "claim_id": "gc1",
+      "text": "Load testing found replication lag above 200ms during failover.",
+      "citations": ["d1"]
+    },
+    {
+      "claim_id": "gc2",
+      "text": "The launch moved by six weeks so recovery tooling and backup verification could be completed.",
+      "citations": ["d2"]
+    },
+    {
+      "claim_id": "gc3",
+      "text": "The release was delayed because the team prioritized reliability over the original schedule.",
+      "citations": ["d1", "d2"]
+    }
+  ],
+  "actions": [
+    {"kind": "search", "argument": "AuroraDB v4 launch delay"},
+    {"kind": "open", "document_ids": ["d1"]},
+    {"kind": "open", "document_ids": ["d2"]},
+    {"kind": "write_claim", "argument": "replication lag caused reliability concern", "document_ids": ["d1"]},
+    {"kind": "write_claim", "argument": "six-week shift added time for recovery tooling", "document_ids": ["d2"]},
+    {"kind": "finish", "argument": "deliver cited answer", "document_ids": ["d1", "d2"]}
+  ],
+  "reward_bundle": {
+    "answer_score": 0.91,
+    "citation_score": 0.95,
+    "chain_score": 0.9,
+    "diversity_score": 0.8,
+    "efficiency_score": 0.85,
+    "total_score": 0.9
+  }
+}

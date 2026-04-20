@@ -1,0 +1,54 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "synthetic-delay-task",
+  "prompt": "Explain why the AuroraDB team delayed the v4 launch and support the answer with citations.",
+  "reference_answer": "AuroraDB delayed the v4 launch after load testing exposed severe replication lag during failover, and the team then shifted the release by six weeks to finish recovery tooling and backup verification. The delay reflected a decision to prioritize reliability over the original schedule.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "Load Test Review",
+      "url": "snapshot://auroradb/load-test-review",
+      "content": "The launch review found replication lag above 200ms during failover in peak-load tests. Engineering recommended delaying release until the database could recover more reliably under load.",
+      "source_type": "snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Release Steering Memo",
+      "url": "snapshot://auroradb/release-steering-memo",
+      "content": "The steering group moved the launch by six weeks so the team could finish recovery tooling and complete backup verification before general availability.",
+      "source_type": "snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Customer Advisory Digest",
+      "url": "snapshot://auroradb/customer-advisory-digest",
+      "content": "Several enterprise customers also asked for audit log improvements, but the product lead said those requests were not the main driver of the launch delay.",
+      "source_type": "snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Load testing exposed replication lag above 200ms during failover.",
+      "supported_by": ["d1"],
+      "keywords": ["replication lag", "200ms", "failover"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "The launch moved by six weeks so recovery tooling and backup verification could be finished.",
+      "supported_by": ["d2"],
+      "keywords": ["six weeks", "recovery tooling", "backup verification"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "The team delayed the launch because it prioritized reliability over the original schedule.",
+      "supported_by": ["d1", "d2"],
+      "keywords": ["delayed", "reliability", "schedule"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 8,
+    "max_document_reads": 4
+  }
+}

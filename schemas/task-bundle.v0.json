@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evidenceweaver.dev/schemas/task-bundle.v0.json",
+  "title": "EvidenceWeaver Task Bundle v0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "prompt",
+    "reference_answer",
+    "documents",
+    "required_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "task-bundle.v0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_answer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["doc_id", "title", "url", "content"],
+        "properties": {
+          "doc_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "minLength": 1},
+          "content": {"type": "string", "minLength": 1},
+          "source_type": {"type": "string"}
+        }
+      }
+    },
+    "required_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "text", "supported_by", "keywords"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "supported_by": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "keywords": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["max_steps"],
+      "properties": {
+        "max_steps": {"type": "integer", "minimum": 1},
+        "max_document_reads": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

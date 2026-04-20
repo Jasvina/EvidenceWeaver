@@ -57,6 +57,24 @@ EvidenceWeaver is built around three bets:
 - **Bet 3: stability is a first-class research problem**
   - Long-horizon agentic RL collapses in ways that are easy to miss. We want reward shaping and rollout filtering that make those failures visible and tractable.
 
+## Minimal Executable Scaffold
+
+This repository now includes a minimal Python scaffold so the project can move from ideas to inspectable artifacts:
+
+- `src/evidenceweaver/` contains typed loaders and a small offline evaluator
+- `schemas/` defines `v0` JSON schemas for task bundles and run artifacts
+- `examples/` contains a synthetic snapshot-based task plus good and weak runs
+- `tests/` verifies parsing, scoring, and the CLI path
+
+Quick local checks:
+
+```bash
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
+  examples/tasks/synthetic_delay_task.json \
+  examples/runs/synthetic_delay_good_run.json
+```
+
 ## What We Are Building
 
 ```mermaid
@@ -124,16 +142,16 @@ That first version is intentionally modest. The goal is not to solve all agentic
 
 - [x] Define project thesis
 - [x] Create public repo and project narrative
-- [ ] Lock a first benchmark slice
+- [x] Lock a first benchmark slice
 - [ ] Decide the first trainer integration
-- [ ] Specify version `v0` interfaces for agent, reward, and evaluation
+- [x] Specify version `v0` interfaces for agent, reward, and evaluation
 
 ### Phase 1 - Minimal Research Baseline
 
 - [ ] Build a simple search-read-write agent loop
 - [ ] Implement evidence graph memory
 - [ ] Implement citation grounding reward
-- [ ] Add offline evaluation for answer quality and citation quality
+- [x] Add offline evaluation for answer quality and citation quality
 - [ ] Publish first reproducible baseline trajectories
 
 ### Phase 2 - Agentic RL
@@ -145,7 +163,7 @@ That first version is intentionally modest. The goal is not to solve all agentic
 
 ### Phase 3 - Research Artifact
 
-- [ ] Write a workshop-quality paper draft
+- [x] Write a pre-results paper draft
 - [ ] Release ablations, diagnostics, and failure cases
 - [ ] Open contribution lanes for environment, reward, and eval extensions
 - [ ] Turn the repo into a living benchmark and training recipe
@@ -167,6 +185,8 @@ This repository is still at day zero, but the intended layout is already visible
 ```text
 .
 |-- README.md
+|-- LICENSE
+|-- pyproject.toml
 |-- docs/
 |   |-- assets/
 |   |   |-- banner.svg
@@ -176,10 +196,18 @@ This repository is still at day zero, but the intended layout is already visible
 |   |-- related-work.md
 |   |-- research-agenda.md
 |   `-- reward-design.md
+|-- examples/
+|   |-- runs/
+|   `-- tasks/
 |-- CONTRIBUTING.md
 |-- .github/
 |   `-- ISSUE_TEMPLATE/
+|-- schemas/
+|-- src/
+|   `-- evidenceweaver/
+|-- tests/
 `-- paper/
+    |-- draft.md
     `-- outline.md
 ```
 
@@ -190,6 +218,11 @@ This repository is still at day zero, but the intended layout is already visible
 - [`docs/benchmark-slice.md`](docs/benchmark-slice.md) - the first reproducible benchmark proposal
 - [`docs/interfaces.md`](docs/interfaces.md) - a minimal `v0` interface sketch for agent, reward, and eval
 - [`docs/reward-design.md`](docs/reward-design.md) - the first reward decomposition sketch
+- [`schemas/task-bundle.v0.json`](schemas/task-bundle.v0.json) - the `v0` task bundle contract
+- [`schemas/run-artifact.v0.json`](schemas/run-artifact.v0.json) - the `v0` run artifact contract
+- [`examples/tasks/synthetic_delay_task.json`](examples/tasks/synthetic_delay_task.json) - a synthetic snapshot-based benchmark example
+- [`examples/runs/synthetic_delay_good_run.json`](examples/runs/synthetic_delay_good_run.json) - a strong example trajectory artifact
+- [`paper/draft.md`](paper/draft.md) - the current pre-results paper draft
 - [`paper/outline.md`](paper/outline.md) - an early paper structure for the project
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - how to contribute high-signal ideas and changes
 

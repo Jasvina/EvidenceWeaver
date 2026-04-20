@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evidenceweaver.dev/schemas/run-artifact.v0.json",
+  "title": "EvidenceWeaver Run Artifact v0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "task_id",
+    "answer"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "run-artifact.v0"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "answer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "final_citations": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "text"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "citations": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind"],
+        "properties": {
+          "kind": {"type": "string", "minLength": 1},
+          "argument": {"type": "string"},
+          "document_ids": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "reward_bundle": {
+      "type": "object",
+      "properties": {
+        "answer_score": {"type": "number"},
+        "citation_score": {"type": "number"},
+        "chain_score": {"type": "number"},
+        "diversity_score": {"type": "number"},
+        "efficiency_score": {"type": "number"},
+        "total_score": {"type": "number"}
+      }
+    }
+  }
+}

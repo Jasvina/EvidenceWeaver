@@ -1,0 +1,31 @@
+{
+  "schema_version": "run-artifact.v0",
+  "run_id": "synthetic-delay-weak-run",
+  "task_id": "synthetic-delay-task",
+  "answer": "AuroraDB mainly delayed v4 because customers wanted better audit logs. The schedule changed while the team polished those enterprise features.",
+  "final_citations": ["d3"],
+  "claims": [
+    {
+      "claim_id": "gc1",
+      "text": "The launch was delayed mainly to ship better audit logs for enterprise customers.",
+      "citations": ["d3"]
+    },
+    {
+      "claim_id": "gc2",
+      "text": "The team added enterprise polish before release.",
+      "citations": ["d3"]
+    }
+  ],
+  "actions": [
+    {"kind": "search", "argument": "AuroraDB enterprise launch changes"},
+    {"kind": "open", "document_ids": ["d3"]},
+    {"kind": "search", "argument": "AuroraDB enterprise polish"},
+    {"kind": "open", "document_ids": ["d3"]},
+    {"kind": "search", "argument": "AuroraDB audit logs v4"},
+    {"kind": "open", "document_ids": ["d3"]},
+    {"kind": "search", "argument": "AuroraDB enterprise requests"},
+    {"kind": "open", "document_ids": ["d3"]},
+    {"kind": "write_claim", "argument": "audit logs caused delay", "document_ids": ["d3"]},
+    {"kind": "finish", "argument": "deliver answer", "document_ids": ["d3"]}
+  ]
+}

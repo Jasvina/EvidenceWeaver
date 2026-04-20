@@ -59,6 +59,17 @@ Each task should ideally include:
 - list of key claims expected in a strong answer
 - citation expectations for those claims
 
+## Current Repository Artifact
+
+The repository now ships a tiny synthetic benchmark artifact that exercises the full `v0` path:
+
+- task bundle: [`examples/tasks/synthetic_delay_task.json`](../examples/tasks/synthetic_delay_task.json)
+- good run: [`examples/runs/synthetic_delay_good_run.json`](../examples/runs/synthetic_delay_good_run.json)
+- weak run: [`examples/runs/synthetic_delay_weak_run.json`](../examples/runs/synthetic_delay_weak_run.json)
+- schemas: [`schemas/task-bundle.v0.json`](../schemas/task-bundle.v0.json) and [`schemas/run-artifact.v0.json`](../schemas/run-artifact.v0.json)
+
+This is intentionally small. It exists to make the interfaces, scoring assumptions, and test path concrete before the first real benchmark slice is locked down.
+
 ## Metrics
 
 At minimum, the first benchmark slice should report:
