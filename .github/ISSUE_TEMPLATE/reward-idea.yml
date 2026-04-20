@@ -1,0 +1,34 @@
+name: Reward idea
+description: Suggest a reward term, anti-hacking check, or scoring strategy.
+title: "reward: "
+labels:
+  - reward
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What reward idea do you want to add?
+      description: Describe the term, constraint, or scoring rule.
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: What failure mode does it target?
+      description: Explain what bad behavior this reward is meant to improve.
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: What could go wrong?
+      description: Describe possible reward hacking or unintended consequences.
+    validations:
+      required: true
+  - type: textarea
+    id: measurement
+    attributes:
+      label: How should we evaluate it?
+      description: Suggest metrics, diagnostics, or ablations.
+    validations:
+      required: true

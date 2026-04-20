@@ -172,10 +172,13 @@ This repository is still at day zero, but the intended layout is already visible
 |   |   |-- banner.svg
 |   |   `-- evidence-loop.svg
 |   |-- benchmark-slice.md
+|   |-- interfaces.md
 |   |-- related-work.md
 |   |-- research-agenda.md
 |   `-- reward-design.md
 |-- CONTRIBUTING.md
+|-- .github/
+|   `-- ISSUE_TEMPLATE/
 `-- paper/
     `-- outline.md
 ```
@@ -185,6 +188,7 @@ This repository is still at day zero, but the intended layout is already visible
 - [`docs/related-work.md`](docs/related-work.md) - the current map of agentic RL work most relevant to EvidenceWeaver
 - [`docs/research-agenda.md`](docs/research-agenda.md) - milestones, hypotheses, and experimental shape
 - [`docs/benchmark-slice.md`](docs/benchmark-slice.md) - the first reproducible benchmark proposal
+- [`docs/interfaces.md`](docs/interfaces.md) - a minimal `v0` interface sketch for agent, reward, and eval
 - [`docs/reward-design.md`](docs/reward-design.md) - the first reward decomposition sketch
 - [`paper/outline.md`](paper/outline.md) - an early paper structure for the project
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - how to contribute high-signal ideas and changes

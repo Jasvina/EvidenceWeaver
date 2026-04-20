@@ -1,0 +1,34 @@
+name: Benchmark proposal
+description: Propose a benchmark slice, task family, or evaluation setup for EvidenceWeaver.
+title: "benchmark: "
+labels:
+  - benchmark
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What benchmark gap are you addressing?
+      description: Describe the problem with the current benchmark plan.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What do you propose?
+      description: Describe the task slice, data source, environment shape, and evaluation outputs.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Why does this matter for research agents?
+      description: Explain what capability or failure mode this benchmark would reveal.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: How would we know it helped?
+      description: Suggest concrete metrics, ablations, or sanity checks.
+    validations:
+      required: true

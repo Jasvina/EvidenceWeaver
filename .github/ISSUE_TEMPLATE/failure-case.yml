@@ -1,0 +1,32 @@
+name: Failure case
+description: Record a trajectory, output, or training behavior that broke in an interesting way.
+title: "failure-case: "
+labels:
+  - failure-case
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What failed?
+      description: Describe the observed failure mode.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How can we reproduce it?
+      description: Include task context, settings, and any artifacts that help reproduce the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this failure interesting?
+      description: Explain what it teaches us about the benchmark, reward, or policy.
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: What should we try next?
+      description: Suggest a fix, diagnostic, or follow-up experiment.
