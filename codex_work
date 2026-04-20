@@ -290,3 +290,26 @@
 3. 为 benchmark task 增加更系统的 provenance 和 refresh metadata。
 4. 把 diagnostics 从 run artifact 扩成更丰富的 debug / analysis surface。
 5. 在 trainer 选型前，继续扩大 baseline、graph、reward、benchmark 四者之间的实验合同。
+
+04月21日00时46分
+- 工作：新增 graph analysis CLI：`src/evidenceweaver/graph/analyze.py`，可以直接读取 run artifact 并输出 graph summary，包括 edge 统计、opened source、focus coverage ratio、open questions、diagnostics 与 reward bundle。
+- 结果：仓库现在不仅能生成 graph，还能把 graph 单独分析出来，开始具备更像 debug / analysis surface 的能力。
+
+04月21日00时46分
+- 工作：继续补 README 与接口文档，把 `evidenceweaver.graph.analyze` CLI 和 graph analysis 能力写进公开文档。
+- 结果：当前 GitHub 首页和接口文档已经能反映“agent -> graph -> reward -> analysis”这一更完整的 artifact 流程。
+
+04月21日00时46分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+- 验证结果：
+  - 15 个单元测试全部通过。
+  - graph analysis CLI 已被测试覆盖，可正常输出 summary。
+
+=== 更新后的下一步计划（04月21日00时46分） ===
+
+1. 把 `contradicts` 等更强 graph 关系引入 evidence graph。
+2. 把 graph analysis CLI 扩成更完整的 debug report / sidecar artifact。
+3. 继续扩展 reward module，让 reward notes / reward generation 更系统化。
+4. 为 benchmark 加更规范的 provenance / refresh metadata。
+5. 在继续引入 trainer 之前，把 graph、reward、benchmark、analysis 这四层再打牢一些。

@@ -200,6 +200,9 @@ class RewardBundle:
     def from_dict(cls, data: dict[str, Any]) -> "RewardBundle":
         return cls(**{key: float(data.get(key, 0.0)) for key in cls.__dataclass_fields__})
 
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
 
 @dataclass(frozen=True, slots=True)
 class RunDiagnostics:
@@ -224,6 +227,9 @@ class RunDiagnostics:
             uncovered_focus_tokens=_string_tuple(data.get("uncovered_focus_tokens", []), "diagnostics.uncovered_focus_tokens"),
             notes=_string_tuple(data.get("notes", []), "diagnostics.notes"),
         )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass(frozen=True, slots=True)

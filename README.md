@@ -86,6 +86,8 @@ PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
 PYTHONPATH=src python3 -m evidenceweaver.reward.compose \
   benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
   /tmp/evidenceweaver_run.json
+PYTHONPATH=src python3 -m evidenceweaver.graph.analyze \
+  /tmp/evidenceweaver_run.json
 ```
 
 ## What We Are Building
@@ -292,6 +294,8 @@ The graph layer also now emits simple claim-to-claim relationship edges:
 - `supports`
 - `derived_from`
 - `duplicates`
+
+There is also a lightweight graph-analysis CLI for turning a scored run into a graph summary that is easier to inspect in isolation.
 
 ## Benchmark Seeds
 

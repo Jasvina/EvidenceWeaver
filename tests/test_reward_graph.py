@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from evidenceweaver.agent.baseline import run_task
 from evidenceweaver.eval.offline import evaluate_run
+from evidenceweaver.graph.analyze import summarize_graph
 from evidenceweaver.models import load_task_bundle
 from evidenceweaver.reward.compose import compose_reward_bundle, reward_notes
 
@@ -57,6 +58,32 @@ class RewardAndGraphTests(unittest.TestCase):
         payload = json.loads(result.stdout)
         self.assertIn("reward_bundle", payload)
         self.assertIn("notes", payload)
+
+    def test_graph_analysis_cli_and_summary(self) -> None:
+        env = dict(os.environ)
+        src_path = str(REPO_ROOT / "src")
+        env["PYTHONPATH"] = src_path if not env.get("PYTHONPATH") else f"{src_path}:{env['PYTHONPATH']}"
+        run = run_task(BENCHMARK_DIR / "agentic_rl_stability_task.json")
+        summary = summarize_graph(run)
+        self.assertTrue(summary["has_graph"])
+        self.assertIn("edge_counts", summary)
+        run_path = Path("/tmp/evidenceweaver_graph_analysis_run.json")
+        run_path.write_text(json.dumps(run.to_dict(), indent=2) + "\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "evidenceweaver.graph.analyze",
+                str(run_path),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["task_id"], "agentic-rl-stability-task")
+        self.assertIn("prompt_focus_coverage_ratio", payload)
 
 
 if __name__ == "__main__":

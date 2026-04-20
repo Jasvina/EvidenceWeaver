@@ -135,6 +135,7 @@ Current repository status:
 - `run-artifact.v0` now supports `evidence_graph` plus `reward_bundle`
 - `run-artifact.v0` now also supports `diagnostics`
 - the baseline agent writes all three fields
+- `python -m evidenceweaver.graph.analyze <run.json>` can summarize graph structure, coverage, and diagnostics from a saved artifact
 
 If these artifacts are easy to read, the project will be much easier to debug and much easier to trust.
 
