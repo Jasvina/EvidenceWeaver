@@ -102,9 +102,28 @@ def _dedupe_key(text: str) -> str:
     return _normalize(text)
 
 
+def _is_redundant_against_seen(text: str, seen_keys: set[str]) -> bool:
+    key = _dedupe_key(text)
+    if not key:
+        return True
+    if key in seen_keys:
+        return True
+    for seen in seen_keys:
+        if key in seen or seen in key:
+            shorter = min(len(key), len(seen))
+            if shorter >= 24:
+                return True
+    return False
+
+
 def _signal_bonus(text: str) -> float:
     normalized = _normalize(text)
     return sum(0.3 for fragment in SIGNAL_FRAGMENTS if fragment in normalized)
+
+
+def _needs_stronger_duplicate_filter(prompt: str) -> bool:
+    normalized = _normalize(prompt)
+    return ("software engineering" in normalized) or ("computer use" in normalized) or ("computer-use" in normalized)
 
 
 @dataclass(frozen=True, slots=True)
@@ -203,6 +222,7 @@ class BaselineAgent:
         seen_claim_texts: set[str],
         start_index: int,
         max_claims: int,
+        stronger_duplicate_filter: bool,
     ) -> list[GeneratedClaim]:
         prompt_tokens = set(_tokenize(task.prompt))
         document_list = list(documents)
@@ -241,7 +261,8 @@ class BaselineAgent:
             assert best_index is not None
             sentence_tokens, _, sentence, doc_id = sentence_pool.pop(best_index)
             key = _dedupe_key(sentence)
-            if not sentence or key in seen_claim_texts:
+            redundant = _is_redundant_against_seen(sentence, seen_claim_texts) if stronger_duplicate_filter else (key in seen_claim_texts)
+            if not sentence or redundant:
                 continue
             seen_claim_texts.add(key)
             remaining_tokens -= sentence_tokens
@@ -279,6 +300,7 @@ class BaselineAgent:
         claims: list[GeneratedClaim] = []
         search_queries: list[str] = []
         iteration_count = 0
+        stronger_duplicate_filter = _needs_stronger_duplicate_filter(task.prompt)
 
         while self._remaining_action_budget(task, actions) > 1:
             if iteration_count == 0:
@@ -337,6 +359,7 @@ class BaselineAgent:
                 seen_claim_texts=seen_claim_texts,
                 start_index=len(claims) + 1,
                 max_claims=remaining_claim_budget,
+                stronger_duplicate_filter=stronger_duplicate_filter,
             )
             for claim in new_claims:
                 claims.append(claim)

@@ -411,3 +411,25 @@
 3. 继续推进 `contradicts` 等更强 graph 关系，为下一轮错误分析做准备。
 4. 把 provenance 从静态 metadata 逐步推进到更明确的 refresh / versioning contract。
 5. 保持真实样例驱动迭代：每次发现最弱项，就针对该类任务做定向优化并回写 sweep 结果。
+
+04月21日09时55分
+- 工作：把去重策略从全局规则改成 task-family-aware 规则，只在 `computer-use` 和 `software engineering` 这两类任务上启用更强的重复 claim 抑制，而不影响 stability / deep-search 等任务的探索性表达。
+- 结果：避免了“修好一个任务、拖坏另外几个任务”的副作用，real-cases suite 的总体平均分进一步提升。
+
+04月21日09时55分
+- 工作：重新运行 `real_cases_v1` optimizer 并回写新的 `baseline_sweep.json`。
+- 结果：当前 best average `overall_score` 约为 `0.9733`，五任务当前表现为：
+  - `agent-training-stack-task`: `1.0`
+  - `agentic-rl-stability-task`: `0.95`
+  - `computer-use-rl-task`: `0.95`
+  - `deep-search-reward-task`: `0.9667`
+  - `swe-agent-posttraining-task`: `1.0`
+
+04月21日09时55分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy benchmarks/real_cases_v1/tasks`
+- 验证结果：
+  - 18 个单元测试全部通过。
+  - best average `overall_score` 提升到约 `0.9733`。
+  - 当前 weakest task 仍然是 `computer-use-rl-task`，但已提升到约 `0.95`。

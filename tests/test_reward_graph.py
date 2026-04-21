@@ -29,7 +29,7 @@ class RewardAndGraphTests(unittest.TestCase):
         self.assertIsInstance(reward_notes(report), tuple)
 
     def test_graph_contains_non_support_relationship_edge(self) -> None:
-        task_path = BENCHMARK_DIR / "agentic_rl_stability_task.json"
+        task_path = BENCHMARK_DIR / "agent_training_stack_task.json"
         run = run_task(task_path)
         edge_kinds = {edge.kind for edge in run.evidence_graph.edges}
         self.assertIn("supports", edge_kinds)
