@@ -236,6 +236,7 @@ This repository is still at day zero, but the intended layout is already visible
 - [`docs/related-work.md`](docs/related-work.md) - the current map of agentic RL work most relevant to EvidenceWeaver
 - [`docs/research-agenda.md`](docs/research-agenda.md) - milestones, hypotheses, and experimental shape
 - [`docs/benchmark-slice.md`](docs/benchmark-slice.md) - the first reproducible benchmark proposal
+- [`docs/progress-and-roadmap.md`](docs/progress-and-roadmap.md) - current progress, latest benchmark results, and future optimization plan
 - [`docs/interfaces.md`](docs/interfaces.md) - a minimal `v0` interface sketch for agent, reward, and eval
 - [`docs/reward-design.md`](docs/reward-design.md) - the first reward decomposition sketch
 - [`schemas/task-bundle.v0.json`](schemas/task-bundle.v0.json) - the `v0` task bundle contract

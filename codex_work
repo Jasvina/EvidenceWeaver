@@ -492,3 +492,30 @@
 3. 开始为 benchmark 任务生成更完整的 source snapshot sidecar，而不只是在任务 JSON 中放 paraphrased digest。
 4. 继续补 `contradicts` 等 graph 关系，并让 graph analysis report 更适合调试。
 5. 将 paper draft 中的实验章节改成和当前 real-case sweep 更一致的结构。
+
+04月21日11时48分
+- 工作：根据用户要求，把当前项目进度和未来优化路线整理成 GitHub 可读文档 `docs/progress-and-roadmap.md`，并在 README 中加入入口。
+- 结果：远端仓库现在有单独文档记录：当前阶段、已实现组件、benchmark 状态、最新 real-case 分数、已做的优化、已知限制和下一步路线。
+
+04月21日11时48分
+- 当前阶段总结：
+  - 项目已经进入 real-example-driven accuracy optimization 阶段。
+  - 当前闭环为 `task bundle -> baseline agent -> evidence graph -> diagnostics -> reward bundle -> graph analysis -> optimizer sweep`。
+  - `real_cases_v1` 当前有 8 个公开来源驱动任务。
+  - 当前 best average `overall_score` 约为 `0.9724`。
+  - 当前所有 real-case tasks 都 >= `0.95`。
+
+04月21日11时48分
+- 未来优化路线已写入 `docs/progress-and-roadmap.md`：
+  1. 扩展更难真实任务，避免过拟合当前 8 题。
+  2. 增加 source snapshot sidecars。
+  3. 将 failure summary 细化到 per-claim / per-source。
+  4. 深化 evidence graph 关系语义，如 `contradicts` / `requires` / `resolves_open_question`。
+  5. 进一步解耦 reward 和 evaluator。
+  6. 增加 trainer-readiness artifacts。
+
+=== 更新后的下一步计划（04月21日11时48分） ===
+
+1. 下一轮优先增加 source snapshot sidecar 或更难的 real-case tasks。
+2. 如果继续优化当前 suite，必须先增加任务数量，避免过拟合。
+3. 后续每次 benchmark 或 baseline 变化都要更新 `baseline_sweep.json`、`docs/progress-and-roadmap.md` 和 `codex_work`。
