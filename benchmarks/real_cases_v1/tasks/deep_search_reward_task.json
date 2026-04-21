@@ -30,25 +30,62 @@
     {
       "claim_id": "c1",
       "text": "Long-horizon deep search creates sparse supervision because agents may need many turns and tool calls before success is visible.",
-      "supported_by": ["d1", "d2"],
-      "keywords": ["long-horizon", "many turns", "tool calls", "sparse"]
+      "supported_by": [
+        "d1",
+        "d2"
+      ],
+      "keywords": [
+        "long-horizon",
+        "many turns",
+        "tool calls",
+        "sparse"
+      ]
     },
     {
       "claim_id": "c2",
       "text": "Outcome-only reward misses whether the reasoning is comprehensive and factually grounded.",
-      "supported_by": ["d3"],
-      "keywords": ["outcome-only", "comprehensiveness", "factuality", "grounded"]
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "outcome-only",
+        "comprehensiveness",
+        "factuality",
+        "grounded"
+      ]
     },
     {
       "claim_id": "c3",
       "text": "Evidence-sensitive rewards such as citation-aware rubrics help reward citation grounding and evidence-chain quality rather than only final correctness.",
-      "supported_by": ["d3"],
-      "keywords": ["citation-aware", "citation grounding", "evidence-chain", "final correctness"],
-      "depends_on": ["c1", "c2"]
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "citation-aware",
+        "citation grounding",
+        "evidence-chain",
+        "final correctness"
+      ],
+      "depends_on": [
+        "c1",
+        "c2"
+      ]
     }
   ],
   "budget": {
     "max_steps": 8,
     "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2508.07976",
+      "https://github.com/THUDM/DeepDive",
+      "https://github.com/THUDM/CaRR"
+    ],
+    "refresh_hint": "Refresh if deep-search reward framing or repository claims change.",
+    "notes": [
+      "Anchored to deep-search RL and citation-aware reward sources."
+    ]
   }
 }

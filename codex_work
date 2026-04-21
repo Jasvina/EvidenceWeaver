@@ -353,3 +353,27 @@
 3. 让 optimizer 输出更丰富的 per-task failure summary，而不只是聚合分数。
 4. 考虑在 baseline 中加入 task-family-aware heuristic，而不是所有任务一套规则。
 5. 在继续扩大 benchmark 之前，先把真实样例驱动的误差分析能力补强。
+
+04月21日09时45分
+- 工作：为 `real_cases_v1` 全部五个任务引入 `provenance` 字段，并扩展 `TaskBundle` / `task-bundle.v0` 支持该元数据结构。
+- 结果：benchmark artifact 不再只是题目和文档本身，而是开始具备来源治理能力；每个任务现在都能携带 `snapshot_style`、`primary_urls`、`refresh_hint` 和 `notes`。
+
+04月21日09时45分
+- 工作：把 provenance 能力补进 README、benchmark README、接口文档，并增加测试确保 real-cases suite 的任务都带 provenance。
+- 结果：项目已经从“benchmark 存储”继续推进到“benchmark 治理”，后续扩展真实样例时更容易维持来源一致性和刷新策略。
+
+04月21日09时45分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - 对 `benchmarks/real_cases_v1/tasks/*.json` 逐个检查 `provenance.primary_urls`
+- 验证结果：
+  - 18 个单元测试全部通过。
+  - real-cases suite 全部任务都已携带 provenance。
+
+=== 更新后的下一步计划（04月21日09时45分） ===
+
+1. 继续针对 `swe-agent-posttraining-task` 做专项精度优化，因为它仍然是当前最弱项。
+2. 把 optimizer 扩展成能输出更明确的 failure summary，而不仅是 aggregate 分数。
+3. 在 graph 里继续引入 `contradicts` 等更强关系语义。
+4. 让 provenance 后续能支持 refresh recipe 或 source snapshot versioning。
+5. 继续把“真实样例驱动的误差分析”做成项目主线，而不是只停留在一次性 sweep。

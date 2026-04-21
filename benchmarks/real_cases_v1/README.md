@@ -22,6 +22,15 @@ These tasks all stay within the same repository domain:
 - computer-use agents
 - software engineering agents
 
+Each task now includes a `provenance` section with:
+
+- `snapshot_style`
+- `primary_urls`
+- `refresh_hint`
+- `notes`
+
+That metadata is intentionally small, but it gives the suite a more durable source-of-truth contract than bare task text alone.
+
 ## Why this suite exists
 
 The goal is not to claim benchmark completeness. The goal is to create a practical, real-example-driven loop for:

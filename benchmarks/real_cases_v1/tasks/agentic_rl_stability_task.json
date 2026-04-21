@@ -30,25 +30,62 @@
     {
       "claim_id": "c1",
       "text": "Recent agentic RL work treats stability as a first-class issue because long-horizon training can collapse.",
-      "supported_by": ["d2", "d3"],
-      "keywords": ["stability", "first-class", "training collapse", "long-horizon"]
+      "supported_by": [
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "stability",
+        "first-class",
+        "training collapse",
+        "long-horizon"
+      ]
     },
     {
       "claim_id": "c2",
       "text": "Template collapse is a concrete failure mode in which reasoning becomes input-agnostic even when entropy looks stable.",
-      "supported_by": ["d2"],
-      "keywords": ["template collapse", "input-agnostic", "entropy"]
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "template collapse",
+        "input-agnostic",
+        "entropy"
+      ]
     },
     {
       "claim_id": "c3",
       "text": "Stabilization mechanisms include mutual information diagnostics, SNR-aware filtering, and SAMPO.",
-      "supported_by": ["d2", "d3"],
-      "keywords": ["mutual information", "SNR-aware filtering", "SAMPO"],
-      "depends_on": ["c1", "c2"]
+      "supported_by": [
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "mutual information",
+        "SNR-aware filtering",
+        "SAMPO"
+      ],
+      "depends_on": [
+        "c1",
+        "c2"
+      ]
     }
   ],
   "budget": {
     "max_steps": 8,
     "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2504.20073",
+      "https://arxiv.org/abs/2604.06268",
+      "https://arxiv.org/abs/2602.21534"
+    ],
+    "refresh_hint": "Re-check abstracts and project summaries if newer versions of the papers appear.",
+    "notes": [
+      "Derived from public paper abstracts and project summaries.",
+      "Used for stability-oriented reasoning tasks."
+    ]
   }
 }

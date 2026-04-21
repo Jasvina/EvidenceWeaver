@@ -57,6 +57,23 @@ class Budget:
 
 
 @dataclass(frozen=True, slots=True)
+class TaskProvenance:
+    snapshot_style: str
+    primary_urls: tuple[str, ...] = ()
+    refresh_hint: str = ""
+    notes: tuple[str, ...] = ()
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "TaskProvenance":
+        return cls(
+            snapshot_style=_expect_string(data.get("snapshot_style"), "provenance.snapshot_style"),
+            primary_urls=_string_tuple(data.get("primary_urls", []), "provenance.primary_urls"),
+            refresh_hint=str(data.get("refresh_hint", "")),
+            notes=_string_tuple(data.get("notes", []), "provenance.notes"),
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class Document:
     doc_id: str
     title: str
@@ -103,6 +120,7 @@ class TaskBundle:
     documents: tuple[Document, ...]
     required_claims: tuple[RequiredClaim, ...]
     budget: Budget | None = None
+    provenance: TaskProvenance | None = None
 
     @property
     def document_ids(self) -> set[str]:
@@ -124,6 +142,8 @@ class TaskBundle:
         )
         raw_budget = data.get("budget")
         budget = None if raw_budget is None else Budget.from_dict(_expect_mapping(raw_budget, "budget"))
+        raw_provenance = data.get("provenance")
+        provenance = None if raw_provenance is None else TaskProvenance.from_dict(_expect_mapping(raw_provenance, "provenance"))
         bundle = cls(
             schema_version=_expect_string(data.get("schema_version"), "schema_version"),
             task_id=_expect_string(data.get("task_id"), "task_id"),
@@ -132,6 +152,7 @@ class TaskBundle:
             documents=documents,
             required_claims=required_claims,
             budget=budget,
+            provenance=provenance,
         )
         bundle.validate_references()
         return bundle

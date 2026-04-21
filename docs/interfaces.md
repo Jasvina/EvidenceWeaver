@@ -26,6 +26,8 @@ At minimum, `AgentState` should contain:
 - evidence graph snapshot
 - budget counters
 
+The benchmark layer now also carries optional task-level provenance metadata so the agent and tooling can know what kind of snapshot they are operating over.
+
 The `Action` space can start very small:
 
 - `search(query)`

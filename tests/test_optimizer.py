@@ -7,6 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from evidenceweaver.models import load_task_bundle
 from evidenceweaver.optimize.accuracy import collect_task_paths, optimize_suite
 
 
@@ -18,6 +19,10 @@ class OptimizerTests(unittest.TestCase):
     def test_real_cases_suite_has_expected_task_count(self) -> None:
         paths = collect_task_paths(REAL_CASES_DIR)
         self.assertEqual(len(paths), 5)
+        for path in paths:
+            task = load_task_bundle(path)
+            self.assertIsNotNone(task.provenance)
+            self.assertTrue(task.provenance.primary_urls)
 
     def test_optimize_suite_returns_ranked_candidates(self) -> None:
         payload = optimize_suite(REAL_CASES_DIR)

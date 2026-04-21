@@ -329,6 +329,7 @@ Current repository snapshot:
 - saved sweep result: `benchmarks/real_cases_v1/results/baseline_sweep.json`
 - current best config aligns with the repository default baseline configuration
 - current hardest task in the suite is `swe-agent-posttraining-task`, which is a useful signal for where the next accuracy work should go
+- each real-case task now carries provenance metadata so source URLs and refresh hints travel with the artifact
 
 ## Related Work Snapshot
 

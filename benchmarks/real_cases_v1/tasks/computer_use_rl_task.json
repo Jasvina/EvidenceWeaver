@@ -30,25 +30,64 @@
     {
       "claim_id": "c1",
       "text": "Computer-use agents need mixed or hybrid action spaces because real tasks involve both GUI behavior and higher-level operations.",
-      "supported_by": ["d1", "d2"],
-      "keywords": ["mixed action spaces", "hybrid", "GUI", "API"]
+      "supported_by": [
+        "d1",
+        "d2"
+      ],
+      "keywords": [
+        "mixed action spaces",
+        "hybrid",
+        "GUI",
+        "API"
+      ]
     },
     {
       "claim_id": "c2",
       "text": "Specialized RL environments matter because desktop trajectories are long and expensive enough that scalable environments become important.",
-      "supported_by": ["d1", "d3"],
-      "keywords": ["scalable", "desktop environments", "long interactive trajectories", "trainable"]
+      "supported_by": [
+        "d1",
+        "d3"
+      ],
+      "keywords": [
+        "scalable",
+        "desktop environments",
+        "long interactive trajectories",
+        "trainable"
+      ]
     },
     {
       "claim_id": "c3",
       "text": "ComputerRL is important because it combines online RL with hybrid actions and realistic desktop environments instead of text-only supervision.",
-      "supported_by": ["d1", "d2"],
-      "keywords": ["online reinforcement learning", "hybrid actions", "realistic desktop environments", "text-only"],
-      "depends_on": ["c1", "c2"]
+      "supported_by": [
+        "d1",
+        "d2"
+      ],
+      "keywords": [
+        "online reinforcement learning",
+        "hybrid actions",
+        "realistic desktop environments",
+        "text-only"
+      ],
+      "depends_on": [
+        "c1",
+        "c2"
+      ]
     }
   ],
   "budget": {
     "max_steps": 9,
     "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2508.14040",
+      "https://github.com/THUDM/ComputerRL",
+      "https://github.com/xlang-ai/OSWorld"
+    ],
+    "refresh_hint": "Refresh if action-space or environment descriptions change in upstream repos or paper revisions.",
+    "notes": [
+      "Focused on computer-use environments and hybrid action design."
+    ]
   }
 }

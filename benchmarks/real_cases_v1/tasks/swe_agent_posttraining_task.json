@@ -30,25 +30,65 @@
     {
       "claim_id": "c1",
       "text": "Software engineering agents benefit from executable or repository-grounded feedback rather than answer-only supervision.",
-      "supported_by": ["d1", "d3"],
-      "keywords": ["executable", "repository state", "tests", "answer-only"]
+      "supported_by": [
+        "d1",
+        "d3"
+      ],
+      "keywords": [
+        "executable",
+        "repository state",
+        "tests",
+        "answer-only"
+      ]
     },
     {
       "claim_id": "c2",
       "text": "SWE-Master extends post-training by combining agentic SFT, RL, test-time scaling, and tool-augmented coding support.",
-      "supported_by": ["d2"],
-      "keywords": ["agentic supervised fine-tuning", "reinforcement learning", "test-time scaling", "tool-augmented", "LSP"]
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "agentic supervised fine-tuning",
+        "reinforcement learning",
+        "test-time scaling",
+        "tool-augmented",
+        "LSP"
+      ]
     },
     {
       "claim_id": "c3",
       "text": "The broader reason SWE agents need post-training is that realistic coding tasks require tool use plus verifiable environment feedback.",
-      "supported_by": ["d1", "d2", "d3"],
-      "keywords": ["tool use", "verifiable", "environment feedback", "realistic coding tasks"],
-      "depends_on": ["c1", "c2"]
+      "supported_by": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "tool use",
+        "verifiable",
+        "environment feedback",
+        "realistic coding tasks"
+      ],
+      "depends_on": [
+        "c1",
+        "c2"
+      ]
     }
   ],
   "budget": {
     "max_steps": 9,
     "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2502.18449",
+      "https://github.com/RUCAIBox/SWE-Master",
+      "https://github.com/SWE-bench/SWE-bench"
+    ],
+    "refresh_hint": "Refresh if SWE post-training stacks or benchmark semantics change materially upstream.",
+    "notes": [
+      "Focused on executable-feedback and tool-grounded software engineering agents."
+    ]
   }
 }
