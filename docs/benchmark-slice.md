@@ -110,6 +110,25 @@ The current baseline is no longer purely one-shot. On tasks with enough budget i
 - open an additional source
 - produce a richer scored artifact
 
+## Real-example-driven optimization stage
+
+The repository has now entered a more serious tuning phase with [`benchmarks/real_cases_v1/`](../benchmarks/real_cases_v1/README.md).
+
+This suite is different from `snapshot_v0` in purpose:
+
+- `snapshot_v0` exists to prove the loop works
+- `real_cases_v1` exists to compare candidate baseline configurations against a broader task set
+
+The current sweep output is saved in:
+
+- [`benchmarks/real_cases_v1/results/baseline_sweep.json`](../benchmarks/real_cases_v1/results/baseline_sweep.json)
+
+The current signal from that sweep is:
+
+- the best-performing baseline opens more documents on the first pass
+- the current baseline is strong on stability, training-stack, deep-search, and computer-use tasks
+- the current weakest area is the SWE post-training task family
+
 ## Metrics
 
 At minimum, the first benchmark slice should report:

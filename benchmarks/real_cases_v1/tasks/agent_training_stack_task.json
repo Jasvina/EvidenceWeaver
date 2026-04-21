@@ -1,0 +1,60 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "agent-training-stack-task",
+  "prompt": "Compare how Agent Lightning, AgentRL, and rLLM structure agent training pipelines.",
+  "reference_answer": "Agent Lightning focuses on decoupling agent execution from RL training through a unified data interface and almost zero code modifications. AgentRL emphasizes a fully asynchronous multi-turn, multi-task training and environment stack with separate rollout, actor, and reference workers. rLLM is positioned as a reusable framework or substrate that can train many agent frameworks with near-zero code changes and multiple RL backends.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "Agent Lightning digest",
+      "url": "https://arxiv.org/abs/2508.03680",
+      "content": "Agent Lightning is organized around complete decoupling between agent execution and training, using a unified data interface and almost zero code modifications for existing agents. Its design focuses on plugging RL into existing agent stacks without large rewrites.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "AgentRL repository digest",
+      "url": "https://github.com/THUDM/AgentRL",
+      "content": "AgentRL emphasizes a fully asynchronous multi-turn, multi-task training pipeline with rollout workers, actor workers, and reference workers. The framework treats asynchronous coordination as the core way to scale agentic RL updates.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "rLLM repository digest",
+      "url": "https://github.com/rllm-org/rllm",
+      "content": "rLLM acts like a reusable agent-training substrate with near-zero code changes, a CLI-first workflow, and multiple RL algorithms and training backends. The project highlights framework ergonomics and compatibility with many agent stacks.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Agent Lightning is organized around decoupling agent execution from training with a unified interface and minimal rewrites.",
+      "supported_by": ["d1"],
+      "keywords": ["Agent Lightning", "decoupling", "unified", "zero code modifications"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "AgentRL emphasizes a fully asynchronous multi-turn, multi-task pipeline with rollout, actor, and reference workers.",
+      "supported_by": ["d2"],
+      "keywords": ["fully asynchronous", "multi-turn", "multi-task", "rollout workers", "actor workers", "reference workers"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "rLLM acts like a reusable agent-training substrate with near-zero code changes and multiple RL backends.",
+      "supported_by": ["d3"],
+      "keywords": ["rLLM", "near-zero code changes", "multiple RL algorithms", "training backends"]
+    },
+    {
+      "claim_id": "c4",
+      "text": "The three systems differ because Agent Lightning focuses on execution-training decoupling, AgentRL on asynchronous training infrastructure, and rLLM on reusable framework ergonomics.",
+      "supported_by": ["d1", "d2", "d3"],
+      "keywords": ["decoupling", "asynchronous", "framework", "compare"],
+      "depends_on": ["c1", "c2", "c3"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  }
+}

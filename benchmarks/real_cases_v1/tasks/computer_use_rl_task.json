@@ -1,0 +1,54 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "computer-use-rl-task",
+  "prompt": "Why do computer-use agents need specialized RL environments and mixed action spaces?",
+  "reference_answer": "Computer-use agents need specialized RL environments because desktop tasks are long-horizon and expensive to supervise with pure outcome-only signals. They also need mixed action spaces because real computer tasks combine GUI actions with higher-level operations or APIs. ComputerRL is important because it packages online RL with hybrid actions and scalable desktop environments instead of treating computer use as plain text generation.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "ComputerRL paper digest",
+      "url": "https://arxiv.org/abs/2508.14040",
+      "content": "ComputerRL presents end-to-end online reinforcement learning for computer-use agents. The paper emphasizes hybrid API and GUI action spaces together with scalable parallel desktop environments so long interactive tasks become trainable.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ComputerRL repository digest",
+      "url": "https://github.com/THUDM/ComputerRL",
+      "content": "The ComputerRL repository describes computer-use training around mixed actions, realistic desktop environments, and online reinforcement learning instead of purely text-only supervision.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "OSWorld benchmark digest",
+      "url": "https://github.com/xlang-ai/OSWorld",
+      "content": "OSWorld is a computer-use benchmark built around real desktop tasks with long interactive trajectories. Such trajectories make scalable environments and action design central to training quality.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Computer-use agents need mixed or hybrid action spaces because real tasks involve both GUI behavior and higher-level operations.",
+      "supported_by": ["d1", "d2"],
+      "keywords": ["mixed action spaces", "hybrid", "GUI", "API"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Specialized RL environments matter because desktop trajectories are long and expensive enough that scalable environments become important.",
+      "supported_by": ["d1", "d3"],
+      "keywords": ["scalable", "desktop environments", "long interactive trajectories", "trainable"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "ComputerRL is important because it combines online RL with hybrid actions and realistic desktop environments instead of text-only supervision.",
+      "supported_by": ["d1", "d2"],
+      "keywords": ["online reinforcement learning", "hybrid actions", "realistic desktop environments", "text-only"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  }
+}

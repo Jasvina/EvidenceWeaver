@@ -1,0 +1,54 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "swe-agent-posttraining-task",
+  "prompt": "Why do software engineering agents need post-training that is grounded in tools and executable feedback?",
+  "reference_answer": "Software engineering agents need post-training grounded in tools and executable feedback because issue-resolution tasks can be verified with repository state and tests instead of only free-form judgments. SWE-RL demonstrates the value of reinforcement learning on software engineering tasks, while SWE-Master layers agentic SFT, RL, test-time scaling, and LSP or code tools into a stronger system. The broader lesson is that SWE agents need environment feedback and tool use, not just answer-only optimization.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "SWE-RL digest",
+      "url": "https://arxiv.org/abs/2502.18449",
+      "content": "SWE-RL applies reinforcement learning to software engineering agents on issue-resolution tasks. The key intuition is that repository state and executable tests provide richer feedback than answer-only judging.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "SWE-Master repository digest",
+      "url": "https://github.com/RUCAIBox/SWE-Master",
+      "content": "SWE-Master combines agentic supervised fine-tuning, reinforcement learning, test-time scaling, and tool-augmented coding workflows including LSP-style support. The system treats post-training as an integrated stack rather than a single optimization trick.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "SWE-bench digest",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "content": "SWE-bench evaluates issue resolution against real repositories and executable outcomes. This makes software engineering a setting where tools and environment feedback matter directly.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Software engineering agents benefit from executable or repository-grounded feedback rather than answer-only supervision.",
+      "supported_by": ["d1", "d3"],
+      "keywords": ["executable", "repository state", "tests", "answer-only"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "SWE-Master extends post-training by combining agentic SFT, RL, test-time scaling, and tool-augmented coding support.",
+      "supported_by": ["d2"],
+      "keywords": ["agentic supervised fine-tuning", "reinforcement learning", "test-time scaling", "tool-augmented", "LSP"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "The broader reason SWE agents need post-training is that realistic coding tasks require tool use plus verifiable environment feedback.",
+      "supported_by": ["d1", "d2", "d3"],
+      "keywords": ["tool use", "verifiable", "environment feedback", "realistic coding tasks"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  }
+}

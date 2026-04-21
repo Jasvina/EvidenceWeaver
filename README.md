@@ -68,6 +68,7 @@ This repository now includes a minimal Python scaffold so the project can move f
 - `schemas/` defines `v0` JSON schemas for task bundles and run artifacts
 - `examples/` contains a synthetic snapshot-based task plus good and weak runs
 - `benchmarks/snapshot_v0/` contains the first more realistic paraphrased snapshot benchmark seeds
+- `benchmarks/real_cases_v1/` contains the first real-example-driven accuracy-optimization suite
 - `tests/` verifies parsing, scoring, and the CLI path
 
 Quick local checks:
@@ -88,6 +89,8 @@ PYTHONPATH=src python3 -m evidenceweaver.reward.compose \
   /tmp/evidenceweaver_run.json
 PYTHONPATH=src python3 -m evidenceweaver.graph.analyze \
   /tmp/evidenceweaver_run.json
+PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy \
+  benchmarks/real_cases_v1/tasks
 ```
 
 ## What We Are Building
@@ -308,6 +311,24 @@ Current tasks:
 - `deep_search_reward_task` - why deep search agents need evidence-sensitive rewards
 
 These tasks use paraphrased snapshot digests anchored to primary-source URLs, which keeps the repository lightweight while still exercising research-style synthesis and citation behavior.
+
+## Real-Case Optimization
+
+The repository now also includes `benchmarks/real_cases_v1/`, a broader five-task suite used to tune the deterministic baseline against more realistic examples.
+
+Run the suite optimizer:
+
+```bash
+PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy \
+  benchmarks/real_cases_v1/tasks
+```
+
+Current repository snapshot:
+
+- suite size: `5` tasks
+- saved sweep result: `benchmarks/real_cases_v1/results/baseline_sweep.json`
+- current best config aligns with the repository default baseline configuration
+- current hardest task in the suite is `swe-agent-posttraining-task`, which is a useful signal for where the next accuracy work should go
 
 ## Related Work Snapshot
 

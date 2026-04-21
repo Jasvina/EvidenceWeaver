@@ -34,6 +34,11 @@ The `Action` space can start very small:
 - `write_claim(text, citations)`
 - `finish(answer)`
 
+Current repository status:
+
+- the deterministic baseline now exposes tunable configuration parameters through `BaselineAgentConfig`
+- these parameters are exercised by the real-case accuracy optimizer in `src/evidenceweaver/optimize/accuracy.py`
+
 ## 2. Environment Interface
 
 The environment should be responsible for executing actions and returning observations.

@@ -158,6 +158,8 @@ The benchmark currently contains three tasks.
 
 These tasks are all domain-relevant to the project itself, which makes them useful as both benchmark seeds and living design probes.
 
+The repository has now also moved into a broader real-example-driven tuning stage through `real_cases_v1`, which adds computer-use and software-engineering post-training tasks. This matters because the project is no longer only checking whether the loop runs; it is now using a multi-task suite to optimize deterministic baseline behavior and identify the first accuracy bottlenecks.
+
 ### 6.3 Provenance model
 
 The benchmark documents are paraphrased digests anchored to primary-source URLs. That decision keeps the benchmark lightweight and avoids copying large web pages into the repository. The cost is that the benchmark is not yet a high-fidelity frozen-web benchmark. The benefit is that the project can already reason about realistic task shape, provenance, and evaluation.
@@ -257,6 +259,8 @@ A credible paper from this project should eventually answer at least five questi
 3. Which diagnostics predict long-horizon collapse earliest?
 4. Which benchmark dimensions matter most for research-agent evaluation?
 5. How much performance tradeoff exists between answer quality and evidence quality?
+
+The current repository already provides one useful early answer shape: a small multi-task sweep can identify which task families are easiest for a graph-aware baseline and which remain hard. In the present snapshot, software-engineering post-training tasks are noticeably weaker than the other four task families, which suggests the future benchmark and agent work should not assume one heuristic loop will fit all domains equally well.
 
 The first publishable evidence will likely come from ablations rather than from a huge absolute benchmark win.
 

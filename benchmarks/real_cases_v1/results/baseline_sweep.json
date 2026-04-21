@@ -1,0 +1,419 @@
+{
+  "task_dir": "benchmarks/real_cases_v1/tasks",
+  "task_count": 5,
+  "best_config": {
+    "config_name": "balanced_v1",
+    "config": {
+      "max_docs": 3,
+      "max_claims": 4,
+      "search_limit": 5,
+      "initial_doc_cap": 3,
+      "followup_doc_limit": 1,
+      "novelty_weight": 1.5,
+      "signal_bonus_weight": 1.0,
+      "sentence_length_bonus": 0.1,
+      "followup_min_total_budget": 9
+    },
+    "average_overall_score": 0.8283,
+    "average_citation_coverage": 0.8667,
+    "average_answer_coverage": 0.8667,
+    "task_metrics": [
+      {
+        "task_id": "agent-training-stack-task",
+        "overall_score": 0.9625,
+        "answer_coverage": 1.0,
+        "citation_coverage": 1.0,
+        "citation_precision": 0.75,
+        "unsupported_claim_rate": 0.25
+      },
+      {
+        "task_id": "agentic-rl-stability-task",
+        "overall_score": 0.9,
+        "answer_coverage": 1.0,
+        "citation_coverage": 1.0,
+        "citation_precision": 0.6667,
+        "unsupported_claim_rate": 0.3333
+      },
+      {
+        "task_id": "computer-use-rl-task",
+        "overall_score": 0.925,
+        "answer_coverage": 1.0,
+        "citation_coverage": 1.0,
+        "citation_precision": 0.5,
+        "unsupported_claim_rate": 0.5
+      },
+      {
+        "task_id": "deep-search-reward-task",
+        "overall_score": 0.9667,
+        "answer_coverage": 1.0,
+        "citation_coverage": 1.0,
+        "citation_precision": 1.0,
+        "unsupported_claim_rate": 0.0
+      },
+      {
+        "task_id": "swe-agent-posttraining-task",
+        "overall_score": 0.3875,
+        "answer_coverage": 0.3333,
+        "citation_coverage": 0.3333,
+        "citation_precision": 0.25,
+        "unsupported_claim_rate": 0.75
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "config_name": "balanced_v1",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 4,
+        "search_limit": 5,
+        "initial_doc_cap": 3,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.5,
+        "signal_bonus_weight": 1.0,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 9
+      },
+      "average_overall_score": 0.8283,
+      "average_citation_coverage": 0.8667,
+      "average_answer_coverage": 0.8667,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.9625,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.75,
+          "unsupported_claim_rate": 0.25
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.9,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.925,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.5,
+          "unsupported_claim_rate": 0.5
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.9667,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 1.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3875,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.25,
+          "unsupported_claim_rate": 0.75
+        }
+      ]
+    },
+    {
+      "config_name": "wider_first_pass",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 4,
+        "search_limit": 5,
+        "initial_doc_cap": 3,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.5,
+        "signal_bonus_weight": 1.0,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 9
+      },
+      "average_overall_score": 0.8283,
+      "average_citation_coverage": 0.8667,
+      "average_answer_coverage": 0.8667,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.9625,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.75,
+          "unsupported_claim_rate": 0.25
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.9,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.925,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.5,
+          "unsupported_claim_rate": 0.5
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.9667,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 1.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3875,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.25,
+          "unsupported_claim_rate": 0.75
+        }
+      ]
+    },
+    {
+      "config_name": "claim_heavy",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 5,
+        "search_limit": 5,
+        "initial_doc_cap": 3,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.3,
+        "signal_bonus_weight": 1.0,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 9
+      },
+      "average_overall_score": 0.8283,
+      "average_citation_coverage": 0.8667,
+      "average_answer_coverage": 0.8667,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.9625,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.75,
+          "unsupported_claim_rate": 0.25
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.9,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.925,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.5,
+          "unsupported_claim_rate": 0.5
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.9667,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 1.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3875,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.25,
+          "unsupported_claim_rate": 0.75
+        }
+      ]
+    },
+    {
+      "config_name": "precision_first",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 3,
+        "search_limit": 5,
+        "initial_doc_cap": 3,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.8,
+        "signal_bonus_weight": 1.2,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 9
+      },
+      "average_overall_score": 0.8283,
+      "average_citation_coverage": 0.8667,
+      "average_answer_coverage": 0.8667,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.9625,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.75,
+          "unsupported_claim_rate": 0.25
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.9,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.925,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.5,
+          "unsupported_claim_rate": 0.5
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.9667,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 1.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3875,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.25,
+          "unsupported_claim_rate": 0.75
+        }
+      ]
+    },
+    {
+      "config_name": "breadth_first",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 5,
+        "search_limit": 5,
+        "initial_doc_cap": 2,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.2,
+        "signal_bonus_weight": 1.0,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 9
+      },
+      "average_overall_score": 0.6767,
+      "average_citation_coverage": 0.6833,
+      "average_answer_coverage": 0.75,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.6667,
+          "answer_coverage": 0.75,
+          "citation_coverage": 0.75,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.9,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.4833,
+          "answer_coverage": 0.6667,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.3333,
+          "unsupported_claim_rate": 0.6667
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.9667,
+          "answer_coverage": 1.0,
+          "citation_coverage": 1.0,
+          "citation_precision": 1.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3667,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.3333,
+          "unsupported_claim_rate": 0.6667
+        }
+      ]
+    },
+    {
+      "config_name": "followup_friendly",
+      "config": {
+        "max_docs": 3,
+        "max_claims": 4,
+        "search_limit": 5,
+        "initial_doc_cap": 2,
+        "followup_doc_limit": 1,
+        "novelty_weight": 1.5,
+        "signal_bonus_weight": 1.0,
+        "sentence_length_bonus": 0.1,
+        "followup_min_total_budget": 8
+      },
+      "average_overall_score": 0.3233,
+      "average_citation_coverage": 0.2833,
+      "average_answer_coverage": 0.35,
+      "task_metrics": [
+        {
+          "task_id": "agent-training-stack-task",
+          "overall_score": 0.6667,
+          "answer_coverage": 0.75,
+          "citation_coverage": 0.75,
+          "citation_precision": 0.6667,
+          "unsupported_claim_rate": 0.3333
+        },
+        {
+          "task_id": "agentic-rl-stability-task",
+          "overall_score": 0.05,
+          "answer_coverage": 0.0,
+          "citation_coverage": 0.0,
+          "citation_precision": 0.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "computer-use-rl-task",
+          "overall_score": 0.4833,
+          "answer_coverage": 0.6667,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.3333,
+          "unsupported_claim_rate": 0.6667
+        },
+        {
+          "task_id": "deep-search-reward-task",
+          "overall_score": 0.05,
+          "answer_coverage": 0.0,
+          "citation_coverage": 0.0,
+          "citation_precision": 0.0,
+          "unsupported_claim_rate": 0.0
+        },
+        {
+          "task_id": "swe-agent-posttraining-task",
+          "overall_score": 0.3667,
+          "answer_coverage": 0.3333,
+          "citation_coverage": 0.3333,
+          "citation_precision": 0.3333,
+          "unsupported_claim_rate": 0.6667
+        }
+      ]
+    }
+  ]
+}

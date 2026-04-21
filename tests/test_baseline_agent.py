@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from evidenceweaver.agent.baseline import BaselineAgent, run_task
+from evidenceweaver.agent.baseline import BaselineAgent, BaselineAgentConfig, run_task
 from evidenceweaver.eval.offline import evaluate_run
 from evidenceweaver.models import load_run_artifact, load_task_bundle
 
@@ -125,9 +125,11 @@ class BaselineAgentTests(unittest.TestCase):
 
     def test_graph_driven_follow_up_search_occurs_on_snapshot_suite(self) -> None:
         benchmark_dir = REPO_ROOT / "benchmarks" / "snapshot_v0" / "tasks"
+        followup_agent = BaselineAgent(config=BaselineAgentConfig(initial_doc_cap=2))
         iteration_counts = []
         for path in sorted(benchmark_dir.glob("*.json")):
-            run = run_task(path)
+            task = load_task_bundle(path)
+            run = followup_agent.run(task)
             iteration_counts.append(run.diagnostics.iteration_count)
             self.assertGreaterEqual(len(run.diagnostics.search_queries), 1)
         self.assertTrue(any(count > 1 for count in iteration_counts))

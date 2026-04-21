@@ -104,6 +104,19 @@ class SearchHit:
     score: float
 
 
+@dataclass(frozen=True, slots=True)
+class BaselineAgentConfig:
+    max_docs: int = 3
+    max_claims: int = 4
+    search_limit: int = 5
+    initial_doc_cap: int = 3
+    followup_doc_limit: int = 1
+    novelty_weight: float = 1.5
+    signal_bonus_weight: float = 1.0
+    sentence_length_bonus: float = 0.1
+    followup_min_total_budget: int = 9
+
+
 class SnapshotEnvironment:
     """A tiny snapshot environment that supports search and open actions."""
 
@@ -140,9 +153,26 @@ class SnapshotEnvironment:
 class BaselineAgent:
     """A simple deterministic search-read-write baseline for snapshot tasks."""
 
-    def __init__(self, max_docs: int | None = None, max_claims: int | None = None) -> None:
-        self.max_docs = max_docs
-        self.max_claims = max_claims
+    def __init__(
+        self,
+        max_docs: int | None = None,
+        max_claims: int | None = None,
+        config: BaselineAgentConfig | None = None,
+    ) -> None:
+        base = config or BaselineAgentConfig()
+        resolved_max_docs = max_docs if max_docs is not None else base.max_docs
+        resolved_max_claims = max_claims if max_claims is not None else base.max_claims
+        self.config = BaselineAgentConfig(
+            max_docs=resolved_max_docs,
+            max_claims=resolved_max_claims,
+            search_limit=base.search_limit,
+            initial_doc_cap=base.initial_doc_cap,
+            followup_doc_limit=base.followup_doc_limit,
+            novelty_weight=base.novelty_weight,
+            signal_bonus_weight=base.signal_bonus_weight,
+            sentence_length_bonus=base.sentence_length_bonus,
+            followup_min_total_budget=base.followup_min_total_budget,
+        )
 
     def _select_documents(self, task: TaskBundle, hits: list[SearchHit], opened_doc_ids: set[str], limit: int) -> list[Document]:
         budget_reads = task.budget.max_document_reads if task.budget and task.budget.max_document_reads else len(task.documents)
@@ -171,7 +201,11 @@ class BaselineAgent:
         for document in document_list:
             for sentence in _sentence_split(document.content):
                 sentence_tokens = set(_tokenize(sentence))
-                score = _overlap_score(prompt_tokens, sentence) + _signal_bonus(sentence) + (0.1 if len(sentence) <= 260 else 0.0)
+                score = (
+                    _overlap_score(prompt_tokens, sentence)
+                    + (self.config.signal_bonus_weight * _signal_bonus(sentence))
+                    + (self.config.sentence_length_bonus if len(sentence) <= 260 else 0.0)
+                )
                 sentence_pool.append((sentence_tokens, score, sentence.strip(), document.doc_id))
 
         claims: list[GeneratedClaim] = []
@@ -181,7 +215,7 @@ class BaselineAgent:
             best_score = None
             for index, (sentence_tokens, base_score, sentence, doc_id) in enumerate(sentence_pool):
                 novelty = len(sentence_tokens & remaining_tokens)
-                score = (1.5 * novelty) + base_score
+                score = (self.config.novelty_weight * novelty) + base_score
                 if best_score is None or score > best_score:
                     best_score = score
                     best_index = index
@@ -236,7 +270,7 @@ class BaselineAgent:
                     break
 
             iteration_count += 1
-            hits = environment.search(search_query, limit=5)
+            hits = environment.search(search_query, limit=self.config.search_limit)
             search_queries.append(search_query)
             actions.append(Action(kind="search", argument=search_query))
 
@@ -248,11 +282,11 @@ class BaselineAgent:
                 break
             if iteration_count == 1:
                 total_budget = task.budget.max_steps if task.budget else 8
-                allow_follow_up = total_budget >= 9 and remaining_reads > 0 and len(task.documents) > 2
-                initial_doc_cap = 2 if allow_follow_up else (self.max_docs or 3)
+                allow_follow_up = total_budget >= self.config.followup_min_total_budget and remaining_reads > 0 and len(task.documents) > 2
+                initial_doc_cap = self.config.initial_doc_cap if allow_follow_up else self.config.max_docs
                 target_doc_limit = min(initial_doc_cap, remaining_reads, max(1, remaining_action_budget - 1))
             else:
-                target_doc_limit = min(1, remaining_reads, max(1, remaining_action_budget - 1))
+                target_doc_limit = min(self.config.followup_doc_limit, remaining_reads, max(1, remaining_action_budget - 1))
             documents = self._select_documents(task, hits, opened_doc_ids, limit=target_doc_limit)
             if not documents:
                 break
@@ -272,7 +306,7 @@ class BaselineAgent:
             remaining_unopened_docs = self._remaining_read_budget(task, opened_doc_ids)
             reserve_actions = 1  # reserve finish
             total_budget = task.budget.max_steps if task.budget else 8
-            if iteration_count == 1 and remaining_unopened_docs > 0 and total_budget >= 9:
+            if iteration_count == 1 and remaining_unopened_docs > 0 and total_budget >= self.config.followup_min_total_budget:
                 reserve_actions += 4  # reserve search + open + one follow-up claim path
             remaining_claim_budget = max(0, self._remaining_action_budget(task, actions) - reserve_actions)
             if remaining_claim_budget <= 0:
@@ -344,9 +378,15 @@ class BaselineAgent:
         return run.with_diagnostics(enriched_diagnostics).with_reward_bundle(compose_reward_bundle(report))
 
 
-def run_task(task_path: str | Path, run_id: str | None = None, max_docs: int | None = None, max_claims: int | None = None) -> RunArtifact:
+def run_task(
+    task_path: str | Path,
+    run_id: str | None = None,
+    max_docs: int | None = None,
+    max_claims: int | None = None,
+    config: BaselineAgentConfig | None = None,
+) -> RunArtifact:
     task = load_task_bundle(task_path)
-    agent = BaselineAgent(max_docs=max_docs, max_claims=max_claims)
+    agent = BaselineAgent(max_docs=max_docs, max_claims=max_claims, config=config)
     return agent.run(task, run_id=run_id)
 
 
