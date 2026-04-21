@@ -1,0 +1,65 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "tool-user-interaction-task",
+  "prompt": "Why are tool-agent-user benchmarks important for evaluating deployed agents?",
+  "reference_answer": "Tool-agent-user benchmarks are important because deployed agents must use tools while interacting with humans and following domain-specific policies. Tau-bench evaluates dynamic conversations between simulated users and tool-using agents, compares final database state to annotated goals, and uses pass^k to measure consistency across repeated trials. The broader lesson is that agent reliability depends on policy adherence, tool use, and user interaction together.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "tau-bench paper digest",
+      "url": "https://huggingface.co/papers/2406.12045",
+      "content": "Tau-bench evaluates language agents in dynamic conversations with simulated users, domain-specific API tools, and policy guidelines. It highlights that real deployment requires agents to combine tool use, human interaction, and rule following.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "tau-bench evaluation digest",
+      "url": "https://huggingface.co/papers/2406.12045",
+      "content": "Tau-bench evaluates final outcomes by comparing the database state at the end of a conversation against an annotated goal state. It also proposes pass^k to measure reliability over multiple trials.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "tau2-bench repository digest",
+      "url": "https://github.com/sierra-research/tau2-bench",
+      "content": "The tau2-bench repository extends tool-agent-user evaluation toward more realistic domains, including knowledge retrieval, voice, multimodal interaction, and task-quality fixes.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Tool-agent-user benchmarks matter because deployed agents must combine tool use, user interaction, and policy adherence.",
+      "supported_by": ["d1"],
+      "keywords": ["tool use", "human interaction", "policy", "domain-specific"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Tau-bench evaluates dynamic simulated-user conversations and checks final database state against annotated goals.",
+      "supported_by": ["d1", "d2"],
+      "keywords": ["dynamic conversations", "simulated users", "database state", "annotated goal"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Reliability metrics such as pass^k are needed because agents can be inconsistent over repeated trials.",
+      "supported_by": ["d2"],
+      "keywords": ["pass^k", "reliability", "multiple trials", "consistency"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://huggingface.co/papers/2406.12045",
+      "https://github.com/sierra-research/tau2-bench"
+    ],
+    "refresh_hint": "Refresh if tau-bench or tau2-bench domain descriptions, evaluation metrics, or task quality notes change.",
+    "notes": [
+      "Focused on deployed-agent evaluation with tools, users, and policies."
+    ]
+  }
+}

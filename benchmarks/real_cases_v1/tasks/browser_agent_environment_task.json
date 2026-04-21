@@ -1,0 +1,65 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "browser-agent-environment-task",
+  "prompt": "Why do browser agents need realistic web environments and standardized environment APIs?",
+  "reference_answer": "Browser agents need realistic web environments because web tasks require navigation, state changes, and interaction with applications rather than static text. WebArena provides a self-hostable realistic web environment for autonomous agents, while BrowserGym exposes WebArena and related browser tasks through a standardized gym-style API. Standardized APIs matter because they make parallel experiments, benchmark integration, and reproducible evaluation easier.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "WebArena repository digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "content": "WebArena is a standalone self-hostable web environment for building autonomous agents. It focuses on realistic web tasks where agents interact with websites and application state rather than static documents.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "BrowserGym WebArena digest",
+      "url": "https://browsergym.readthedocs.io/latest/environments/webarena.html",
+      "content": "BrowserGym integrates WebArena and exposes browser environments through a gym-style API with reset and step interactions. This supports standardized interaction loops for browser agents.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "WebArena update digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "content": "The WebArena repository points users toward AgentLab and BrowserGym for parallel experiments, unified benchmark integration, leaderboard reporting, and improved handling of environment edge cases.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Browser agents need realistic web environments because tasks involve navigation, application state, and interactive websites.",
+      "supported_by": ["d1"],
+      "keywords": ["realistic web", "application state", "interactive", "autonomous agents"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "BrowserGym exposes WebArena through a standardized gym-style reset and step API.",
+      "supported_by": ["d2"],
+      "keywords": ["BrowserGym", "WebArena", "gym-style API", "reset", "step"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Standardized browser APIs help with parallel experiments, benchmark integration, leaderboard reporting, and edge-case handling.",
+      "supported_by": ["d3"],
+      "keywords": ["parallel experiments", "benchmark integration", "leaderboard", "edge cases"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://github.com/web-arena-x/webarena",
+      "https://browsergym.readthedocs.io/latest/environments/webarena.html"
+    ],
+    "refresh_hint": "Refresh if WebArena points to newer recommended tooling or BrowserGym changes its API descriptions.",
+    "notes": [
+      "Focused on realistic browser environments and standardized interaction APIs."
+    ]
+  }
+}

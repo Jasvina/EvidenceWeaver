@@ -18,7 +18,7 @@ REAL_CASES_DIR = REPO_ROOT / "benchmarks" / "real_cases_v1" / "tasks"
 class OptimizerTests(unittest.TestCase):
     def test_real_cases_suite_has_expected_task_count(self) -> None:
         paths = collect_task_paths(REAL_CASES_DIR)
-        self.assertEqual(len(paths), 5)
+        self.assertEqual(len(paths), 8)
         for path in paths:
             task = load_task_bundle(path)
             self.assertIsNotNone(task.provenance)
@@ -26,7 +26,7 @@ class OptimizerTests(unittest.TestCase):
 
     def test_optimize_suite_returns_ranked_candidates(self) -> None:
         payload = optimize_suite(REAL_CASES_DIR)
-        self.assertEqual(payload["task_count"], 5)
+        self.assertEqual(payload["task_count"], 8)
         self.assertIn("best_config", payload)
         self.assertIn("candidates", payload)
         self.assertGreaterEqual(len(payload["candidates"]), 3)
@@ -53,7 +53,7 @@ class OptimizerTests(unittest.TestCase):
             env=env,
         )
         payload = json.loads(result.stdout)
-        self.assertEqual(payload["task_count"], 5)
+        self.assertEqual(payload["task_count"], 8)
         self.assertIn("best_config", payload)
 
 

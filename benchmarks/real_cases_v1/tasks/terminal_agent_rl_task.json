@@ -1,0 +1,66 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "terminal-agent-rl-task",
+  "prompt": "Why are terminal-agent benchmarks useful for long-horizon RL research?",
+  "reference_answer": "Terminal-agent benchmarks are useful for long-horizon RL because they place agents in executable terminal environments where tasks can involve compiling code, setting up servers, or other end-to-end workflows. Terminal-Bench provides a reproducible task suite and execution harness, while Terminal-Bench-RL shows how such environments can be connected to scalable RL infrastructure for terminal and coding agents. The key value is verifiable task completion over long trajectories rather than short text-only answers.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/harbor-framework/terminal-bench",
+      "content": "Terminal-Bench tests AI agents in real terminal environments on complicated end-to-end tasks such as compiling code, training models, and setting up servers. It includes a task dataset and an execution harness, and each task can include instructions, tests, and oracle solutions.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench website digest",
+      "url": "https://www.tbench.ai/",
+      "content": "Terminal-Bench is presented as a benchmark for AI agents in terminal environments, with public task examples and leaderboards for measuring terminal mastery and task-resolution success rates.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Terminal-Bench-RL digest",
+      "url": "https://github.com/Danau5tin/terminal-bench-rl",
+      "content": "Terminal-Bench-RL focuses on training long-horizon terminal and coding agents with reinforcement learning. The project builds on rLLM and describes infrastructure for scaling RL training on terminal-based task completion.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "Terminal-agent benchmarks are useful because they evaluate agents in executable terminal environments with end-to-end tasks.",
+      "supported_by": ["d1", "d2"],
+      "keywords": ["terminal environments", "end-to-end tasks", "agents"]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Terminal-Bench provides a reproducible task dataset and execution harness with tests or oracle solutions.",
+      "supported_by": ["d1"],
+      "keywords": ["task dataset", "execution harness", "tests", "oracle solutions"]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Terminal-Bench-RL connects terminal task completion to scalable reinforcement learning infrastructure for long-horizon agents.",
+      "supported_by": ["d3"],
+      "keywords": ["Terminal-Bench-RL", "reinforcement learning", "long-horizon", "terminal", "coding agents"],
+      "depends_on": ["c1", "c2"]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://github.com/harbor-framework/terminal-bench",
+      "https://www.tbench.ai/",
+      "https://github.com/Danau5tin/terminal-bench-rl"
+    ],
+    "refresh_hint": "Refresh if Terminal-Bench task definitions, harness structure, or Terminal-Bench-RL training claims change.",
+    "notes": [
+      "Focused on terminal-environment and long-horizon RL benchmarks."
+    ]
+  }
+}

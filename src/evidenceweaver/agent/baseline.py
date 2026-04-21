@@ -72,6 +72,28 @@ SIGNAL_FRAGMENTS = (
     "issue resolution",
     "real repositories",
     "environment feedback",
+    "dynamic conversations",
+    "simulated users",
+    "api tools",
+    "policy guidelines",
+    "database state",
+    "annotated goal",
+    "pass k",
+    "pass k reliability",
+    "parallel experiments",
+    "benchmark integration",
+    "leaderboard",
+    "edge cases",
+    "gym style api",
+    "self hostable",
+    "web environment",
+    "task dataset",
+    "execution harness",
+    "oracle solutions",
+    "compiling code",
+    "training models",
+    "setting up servers",
+    "terminal environments",
 )
 
 
@@ -123,7 +145,17 @@ def _signal_bonus(text: str) -> float:
 
 def _needs_stronger_duplicate_filter(prompt: str) -> bool:
     normalized = _normalize(prompt)
-    return ("software engineering" in normalized) or ("computer use" in normalized) or ("computer-use" in normalized)
+    return (
+        ("software engineering" in normalized)
+        or ("computer use" in normalized)
+        or ("computer-use" in normalized)
+        or ("browser agents" in normalized)
+        or ("web environments" in normalized)
+        or ("terminal agent" in normalized)
+        or ("terminal agents" in normalized)
+        or ("tool agent user" in normalized)
+        or ("tool-agent-user" in prompt.lower())
+    )
 
 
 @dataclass(frozen=True, slots=True)

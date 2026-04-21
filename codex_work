@@ -457,3 +457,38 @@
 3. 增加新的真实样例任务，防止当前五任务 suite 被过拟合。
 4. 利用已授权的公开网络抓取，补更真实的 public-source snapshot seed。
 5. 继续保持每次优化都回写 `baseline_sweep.json` 和 `codex_work`。
+
+04月21日11时36分
+- 工作：利用公开来源继续扩展 `real_cases_v1`，新增三类真实样例任务：
+  - `terminal_agent_rl_task`
+  - `browser_agent_environment_task`
+  - `tool_user_interaction_task`
+- 结果：real-cases suite 从 5 个任务扩展到 8 个任务，覆盖范围进一步扩展到 terminal agents、browser/web agents、tool-agent-user evaluation。
+
+04月21日11时36分
+- 工作：新增任务后按“最弱项优先”继续优化：
+  - `tool-user-interaction-task` 从约 `0.425` 提到约 `0.95`
+  - `browser-agent-environment-task` 从约 `0.5917` 提到 `1.0`
+  - `terminal-agent-rl-task` 从约 `0.6292` 提到约 `0.9625`
+- 结果：扩展后的 8 任务 suite 当前 best average `overall_score` 约为 `0.9724`，所有任务当前都 >= `0.95`。
+
+04月21日11时36分
+- 工作：更新 `baseline_sweep.json`、README、benchmark 文档，并保留 optimizer failure summary。
+- 结果：仓库已经从 5 任务调优进入 8 任务真实样例调优阶段，且有保存的 sweep artifact 可以复核。
+
+04月21日11时36分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy benchmarks/real_cases_v1/tasks`
+- 验证结果：
+  - 18 个单元测试全部通过。
+  - 扩展 suite 当前 best average `overall_score` 约为 `0.9724`。
+  - 当前所有 real-case tasks 均 >= `0.95`。
+
+=== 更新后的下一步计划（04月21日11时36分） ===
+
+1. 继续添加更多真实样例任务，防止 8 任务 suite 被过拟合。
+2. 将 optimizer 的 failure summary 进一步细化到 per-claim / per-source 级别。
+3. 开始为 benchmark 任务生成更完整的 source snapshot sidecar，而不只是在任务 JSON 中放 paraphrased digest。
+4. 继续补 `contradicts` 等 graph 关系，并让 graph analysis report 更适合调试。
+5. 将 paper draft 中的实验章节改成和当前 real-case sweep 更一致的结构。

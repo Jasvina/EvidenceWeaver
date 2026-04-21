@@ -127,8 +127,8 @@ The current signal from that sweep is:
 
 - the best-performing baseline opens more documents on the first pass
 - the current baseline is strong across all five real-case tasks
-- the best average `overall_score` on `real_cases_v1` is now about `0.9733`
-- after targeted tuning, the current weakest task is `computer-use-rl-task`, not SWE
+- the best average `overall_score` on expanded `real_cases_v1` is now about `0.9724`
+- after targeted tuning, all current real-case tasks score at least `0.95`
 - the optimizer now emits failure summaries so the suite can drive the next optimization step directly
 
 ## Metrics
