@@ -129,6 +129,7 @@ The current signal from that sweep is:
 - the current baseline is strong across all five real-case tasks
 - the best average `overall_score` on `real_cases_v1` is now about `0.9733`
 - after targeted tuning, the current weakest task is `computer-use-rl-task`, not SWE
+- the optimizer now emits failure summaries so the suite can drive the next optimization step directly
 
 ## Metrics
 

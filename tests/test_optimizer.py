@@ -32,6 +32,9 @@ class OptimizerTests(unittest.TestCase):
         self.assertGreaterEqual(len(payload["candidates"]), 3)
         best = payload["best_config"]
         self.assertGreaterEqual(best["average_overall_score"], 0.55)
+        self.assertIn("failure_summary", best)
+        self.assertIn("weakest_task_id", best["failure_summary"])
+        self.assertIn("recommendations", best["failure_summary"])
 
     def test_optimizer_cli_emits_json(self) -> None:
         env = dict(os.environ)

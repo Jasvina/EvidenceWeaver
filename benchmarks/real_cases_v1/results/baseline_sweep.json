@@ -58,7 +58,12 @@
         "citation_precision": 1.0,
         "unsupported_claim_rate": 0.0
       }
-    ]
+    ],
+    "failure_summary": {
+      "weakest_task_id": "agentic-rl-stability-task",
+      "weakest_task_score": 0.95,
+      "recommendations": []
+    }
   },
   "candidates": [
     {
@@ -118,7 +123,12 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "agentic-rl-stability-task",
+        "weakest_task_score": 0.95,
+        "recommendations": []
+      }
     },
     {
       "config_name": "wider_first_pass",
@@ -177,7 +187,12 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "agentic-rl-stability-task",
+        "weakest_task_score": 0.95,
+        "recommendations": []
+      }
     },
     {
       "config_name": "claim_heavy",
@@ -236,7 +251,12 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "agentic-rl-stability-task",
+        "weakest_task_score": 0.95,
+        "recommendations": []
+      }
     },
     {
       "config_name": "precision_first",
@@ -295,7 +315,12 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "agentic-rl-stability-task",
+        "weakest_task_score": 0.95,
+        "recommendations": []
+      }
     },
     {
       "config_name": "breadth_first",
@@ -354,7 +379,17 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "computer-use-rl-task",
+        "weakest_task_score": 0.5917,
+        "recommendations": [
+          "reduce unsupported claims via stricter duplicate suppression or tighter claim selection",
+          "improve citation precision by preferring richer multi-sentence evidence snippets",
+          "increase answer coverage with task-family-aware follow-up search or broader first-pass retrieval",
+          "improve citation coverage by ensuring each major claim is grounded in at least one selected document"
+        ]
+      }
     },
     {
       "config_name": "followup_friendly",
@@ -413,7 +448,16 @@
           "citation_precision": 1.0,
           "unsupported_claim_rate": 0.0
         }
-      ]
+      ],
+      "failure_summary": {
+        "weakest_task_id": "agentic-rl-stability-task",
+        "weakest_task_score": 0.05,
+        "recommendations": [
+          "improve citation precision by preferring richer multi-sentence evidence snippets",
+          "increase answer coverage with task-family-aware follow-up search or broader first-pass retrieval",
+          "improve citation coverage by ensuring each major claim is grounded in at least one selected document"
+        ]
+      }
     }
   ]
 }

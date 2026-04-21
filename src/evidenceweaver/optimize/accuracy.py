@@ -38,6 +38,7 @@ class ConfigEvaluation:
             "average_citation_coverage": self.average_citation_coverage,
             "average_answer_coverage": self.average_answer_coverage,
             "task_metrics": [asdict(metric) for metric in self.task_metrics],
+            "failure_summary": failure_summary(self),
         }
 
 
@@ -102,6 +103,24 @@ def optimize_suite(task_dir: str | Path) -> dict[str, object]:
         "task_count": len(task_paths),
         "best_config": best.to_dict(),
         "candidates": [result.to_dict() for result in ranked],
+    }
+
+
+def failure_summary(result: ConfigEvaluation) -> dict[str, object]:
+    weakest = min(result.task_metrics, key=lambda metric: metric.overall_score)
+    recommendations: list[str] = []
+    if weakest.unsupported_claim_rate > 0.25:
+        recommendations.append("reduce unsupported claims via stricter duplicate suppression or tighter claim selection")
+    if weakest.citation_precision < 0.75:
+        recommendations.append("improve citation precision by preferring richer multi-sentence evidence snippets")
+    if weakest.answer_coverage < 1.0:
+        recommendations.append("increase answer coverage with task-family-aware follow-up search or broader first-pass retrieval")
+    if weakest.citation_coverage < 1.0:
+        recommendations.append("improve citation coverage by ensuring each major claim is grounded in at least one selected document")
+    return {
+        "weakest_task_id": weakest.task_id,
+        "weakest_task_score": weakest.overall_score,
+        "recommendations": recommendations,
     }
 
 

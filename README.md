@@ -331,6 +331,7 @@ Current repository snapshot:
 - current best average `overall_score` on the suite is about `0.9733`
 - current hardest task in the suite is `computer-use-rl-task`, which is the clearest place to keep pushing next
 - each real-case task now carries provenance metadata so source URLs and refresh hints travel with the artifact
+- optimizer output now includes a failure summary for weakest-task tracking and next-step recommendations
 
 ## Related Work Snapshot
 

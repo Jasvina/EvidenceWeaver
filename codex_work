@@ -433,3 +433,27 @@
   - 18 个单元测试全部通过。
   - best average `overall_score` 提升到约 `0.9733`。
   - 当前 weakest task 仍然是 `computer-use-rl-task`，但已提升到约 `0.95`。
+
+04月21日11时20分
+- 工作：给 optimizer 增加 `failure_summary`，现在每个 candidate config 的结果都会包含 weakest task、weakest score 和下一步建议。
+- 结果：真实样例驱动阶段不再只是“跑分排序”，而是开始能自动指出下一轮优化方向。
+
+04月21日11时20分
+- 工作：将带 `failure_summary` 的 optimizer 结果重新写入 `benchmarks/real_cases_v1/results/baseline_sweep.json`，并更新 README / benchmark 文档。
+- 结果：保存的 sweep artifact 现在可直接作为误差分析输入，后续 agent 接管时不需要重新运行才能知道当前弱点和建议。
+
+04月21日11时20分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy benchmarks/real_cases_v1/tasks`
+- 验证结果：
+  - 18 个单元测试全部通过。
+  - optimizer 输出现在包含 `failure_summary`。
+
+=== 更新后的下一步计划（04月21日11时20分） ===
+
+1. 把 failure summary 从启发式建议进一步升级成 per-claim / per-edge 误差解释。
+2. 为 computer-use task 继续做 precision 提升，尝试把当前 `0.95` 推到更高。
+3. 增加新的真实样例任务，防止当前五任务 suite 被过拟合。
+4. 利用已授权的公开网络抓取，补更真实的 public-source snapshot seed。
+5. 继续保持每次优化都回写 `baseline_sweep.json` 和 `codex_work`。

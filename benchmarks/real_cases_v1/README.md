@@ -52,6 +52,7 @@ The optimizer evaluates a small set of baseline configurations and returns:
 - the best config
 - ranked candidate configs
 - per-task metrics for each config
+- failure summaries with the weakest task and suggested next moves
 
 ## Design note
 
