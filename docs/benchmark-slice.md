@@ -126,8 +126,9 @@ The current sweep output is saved in:
 The current signal from that sweep is:
 
 - the best-performing baseline opens more documents on the first pass
-- the current baseline is strong on stability, training-stack, deep-search, and computer-use tasks
-- the current weakest area is the SWE post-training task family
+- the current baseline is strong across all five real-case tasks
+- the best average `overall_score` on `real_cases_v1` is now about `0.9683`
+- after targeted tuning, the current weakest task is `computer-use-rl-task`, not SWE
 
 ## Metrics
 

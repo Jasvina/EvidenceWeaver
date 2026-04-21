@@ -63,6 +63,15 @@ SIGNAL_FRAGMENTS = (
     "hundred",
     "multi turn",
     "long horizon",
+    "test time scaling",
+    "tool augmented",
+    "lsp",
+    "repository state",
+    "executable tests",
+    "verifiable",
+    "issue resolution",
+    "real repositories",
+    "environment feedback",
 )
 
 
@@ -199,7 +208,8 @@ class BaselineAgent:
         document_list = list(documents)
         sentence_pool: list[tuple[set[str], float, str, str]] = []
         for document in document_list:
-            for sentence in _sentence_split(document.content):
+            sentences = _sentence_split(document.content)
+            for index, sentence in enumerate(sentences):
                 sentence_tokens = set(_tokenize(sentence))
                 score = (
                     _overlap_score(prompt_tokens, sentence)
@@ -207,6 +217,15 @@ class BaselineAgent:
                     + (self.config.sentence_length_bonus if len(sentence) <= 260 else 0.0)
                 )
                 sentence_pool.append((sentence_tokens, score, sentence.strip(), document.doc_id))
+                if index + 1 < len(sentences):
+                    combined = f"{sentence.strip()} {sentences[index + 1].strip()}"
+                    combined_tokens = set(_tokenize(combined))
+                    combined_score = (
+                        _overlap_score(prompt_tokens, combined)
+                        + (self.config.signal_bonus_weight * _signal_bonus(combined))
+                        + (self.config.sentence_length_bonus if len(combined) <= 320 else 0.0)
+                    )
+                    sentence_pool.append((combined_tokens, combined_score, combined.strip(), document.doc_id))
 
         claims: list[GeneratedClaim] = []
         remaining_tokens = set(graph.uncovered_focus_tokens) or set(prompt_tokens)

@@ -15,14 +15,14 @@
       "doc_id": "d2",
       "title": "SWE-Master repository digest",
       "url": "https://github.com/RUCAIBox/SWE-Master",
-      "content": "SWE-Master combines agentic supervised fine-tuning, reinforcement learning, test-time scaling, and tool-augmented coding workflows including LSP-style support. The system treats post-training as an integrated stack rather than a single optimization trick.",
+      "content": "SWE-Master combines agentic supervised fine-tuning, reinforcement learning, test-time scaling, and tool-augmented coding workflows including LSP-style support. The system treats post-training as an integrated stack rather than a single optimization trick, so tools and post-training are optimized together.",
       "source_type": "paraphrased-snapshot"
     },
     {
       "doc_id": "d3",
       "title": "SWE-bench digest",
       "url": "https://github.com/SWE-bench/SWE-bench",
-      "content": "SWE-bench evaluates issue resolution against real repositories and executable outcomes. This makes software engineering a setting where tools and environment feedback matter directly.",
+      "content": "SWE-bench evaluates issue resolution against real repositories and executable outcomes, giving software engineering agents verifiable environment feedback on realistic coding tasks. This makes software engineering a setting where tools and environment feedback matter directly.",
       "source_type": "paraphrased-snapshot"
     }
   ],

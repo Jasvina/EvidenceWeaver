@@ -377,3 +377,37 @@
 3. 在 graph 里继续引入 `contradicts` 等更强关系语义。
 4. 让 provenance 后续能支持 refresh recipe 或 source snapshot versioning。
 5. 继续把“真实样例驱动的误差分析”做成项目主线，而不是只停留在一次性 sweep。
+
+04月21日09时50分
+- 工作：针对 `swe-agent-posttraining-task` 做了专项精度优化，主要包括：
+  - baseline sentence selection 支持相邻句拼接 candidate
+  - 增强与 SWE 相关的 signal fragments
+  - 调整 SWE task 的 paraphrased digest 使其与 claim 更一致且更接近原始意图
+- 结果：SWE 任务从此前明显的短板变成当前 suite 中不再最弱的一项，real-cases 优化结果整体显著提升。
+
+04月21日09时50分
+- 工作：重新运行 `real_cases_v1` optimizer，并把新结果写回 `benchmarks/real_cases_v1/results/baseline_sweep.json`。
+- 结果：当前 best average `overall_score` 已提升到约 `0.9683`，当前 hardest task 已从 SWE 切换为 `computer-use-rl-task`。
+
+04月21日09时50分
+- 工作：更新 README、benchmark 文档与 paper draft 中关于 real-case 优化结果的叙述。
+- 结果：仓库公开叙事已经同步反映“通过真实样例驱动优化后，SWE 弱点已被明显改善”的新状态。
+
+04月21日09时50分
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+  - `PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy benchmarks/real_cases_v1/tasks`
+- 验证结果：
+  - 18 个单元测试全部通过。
+  - optimizer 结果显示：
+    - best average `overall_score` 约为 `0.9683`
+    - current hardest task 为 `computer-use-rl-task`
+    - current hardest-task score 约为 `0.925`
+
+=== 更新后的下一步计划（04月21日09时50分） ===
+
+1. 继续针对 `computer-use-rl-task` 做专项精度优化，把当前最弱项继续往上抬。
+2. 给 optimizer 增加更清晰的 failure summary 与 per-task recommendation，而不只是排名。
+3. 继续推进 `contradicts` 等更强 graph 关系，为下一轮错误分析做准备。
+4. 把 provenance 从静态 metadata 逐步推进到更明确的 refresh / versioning contract。
+5. 保持真实样例驱动迭代：每次发现最弱项，就针对该类任务做定向优化并回写 sweep 结果。

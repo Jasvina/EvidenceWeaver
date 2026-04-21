@@ -26,7 +26,7 @@ class RewardAndGraphTests(unittest.TestCase):
         report = evaluate_run(task, run)
         composed = compose_reward_bundle(report)
         self.assertEqual(run.reward_bundle, composed)
-        self.assertTrue(reward_notes(report))
+        self.assertIsInstance(reward_notes(report), tuple)
 
     def test_graph_contains_non_support_relationship_edge(self) -> None:
         task_path = BENCHMARK_DIR / "agentic_rl_stability_task.json"

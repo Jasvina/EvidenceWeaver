@@ -328,7 +328,8 @@ Current repository snapshot:
 - suite size: `5` tasks
 - saved sweep result: `benchmarks/real_cases_v1/results/baseline_sweep.json`
 - current best config aligns with the repository default baseline configuration
-- current hardest task in the suite is `swe-agent-posttraining-task`, which is a useful signal for where the next accuracy work should go
+- current best average `overall_score` on the suite is about `0.9683`
+- current hardest task in the suite is `computer-use-rl-task`, which is the clearest place to keep pushing next
 - each real-case task now carries provenance metadata so source URLs and refresh hints travel with the artifact
 
 ## Related Work Snapshot

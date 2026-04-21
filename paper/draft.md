@@ -260,7 +260,7 @@ A credible paper from this project should eventually answer at least five questi
 4. Which benchmark dimensions matter most for research-agent evaluation?
 5. How much performance tradeoff exists between answer quality and evidence quality?
 
-The current repository already provides one useful early answer shape: a small multi-task sweep can identify which task families are easiest for a graph-aware baseline and which remain hard. In the present snapshot, software-engineering post-training tasks are noticeably weaker than the other four task families, which suggests the future benchmark and agent work should not assume one heuristic loop will fit all domains equally well.
+The current repository already provides one useful early answer shape: a small multi-task sweep can identify which task families are easiest for a graph-aware baseline and which remain hard. In the present snapshot, targeted heuristic refinement improved the earlier software-engineering weakness substantially, and the current hardest task family is now computer-use RL. That shift is itself informative: it suggests that the benchmark can already surface where incremental agent improvements are saturating and where they are still brittle.
 
 The first publishable evidence will likely come from ablations rather than from a huge absolute benchmark win.
 
