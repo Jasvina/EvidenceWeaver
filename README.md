@@ -30,7 +30,7 @@ Today, many agentic RL systems still optimize heavily for final-task success whi
 
 If you want the fastest path from repo visit to runnable artifact, use this order:
 
-1. Open `docs/index.html` locally, or publish `docs/` with GitHub Pages, for the dependency-free project site and visual overview.
+1. Open `docs/index.html` locally, or use the GitHub Pages deployment wired from `docs/`, for the dependency-free project site and visual overview.
 2. Read the quickstart below and run the baseline once.
 3. Inspect `docs/progress-and-roadmap.md` for the current benchmark state and next milestone.
 
@@ -277,6 +277,9 @@ This repository is still at day zero, but the intended layout is already visible
 - [`paper/draft.md`](paper/draft.md) - the current pre-results paper draft
 - [`paper/outline.md`](paper/outline.md) - an early paper structure for the project
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - how to contribute high-signal ideas and changes
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) - collaboration standards for contributors and maintainers
+- [`SECURITY.md`](SECURITY.md) - how to report security or artifact-integrity issues responsibly
+- [`CHANGELOG.md`](CHANGELOG.md) - a running record of repo-facing changes
 
 ## Baseline Agent
 
