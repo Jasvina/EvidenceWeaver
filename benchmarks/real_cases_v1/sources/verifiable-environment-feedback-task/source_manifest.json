@@ -1,0 +1,29 @@
+{
+  "task_id": "verifiable-environment-feedback-task",
+  "prompt": "Why do long-horizon agents benefit from verifiable environment feedback instead of answer-only judging?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "SWE-RL digest",
+      "url": "https://arxiv.org/abs/2502.18449",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/laude-institute/terminal-bench",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "ComputerRL paper digest",
+      "url": "https://arxiv.org/abs/2508.14040",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

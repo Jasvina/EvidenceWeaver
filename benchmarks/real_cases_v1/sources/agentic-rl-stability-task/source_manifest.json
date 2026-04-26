@@ -1,0 +1,29 @@
+{
+  "task_id": "agentic-rl-stability-task",
+  "prompt": "Explain why recent agentic RL work treats stability as a first-class problem, and cite concrete failure modes or stabilization mechanisms.",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN overview digest",
+      "url": "https://arxiv.org/abs/2504.20073",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "RAGEN-2 stability digest",
+      "url": "https://arxiv.org/abs/2604.06268",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "ARLArena digest",
+      "url": "https://arxiv.org/abs/2602.21534",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

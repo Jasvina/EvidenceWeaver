@@ -1,0 +1,107 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "trajectory-credit-assignment-task",
+  "prompt": "Why do long-horizon agents need trajectory-level credit assignment and richer intermediate signals?",
+  "reference_answer": "Long-horizon agents need trajectory-level credit assignment because their behavior unfolds across many dependent steps rather than a single answer. RAGEN frames agent reasoning as trajectory-level multi-turn reinforcement learning in stochastic environments, ASearcher shows that deep search can span beyond ten turns and over one hundred tool calls so outcome-only signals become sparse, and CaRR argues that binary outcomes miss comprehensiveness and factuality unless citation-aware rubric rewards are added. Together they show that long-horizon agents need richer intermediate signals than final-task success alone.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN overview digest",
+      "url": "https://arxiv.org/abs/2504.20073",
+      "content": "RAGEN frames interactive reasoning as trajectory-level multi-turn reinforcement learning in stochastic environments. The project treats agent reasoning as a sequential control problem instead of isolated single-turn prompting, which makes credit assignment important.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ASearcher digest",
+      "url": "https://arxiv.org/abs/2508.07976",
+      "content": "ASearcher says long-horizon deep search can require many turns and tool calls, sometimes beyond one hundred, which makes outcome-only supervision sparse. The project scales asynchronous RL to long-horizon search so those longer trajectories become trainable.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "CaRR digest",
+      "url": "https://github.com/THUDM/CaRR",
+      "content": "CaRR argues that binary outcome rewards for deep search agents miss comprehensiveness, factuality, and grounded reasoning quality. It introduces citation-aware rubric rewards and evidence-chain checks so the reward reflects intermediate evidence quality rather than only final correctness.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "RAGEN treats agent reasoning as trajectory-level multi-turn reinforcement learning and a sequential control problem.",
+      "supported_by": [
+        "d1"
+      ],
+      "keywords": [
+        "trajectory-level",
+        "multi-turn reinforcement learning",
+        "sequential control",
+        "credit assignment"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "text": "ASearcher shows that long-horizon search can run beyond ten turns and over one hundred tool calls, making outcome-only supervision sparse.",
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "beyond ten turns",
+        "one hundred tool calls",
+        "outcome-only",
+        "sparse"
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "text": "CaRR adds citation-aware rubric rewards because binary outcomes miss comprehensiveness, factuality, and grounded intermediate evidence quality.",
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "citation-aware rubric rewards",
+        "binary outcome",
+        "comprehensiveness",
+        "factuality",
+        "grounded"
+      ]
+    },
+    {
+      "claim_id": "c4",
+      "text": "Together these systems show that long-horizon agents need richer intermediate signals and trajectory-level credit assignment rather than final-task success alone.",
+      "supported_by": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "intermediate signals",
+        "trajectory-level credit assignment",
+        "final-task success alone",
+        "long-horizon"
+      ],
+      "depends_on": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2504.20073",
+      "https://arxiv.org/abs/2508.07976",
+      "https://github.com/THUDM/CaRR"
+    ],
+    "refresh_hint": "Refresh if these projects materially change how they describe multi-turn credit assignment or citation-aware reward shaping.",
+    "notes": [
+      "Crosses reasoning-RL framing with search-agent reward design."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "task_id": "agent-training-stack-task",
+  "prompt": "Compare how Agent Lightning, AgentRL, and rLLM structure agent training pipelines.",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "Agent Lightning digest",
+      "url": "https://arxiv.org/abs/2508.03680",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "AgentRL repository digest",
+      "url": "https://github.com/THUDM/AgentRL",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "rLLM repository digest",
+      "url": "https://github.com/rllm-org/rllm",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "task_id": "browser-agent-environment-task",
+  "prompt": "Why do browser agents need realistic web environments and standardized environment APIs?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "WebArena repository digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "BrowserGym WebArena digest",
+      "url": "https://browsergym.readthedocs.io/latest/environments/webarena.html",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "WebArena update digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

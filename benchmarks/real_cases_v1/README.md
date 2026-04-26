@@ -6,27 +6,35 @@ This suite is the repository's first **real-example-driven accuracy optimization
 
 ## What is in this suite
 
-The suite currently includes eight research-style tasks:
+The suite currently includes twelve research-style tasks:
 
 - `agentic_rl_stability_task`
 - `agent_training_stack_task`
+- `agent_diagnostics_reliability_task`
+- `benchmark_reproducibility_task`
 - `browser_agent_environment_task`
 - `computer_use_rl_task`
 - `deep_search_reward_task`
 - `swe_agent_posttraining_task`
 - `terminal_agent_rl_task`
 - `tool_user_interaction_task`
+- `trajectory_credit_assignment_task`
+- `verifiable_environment_feedback_task`
 
 These tasks stay within the same evidence-centric agent domain while covering a broader operating surface:
 
 - agentic RL training stability
 - agent-training frameworks
+- diagnostics and repeated-trial reliability
+- benchmark reproducibility surfaces
 - browser-agent environments and integrations
 - deep search reward design
 - computer-use agents
 - software engineering agents
 - terminal-centric agents
 - tool-user interaction benchmarks
+- trajectory-level credit assignment
+- verifiable environment feedback across domains
 
 Each task now includes a `provenance` section with:
 
@@ -36,6 +44,15 @@ Each task now includes a `provenance` section with:
 - `notes`
 
 That metadata is intentionally small, but it gives the suite a more durable source-of-truth contract than bare task text alone.
+
+## Source sidecars
+
+Every real-case task now also has a sidecar directory under `benchmarks/real_cases_v1/sources/<task_id>/` with:
+
+- `source_manifest.json`
+- one `source_<doc_id>.md` file per snapshot digest
+
+These sidecars keep the benchmark lightweight while making provenance more auditable and easier to inspect task by task.
 
 ## Why this suite exists
 
@@ -58,7 +75,7 @@ The optimizer evaluates a small set of baseline configurations and returns:
 - the best config
 - ranked candidate configs
 - per-task metrics for each config
-- failure summaries with the weakest task and suggested next moves
+- failure summaries with the weakest task, missed claim IDs, missing source IDs, and suggested next moves
 
 ## Design note
 

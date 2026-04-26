@@ -126,9 +126,9 @@ The current sweep output is saved in:
 The current signal from that sweep is:
 
 - the best-performing baseline opens more documents on the first pass
-- the current baseline is strong across all eight real-case tasks
-- the best average `overall_score` on expanded `real_cases_v1` is now about `0.9724`
-- after targeted tuning, all current real-case tasks score at least `0.95`
+- the current harder suite now exposes clear weakness clusters instead of saturating near-perfect scores
+- the best average `overall_score` on expanded `real_cases_v1` is now about `0.8611`
+- the new diagnostics and trajectory-credit tasks now pull the average down and create real optimization headroom
 - the optimizer now emits failure summaries so the suite can drive the next optimization step directly
 
 ## Metrics

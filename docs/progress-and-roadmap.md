@@ -78,7 +78,7 @@ The current test suite covers:
 - real-case optimizer CLI
 - provenance coverage for real-case tasks
 
-Latest verified test count: 18 tests.
+Latest verified test count: 19 tests.
 
 ## Current Benchmarks
 
@@ -123,7 +123,7 @@ Purpose:
 - uses paraphrased public-source snapshots with embedded provenance metadata
 - drives baseline tuning and weakest-task analysis
 
-Current task count: 8
+Current task count: 12
 
 Current tasks:
 
@@ -135,6 +135,10 @@ Current tasks:
 - `swe-agent-posttraining-task`
 - `terminal-agent-rl-task`
 - `tool-user-interaction-task`
+- `trajectory-credit-assignment-task`
+- `agent-diagnostics-reliability-task`
+- `benchmark-reproducibility-task`
+- `verifiable-environment-feedback-task`
 
 ## Latest Real-Case Results
 
@@ -142,7 +146,7 @@ Saved result:
 
 - `benchmarks/real_cases_v1/results/baseline_sweep.json`
 
-Latest best average `overall_score`: `0.9724`
+Latest best average `overall_score`: `0.8611`
 
 Per-task scores under the current best config:
 
@@ -156,8 +160,12 @@ Per-task scores under the current best config:
 | `swe-agent-posttraining-task` | `1.0` |
 | `terminal-agent-rl-task` | `0.9625` |
 | `tool-user-interaction-task` | `0.95` |
+| `trajectory-credit-assignment-task` | `0.525` |
+| `agent-diagnostics-reliability-task` | `0.5292` |
+| `benchmark-reproducibility-task` | `0.75` |
+| `verifiable-environment-feedback-task` | `0.75` |
 
-Current weakest scores are no longer catastrophic. The next meaningful progress should come from adding harder tasks and improving failure analysis rather than over-tuning the current eight examples.
+The harder 12-task suite now exposes clear weakness clusters in trajectory-credit assignment and diagnostics synthesis. That is a better signal than the earlier near-saturated eight-task suite because the optimizer once again has room to reveal failure modes.
 
 ## What Improved During This Stage
 
@@ -175,14 +183,14 @@ Fixes applied:
 - richer signal fragments for task families
 - task-family-aware duplicate suppression
 - expanded real-case suite
-- optimizer failure summaries
+- optimizer failure summaries with missed-claim and missing-source surfacing
 - provenance metadata on real-case tasks
 
 ## Current Known Limitations
 
 - The real-case benchmark uses paraphrased digests, not full frozen web snapshots.
 - The optimizer is deterministic and heuristic, not learned.
-- Current scores are high on only eight tasks, so overfitting risk remains.
+- Current scores are still heuristic and the new 12-task suite remains small enough that overfitting risk persists.
 - The evaluator is keyword/citation based and should not be treated as a human-quality reward model.
 - Graph relationships are still heuristic; `contradicts` is not yet implemented.
 - There is no RL trainer integration yet.
@@ -201,10 +209,11 @@ Add tasks from more domains before tuning further:
 - API-heavy customer-support agents
 - multi-modal or GUI-adjacent tasks
 
-Goal:
+Status after this stage:
 
-- prevent overfitting the current eight-task suite
-- force the optimizer to reveal new weaknesses
+- task count increased from 8 to 12
+- all 12 tasks now have source sidecars
+- the optimizer now exposes trajectory-credit and diagnostics weaknesses instead of saturating near-perfect scores
 
 ### 2. Add source snapshot sidecars
 
@@ -226,9 +235,9 @@ Goal:
 
 The current optimizer gives weakest task and broad recommendations. Next, add:
 
-- missed required claims
+- missed required claims (implemented)
 - unsupported generated claims
-- missing source IDs
+- missing source IDs (implemented)
 - duplicate / redundant claim count
 - graph edge statistics
 - proposed next heuristic or reward change
@@ -288,7 +297,7 @@ Acceptance criteria:
 
 - at least 15 real-case tasks
 - all tasks have provenance metadata
-- at least 5 tasks have source sidecars
+- all current tasks have source sidecars
 - optimizer emits per-claim failure summaries
 - test suite covers the optimizer, graph analysis, reward composition, and provenance validation
 - README and paper draft reflect the real-case optimization results

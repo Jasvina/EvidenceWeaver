@@ -1,0 +1,29 @@
+{
+  "task_id": "swe-agent-posttraining-task",
+  "prompt": "Why do software engineering agents need post-training that is grounded in tools and executable feedback?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "SWE-RL digest",
+      "url": "https://arxiv.org/abs/2502.18449",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "SWE-Master repository digest",
+      "url": "https://github.com/RUCAIBox/SWE-Master",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "SWE-bench digest",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

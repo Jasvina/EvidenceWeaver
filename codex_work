@@ -519,3 +519,6 @@
 1. 下一轮优先增加 source snapshot sidecar 或更难的 real-case tasks。
 2. 如果继续优化当前 suite，必须先增加任务数量，避免过拟合。
 3. 后续每次 benchmark 或 baseline 变化都要更新 `baseline_sweep.json`、`docs/progress-and-roadmap.md` 和 `codex_work`。
+
+2026-04-26: Expanded real_cases_v1 from 8 to 12 tasks, added task-local source sidecars for every real-case task, regenerated baseline_sweep.json, and updated docs/tests to reflect the harder suite.
+2026-04-26: Extended optimizer failure summaries with missed_claim_ids, unsupported_claim_ids, and missing_source_ids to make the harder suite actionable.

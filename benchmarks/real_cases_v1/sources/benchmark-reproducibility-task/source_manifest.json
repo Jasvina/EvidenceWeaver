@@ -1,0 +1,29 @@
+{
+  "task_id": "benchmark-reproducibility-task",
+  "prompt": "Why do agent benchmarks need self-hostable environments, execution harnesses, or annotated goal states to be reproducible?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "WebArena repository digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/laude-institute/terminal-bench",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Tau-bench evaluation digest",
+      "url": "https://arxiv.org/abs/2406.12045",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

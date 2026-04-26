@@ -1,0 +1,29 @@
+{
+  "task_id": "agent-diagnostics-reliability-task",
+  "prompt": "Why do agent benchmarks need diagnostics beyond a single success rate?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN-2 stability digest",
+      "url": "https://arxiv.org/abs/2604.06268",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ARLArena digest",
+      "url": "https://arxiv.org/abs/2602.21534",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Tau-bench evaluation digest",
+      "url": "https://arxiv.org/abs/2406.12045",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

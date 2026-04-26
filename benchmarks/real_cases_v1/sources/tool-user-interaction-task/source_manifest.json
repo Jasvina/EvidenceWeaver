@@ -1,0 +1,29 @@
+{
+  "task_id": "tool-user-interaction-task",
+  "prompt": "Why are tool-agent-user benchmarks important for evaluating deployed agents?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "tau-bench paper digest",
+      "url": "https://huggingface.co/papers/2406.12045",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "tau-bench evaluation digest",
+      "url": "https://huggingface.co/papers/2406.12045",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "tau2-bench repository digest",
+      "url": "https://github.com/sierra-research/tau2-bench",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

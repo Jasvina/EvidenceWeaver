@@ -64,7 +64,7 @@ Now / Next / Later:
 - `Evidence graph` - explicit source, claim, duplicate, support, and open-question structure
 - `Offline evaluator` - decomposed scoring for answer quality and citation quality
 - `Reward composition` - inspectable reward bundle construction from evaluation metrics
-- `Benchmarks` - `snapshot_v0` plus an eight-task `real_cases_v1` tuning suite
+- `Benchmarks` - `snapshot_v0` plus a twelve-task `real_cases_v1` tuning suite
 - `Open-source surface` - static landing page, CI, Pages deployment, issue templates, PR template, changelog, conduct, and security policy
 
 ## Why EvidenceWeaver
@@ -359,7 +359,7 @@ These tasks use paraphrased snapshot digests anchored to primary-source URLs, wh
 
 ## Real-Case Optimization
 
-The repository now also includes `benchmarks/real_cases_v1/`, an eight-task suite used to tune the deterministic baseline against more realistic examples.
+The repository now also includes `benchmarks/real_cases_v1/`, a twelve-task suite used to tune the deterministic baseline against more realistic examples.
 
 Run the suite optimizer:
 
@@ -370,13 +370,13 @@ PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy \
 
 Current repository snapshot:
 
-- suite size: `8` tasks
+- suite size: `12` tasks
 - saved sweep result: `benchmarks/real_cases_v1/results/baseline_sweep.json`
 - current best config aligns with the repository default baseline configuration
-- current best average `overall_score` on the expanded suite is about `0.9724`
-- all current real-case tasks score at least `0.95` under the tuned baseline
-- each real-case task now carries provenance metadata so source URLs and refresh hints travel with the artifact
-- optimizer output now includes a failure summary for weakest-task tracking and next-step recommendations
+- current best average `overall_score` on the expanded suite is about `0.8611`
+- the harder expanded suite now exposes weak spots in diagnostics and trajectory-credit tasks instead of saturating near-perfect scores
+- each real-case task now carries provenance metadata and a task-local source sidecar so URLs, digests, and refresh hints travel with the artifact
+- optimizer output now includes a failure summary with weakest-task tracking, missed claim IDs, missing source IDs, and next-step recommendations
 
 ## Related Work Snapshot
 

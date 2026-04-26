@@ -1,0 +1,108 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "verifiable-environment-feedback-task",
+  "prompt": "Why do long-horizon agents benefit from verifiable environment feedback instead of answer-only judging?",
+  "reference_answer": "Long-horizon agents benefit from verifiable environment feedback because interactive tasks are hard to supervise with one final textual judgment. SWE-RL uses repository state and executable tests as richer feedback for software issue resolution, Terminal-Bench provides an execution harness with tests or oracle solutions for terminal tasks, and ComputerRL emphasizes scalable interactive desktop environments with online RL. Together they show that verifiable environment feedback makes long-horizon agent training and evaluation more practical than answer-only judging.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "SWE-RL digest",
+      "url": "https://arxiv.org/abs/2502.18449",
+      "content": "SWE-RL applies reinforcement learning to software engineering agents on issue-resolution tasks. The key intuition is that repository state and executable tests provide richer verifiable environment feedback than answer-only judging.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/laude-institute/terminal-bench",
+      "content": "Terminal-Bench tests AI agents in real terminal environments on complicated end-to-end tasks such as compiling code, training models, and setting up servers. It includes a task dataset and an execution harness, and each task can include instructions, tests, and oracle solutions for verifiable task completion.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "ComputerRL paper digest",
+      "url": "https://arxiv.org/abs/2508.14040",
+      "content": "ComputerRL presents end-to-end online reinforcement learning for computer-use agents. The paper emphasizes scalable parallel desktop environments and hybrid API plus GUI action spaces so long interactive tasks can use environment feedback instead of answer-only supervision.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "SWE-RL uses repository state and executable tests as verifiable environment feedback for software engineering agents.",
+      "supported_by": [
+        "d1"
+      ],
+      "keywords": [
+        "repository state",
+        "executable tests",
+        "verifiable",
+        "environment feedback"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Terminal-Bench provides a real terminal task dataset and execution harness with tests or oracle solutions.",
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "Terminal-Bench",
+        "execution harness",
+        "tests",
+        "oracle solutions",
+        "verifiable"
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "text": "ComputerRL emphasizes scalable interactive desktop environments and online RL instead of answer-only supervision.",
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "ComputerRL",
+        "desktop environments",
+        "online reinforcement learning",
+        "answer-only"
+      ]
+    },
+    {
+      "claim_id": "c4",
+      "text": "Across software, terminal, and computer-use agents, verifiable environment feedback makes long-horizon training and evaluation more practical than answer-only judging.",
+      "supported_by": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "long-horizon",
+        "verifiable environment feedback",
+        "answer-only judging",
+        "practical"
+      ],
+      "depends_on": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2502.18449",
+      "https://github.com/laude-institute/terminal-bench",
+      "https://arxiv.org/abs/2508.14040"
+    ],
+    "refresh_hint": "Refresh if these projects change how they describe executable feedback, execution harnesses, or interactive environments.",
+    "notes": [
+      "Cross-domain comparison of software, terminal, and computer-use feedback loops.",
+      "Designed to test whether the benchmark can synthesize verifiable-environment arguments across domains."
+    ]
+  }
+}

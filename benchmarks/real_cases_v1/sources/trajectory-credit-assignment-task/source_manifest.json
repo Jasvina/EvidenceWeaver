@@ -1,0 +1,29 @@
+{
+  "task_id": "trajectory-credit-assignment-task",
+  "prompt": "Why do long-horizon agents need trajectory-level credit assignment and richer intermediate signals?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN overview digest",
+      "url": "https://arxiv.org/abs/2504.20073",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ASearcher digest",
+      "url": "https://arxiv.org/abs/2508.07976",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "CaRR digest",
+      "url": "https://github.com/THUDM/CaRR",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

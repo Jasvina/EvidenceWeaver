@@ -1,0 +1,107 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "benchmark-reproducibility-task",
+  "prompt": "Why do agent benchmarks need self-hostable environments, execution harnesses, or annotated goal states to be reproducible?",
+  "reference_answer": "Agent benchmarks need reproducible infrastructure because realistic agent evaluation depends on more than static prompts. WebArena contributes a self-hostable realistic web environment, Terminal-Bench contributes a task dataset plus execution harness with tests or oracle solutions, and Tau-bench evaluates final database state against annotated goal states while tracking pass^k reliability. Together they show that reproducibility for agents comes from replayable environments, explicit harnesses, and auditable end states rather than from one-off transcript grading.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "WebArena repository digest",
+      "url": "https://github.com/web-arena-x/webarena",
+      "content": "WebArena is a standalone self-hostable web environment for building autonomous agents. It focuses on realistic web tasks where agents interact with websites and application state rather than static documents, which makes the benchmark replayable and reproducible.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/laude-institute/terminal-bench",
+      "content": "Terminal-Bench includes a task dataset and an execution harness, and each task can include instructions, tests, and oracle solutions. That harness makes terminal-agent evaluation auditable instead of relying on one-off transcript inspection.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Tau-bench evaluation digest",
+      "url": "https://arxiv.org/abs/2406.12045",
+      "content": "Tau-bench evaluates final outcomes by comparing the database state at the end of a conversation against an annotated goal state. It also proposes pass^k to measure reliability over repeated trials rather than a single run.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "WebArena contributes a self-hostable realistic web environment rather than a static prompt-only benchmark.",
+      "supported_by": [
+        "d1"
+      ],
+      "keywords": [
+        "WebArena",
+        "self-hostable",
+        "realistic web environment",
+        "reproducible"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "text": "Terminal-Bench contributes a task dataset and execution harness with tests or oracle solutions.",
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "Terminal-Bench",
+        "task dataset",
+        "execution harness",
+        "tests",
+        "oracle solutions"
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Tau-bench uses annotated goal states, final database state comparison, and pass^k to evaluate reliability.",
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "annotated goal state",
+        "database state",
+        "pass^k",
+        "reliability"
+      ]
+    },
+    {
+      "claim_id": "c4",
+      "text": "Across these benchmarks, reproducibility comes from replayable environments, explicit harnesses, and auditable end states rather than one-off transcript grading.",
+      "supported_by": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "replayable",
+        "execution harnesses",
+        "auditable end states",
+        "reproducible"
+      ],
+      "depends_on": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://github.com/web-arena-x/webarena",
+      "https://github.com/laude-institute/terminal-bench",
+      "https://arxiv.org/abs/2406.12045"
+    ],
+    "refresh_hint": "Refresh if these benchmarks change their reproducibility story, harness design, or goal-state evaluation rules.",
+    "notes": [
+      "Focused on reproducibility surfaces rather than raw benchmark difficulty."
+    ]
+  }
+}

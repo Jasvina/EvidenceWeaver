@@ -1,0 +1,29 @@
+{
+  "task_id": "terminal-agent-rl-task",
+  "prompt": "Why are terminal-agent benchmarks useful for long-horizon RL research?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "Terminal-Bench repository digest",
+      "url": "https://github.com/harbor-framework/terminal-bench",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "Terminal-Bench website digest",
+      "url": "https://www.tbench.ai/",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Terminal-Bench-RL digest",
+      "url": "https://github.com/Danau5tin/terminal-bench-rl",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

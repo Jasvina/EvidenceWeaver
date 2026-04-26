@@ -1,0 +1,29 @@
+{
+  "task_id": "deep-search-reward-task",
+  "prompt": "Why do deep search agents need evidence-sensitive rewards beyond outcome-only task success?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "ASearcher digest",
+      "url": "https://arxiv.org/abs/2508.07976",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "DeepDive digest",
+      "url": "https://github.com/THUDM/DeepDive",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "CaRR digest",
+      "url": "https://github.com/THUDM/CaRR",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

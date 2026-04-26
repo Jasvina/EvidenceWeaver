@@ -1,0 +1,29 @@
+{
+  "task_id": "computer-use-rl-task",
+  "prompt": "Why do computer-use agents need specialized RL environments and mixed action spaces?",
+  "snapshot_style": "paraphrased-snapshot",
+  "source_count": 3,
+  "sources": [
+    {
+      "doc_id": "d1",
+      "title": "ComputerRL paper digest",
+      "url": "https://arxiv.org/abs/2508.14040",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d1.md"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ComputerRL repository digest",
+      "url": "https://github.com/THUDM/ComputerRL",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d2.md"
+    },
+    {
+      "doc_id": "d3",
+      "title": "OSWorld benchmark digest",
+      "url": "https://github.com/xlang-ai/OSWorld",
+      "source_type": "paraphrased-snapshot",
+      "file": "source_d3.md"
+    }
+  ]
+}

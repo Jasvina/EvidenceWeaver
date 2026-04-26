@@ -1,0 +1,106 @@
+{
+  "schema_version": "task-bundle.v0",
+  "task_id": "agent-diagnostics-reliability-task",
+  "prompt": "Why do agent benchmarks need diagnostics beyond a single success rate?",
+  "reference_answer": "Agent benchmarks need diagnostics beyond a single success rate because one metric can hide serious failure modes. RAGEN-2 shows that entropy can look healthy while trajectories collapse into input-agnostic templates, ARLArena decomposes instability sources and studies collapse in larger interactive environments, and Tau-bench adds pass^k to measure repeated-trial reliability instead of a single run. Together they suggest that useful diagnostics must track collapse, stability, and consistency rather than only headline success.",
+  "documents": [
+    {
+      "doc_id": "d1",
+      "title": "RAGEN-2 stability digest",
+      "url": "https://arxiv.org/abs/2604.06268",
+      "content": "RAGEN-2 says recent multi-turn agentic RL treats stability as a first-class problem because long-horizon training can collapse. It identifies template collapse, where trajectories look diverse by entropy but become input-agnostic, and it proposes mutual information proxies plus SNR-aware filtering to diagnose and mitigate the problem.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d2",
+      "title": "ARLArena digest",
+      "url": "https://arxiv.org/abs/2602.21534",
+      "content": "ARLArena says agentic RL often leads to training collapse in larger environments and longer interaction horizons. It builds a standardized testbed, decomposes instability sources, and proposes SAMPO as a stable agentic policy optimization method.",
+      "source_type": "paraphrased-snapshot"
+    },
+    {
+      "doc_id": "d3",
+      "title": "Tau-bench evaluation digest",
+      "url": "https://arxiv.org/abs/2406.12045",
+      "content": "Tau-bench evaluates final outcomes by comparing the database state at the end of a conversation against an annotated goal state. It also proposes pass^k to measure reliability over repeated trials rather than a single run.",
+      "source_type": "paraphrased-snapshot"
+    }
+  ],
+  "required_claims": [
+    {
+      "claim_id": "c1",
+      "text": "RAGEN-2 shows that entropy can hide template collapse and uses mutual information proxies plus SNR-aware filtering as diagnostics.",
+      "supported_by": [
+        "d1"
+      ],
+      "keywords": [
+        "entropy",
+        "template collapse",
+        "mutual information proxies",
+        "SNR-aware filtering"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "text": "ARLArena studies training collapse in larger interactive environments and decomposes instability sources.",
+      "supported_by": [
+        "d2"
+      ],
+      "keywords": [
+        "training collapse",
+        "interactive environments",
+        "decomposes instability sources",
+        "SAMPO"
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "text": "Tau-bench adds pass^k to measure repeated-trial reliability instead of only a single-run success signal.",
+      "supported_by": [
+        "d3"
+      ],
+      "keywords": [
+        "pass^k",
+        "repeated trials",
+        "reliability",
+        "single run"
+      ]
+    },
+    {
+      "claim_id": "c4",
+      "text": "Together these benchmarks show that useful diagnostics must track collapse, stability, and consistency rather than only headline success.",
+      "supported_by": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "keywords": [
+        "collapse",
+        "stability",
+        "consistency",
+        "headline success"
+      ],
+      "depends_on": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    }
+  ],
+  "budget": {
+    "max_steps": 9,
+    "max_document_reads": 3
+  },
+  "provenance": {
+    "snapshot_style": "paraphrased-snapshot",
+    "primary_urls": [
+      "https://arxiv.org/abs/2604.06268",
+      "https://arxiv.org/abs/2602.21534",
+      "https://arxiv.org/abs/2406.12045"
+    ],
+    "refresh_hint": "Refresh if stability diagnostics or repeated-trial reliability guidance changes materially in these projects.",
+    "notes": [
+      "Intended to stress cross-cutting diagnostics synthesis rather than one-domain summarization."
+    ]
+  }
+}

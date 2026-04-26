@@ -19,6 +19,9 @@ class SuiteTaskMetric:
     citation_coverage: float
     citation_precision: float
     unsupported_claim_rate: float
+    missed_claim_ids: tuple[str, ...] = ()
+    unsupported_claim_ids: tuple[str, ...] = ()
+    missing_source_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,22 +60,39 @@ def collect_task_paths(task_dir: str | Path) -> list[Path]:
     return sorted(Path(task_dir).glob("*.json"))
 
 
+def build_suite_task_metric(task, run, report) -> SuiteTaskMetric:
+    claim_by_id = {claim.claim_id: claim for claim in task.required_claims}
+    missed_claim_ids = tuple(result.claim_id for result in report.claim_results if not result.covered)
+    unsupported_claim_ids = tuple(result.claim_id for result in report.claim_results if result.covered and not result.supported)
+    cited_doc_ids = set(run.final_citations)
+    for claim in run.claims:
+        cited_doc_ids.update(claim.citations)
+    missing_source_ids = tuple(
+        doc_id
+        for claim_id in unsupported_claim_ids
+        for doc_id in claim_by_id[claim_id].supported_by
+        if doc_id not in cited_doc_ids
+    )
+    return SuiteTaskMetric(
+        task_id=task.task_id,
+        overall_score=float(report.metrics["overall_score"]),
+        answer_coverage=float(report.metrics["answer_coverage"]),
+        citation_coverage=float(report.metrics["citation_coverage"]),
+        citation_precision=float(report.metrics["citation_precision"]),
+        unsupported_claim_rate=float(report.metrics["unsupported_claim_rate"]),
+        missed_claim_ids=missed_claim_ids,
+        unsupported_claim_ids=unsupported_claim_ids,
+        missing_source_ids=missing_source_ids,
+    )
+
+
 def evaluate_config_on_suite(task_paths: list[Path], config_name: str, config: BaselineAgentConfig) -> ConfigEvaluation:
     task_metrics: list[SuiteTaskMetric] = []
     for task_path in task_paths:
         task = load_task_bundle(task_path)
         run = run_task(task_path, config=config)
         report = evaluate_run(task, run)
-        task_metrics.append(
-            SuiteTaskMetric(
-                task_id=task.task_id,
-                overall_score=float(report.metrics["overall_score"]),
-                answer_coverage=float(report.metrics["answer_coverage"]),
-                citation_coverage=float(report.metrics["citation_coverage"]),
-                citation_precision=float(report.metrics["citation_precision"]),
-                unsupported_claim_rate=float(report.metrics["unsupported_claim_rate"]),
-            )
-        )
+        task_metrics.append(build_suite_task_metric(task, run, report))
     return ConfigEvaluation(
         config_name=config_name,
         config=config,
@@ -120,6 +140,9 @@ def failure_summary(result: ConfigEvaluation) -> dict[str, object]:
     return {
         "weakest_task_id": weakest.task_id,
         "weakest_task_score": weakest.overall_score,
+        "missed_claim_ids": list(weakest.missed_claim_ids),
+        "unsupported_claim_ids": list(weakest.unsupported_claim_ids),
+        "missing_source_ids": list(weakest.missing_source_ids),
         "recommendations": recommendations,
     }
 
