@@ -9,6 +9,8 @@
   <a href="https://img.shields.io/badge/focus-agentic_rl-1f6feb?style=flat-square"><img alt="Focus" src="https://img.shields.io/badge/focus-agentic_rl-1f6feb?style=flat-square"></a>
   <a href="https://img.shields.io/badge/domain-deep_research_agents-b85c38?style=flat-square"><img alt="Domain" src="https://img.shields.io/badge/domain-deep_research_agents-b85c38?style=flat-square"></a>
   <a href="https://img.shields.io/badge/north_star-grounded_traceable_answers-5b4b8a?style=flat-square"><img alt="North star" src="https://img.shields.io/badge/north_star-grounded_traceable_answers-5b4b8a?style=flat-square"></a>
+  <a href="https://github.com/Jasvina/EvidenceWeaver/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Jasvina/EvidenceWeaver/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/Jasvina/EvidenceWeaver/actions/workflows/pages.yml"><img alt="Pages" src="https://github.com/Jasvina/EvidenceWeaver/actions/workflows/pages.yml/badge.svg"></a>
 </p>
 
 <p align="center">
@@ -55,6 +57,15 @@ Now / Next / Later:
 - `Now` - maintain a clean executable scaffold with reproducible benchmark artifacts and honest diagnostics
 - `Next` - expand harder real-case tasks, add source sidecars, and make failure analysis more explicit
 - `Later` - integrate online or hybrid RL once the benchmark and reward loop are harder to game
+
+## What Exists Today
+
+- `Baseline agent` - deterministic search-read-write loop that emits `run-artifact.v0` JSON
+- `Evidence graph` - explicit source, claim, duplicate, support, and open-question structure
+- `Offline evaluator` - decomposed scoring for answer quality and citation quality
+- `Reward composition` - inspectable reward bundle construction from evaluation metrics
+- `Benchmarks` - `snapshot_v0` plus an eight-task `real_cases_v1` tuning suite
+- `Open-source surface` - static landing page, CI, Pages deployment, issue templates, PR template, changelog, conduct, and security policy
 
 ## Why EvidenceWeaver
 
@@ -402,7 +413,9 @@ If you want to help, start with one of these issue or PR shapes:
 - `benchmark:` - propose a new task family, snapshot recipe, or evaluation setup
 - `reward:` - add a reward term, anti-hacking check, or scoring rule
 - `failure-case:` - document a trajectory or behavior that broke in a useful way
-- `docs:` / `eval:` / `infra:` - tighten the artifact path, public narrative, or reproducibility story
+- `docs:` - improve onboarding, navigation, CI, contributor workflow, or benchmark documentation
+- `eval:` - report a blind spot or misleading signal in the current evaluation loop
+- `infra:` - tighten automation, artifact flow, or reproducibility mechanics
 
 ## Status
 

@@ -1,0 +1,8 @@
+# Default ownership for the repository while the maintainer set is still small.
+* @Jasvina
+
+docs/ @Jasvina
+benchmarks/ @Jasvina
+src/ @Jasvina
+tests/ @Jasvina
+.github/ @Jasvina

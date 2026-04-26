@@ -1,0 +1,34 @@
+name: Evaluation gap
+description: Report a weakness, blind spot, or misleading signal in the current evaluation loop.
+title: "eval: "
+labels:
+  - eval
+body:
+  - type: textarea
+    id: gap
+    attributes:
+      label: What evaluation gap did you find?
+      description: Describe the missing metric, blind spot, or misleading behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: What task, run, or artifact shows the problem?
+      description: Include file paths, commands, or summaries that make the gap concrete.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Why does this matter?
+      description: Explain what false confidence or missed failure mode this gap creates.
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: What should we try next?
+      description: Suggest a metric, diagnostic, ablation, or artifact change.
+    validations:
+      required: true

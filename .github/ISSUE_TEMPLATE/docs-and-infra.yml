@@ -1,0 +1,39 @@
+name: Docs or infra improvement
+description: Propose a documentation, onboarding, CI, or repository process improvement.
+title: "docs: "
+labels:
+  - docs
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: What area does this affect?
+      options:
+        - README or docs navigation
+        - onboarding or quickstart
+        - CI or repository automation
+        - contributor workflow
+        - benchmark documentation
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: What is unclear or missing?
+      description: Describe the friction a contributor or reader would hit today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What do you propose?
+      description: Suggest the smallest useful doc, workflow, or process change.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: How would we know this helped?
+      description: Describe the concrete outcome, artifact path, or reduced confusion this should create.
+    validations:
+      required: true
