@@ -4,6 +4,32 @@ Thanks for considering a contribution.
 
 EvidenceWeaver is still a research bootstrapping project, so the best contributions are the ones that reduce ambiguity, improve reproducibility, or sharpen the evaluation story.
 
+## Local Setup
+
+Use the smallest possible setup before proposing bigger changes:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -e .
+python3 -m unittest discover -s tests -v
+```
+
+Canonical demo path:
+
+```bash
+python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  --output /tmp/evidenceweaver_run.json
+python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json \
+  --emit-scored-run /tmp/evidenceweaver_scored_run.json
+python3 -m evidenceweaver.graph.analyze /tmp/evidenceweaver_scored_run.json
+```
+
+If your change affects benchmark behavior, please mention which task you used and what artifact or metric changed.
+
 ## Good First Contribution Shapes
 
 - clarify a benchmark proposal
@@ -58,3 +84,12 @@ That means:
 - no pretending a messy result is clean
 
 If a contribution makes the project more inspectable, more reproducible, or more honest, it is likely directionally correct.
+
+## High-Signal Pull Request Checklist
+
+Before opening a PR, try to include:
+
+- one sentence on what research ambiguity or reproducibility gap this change reduces
+- the smallest verification step that proves the change works
+- links to task files, run artifacts, or docs touched by the change
+- explicit notes when a claim is provisional, heuristic, or not yet benchmarked

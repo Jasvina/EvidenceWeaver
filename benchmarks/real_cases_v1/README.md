@@ -6,21 +6,27 @@ This suite is the repository's first **real-example-driven accuracy optimization
 
 ## What is in this suite
 
-The suite currently includes five research-style tasks:
+The suite currently includes eight research-style tasks:
 
 - `agentic_rl_stability_task`
 - `agent_training_stack_task`
-- `deep_search_reward_task`
+- `browser_agent_environment_task`
 - `computer_use_rl_task`
+- `deep_search_reward_task`
 - `swe_agent_posttraining_task`
+- `terminal_agent_rl_task`
+- `tool_user_interaction_task`
 
-These tasks all stay within the same repository domain:
+These tasks stay within the same evidence-centric agent domain while covering a broader operating surface:
 
 - agentic RL training stability
 - agent-training frameworks
+- browser-agent environments and integrations
 - deep search reward design
 - computer-use agents
 - software engineering agents
+- terminal-centric agents
+- tool-user interaction benchmarks
 
 Each task now includes a `provenance` section with:
 
@@ -57,3 +63,14 @@ The optimizer evaluates a small set of baseline configurations and returns:
 ## Design note
 
 The suite still uses paraphrased snapshot digests anchored to primary-source URLs. That keeps the repository lightweight and inspectable while pushing it into a more realistic tuning regime.
+
+## Canonical first run
+
+If you are new to the repo, the simplest artifact path is:
+
+1. Run the baseline on `benchmarks/snapshot_v0/tasks/agent_training_stack_task.json`.
+2. Score the resulting run with `evidenceweaver.eval.offline`.
+3. Inspect `/tmp/evidenceweaver_scored_run.json` plus `python3 -m evidenceweaver.graph.analyze /tmp/evidenceweaver_scored_run.json`.
+
+This gives you one readable task, one trajectory, one scored artifact, and one graph summary before you move on to the full suite.
+

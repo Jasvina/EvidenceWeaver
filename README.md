@@ -26,6 +26,36 @@ Today, many agentic RL systems still optimize heavily for final-task success whi
 - decomposed rewards for correctness, grounding, and traceability
 - stability-aware training for long-horizon search behavior
 
+## Start Here
+
+If you want the fastest path from repo visit to runnable artifact, use this order:
+
+1. Open `docs/index.html` locally, or publish `docs/` with GitHub Pages, for the dependency-free project site and visual overview.
+2. Read the quickstart below and run the baseline once.
+3. Inspect `docs/progress-and-roadmap.md` for the current benchmark state and next milestone.
+
+Quickstart:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -e .
+python3 -m unittest discover -s tests -v
+python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  --output /tmp/evidenceweaver_run.json
+python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json \
+  --emit-scored-run /tmp/evidenceweaver_scored_run.json
+```
+
+Now / Next / Later:
+
+- `Now` - maintain a clean executable scaffold with reproducible benchmark artifacts and honest diagnostics
+- `Next` - expand harder real-case tasks, add source sidecars, and make failure analysis more explicit
+- `Later` - integrate online or hybrid RL once the benchmark and reward loop are harder to game
+
 ## Why EvidenceWeaver
 
 The current frontier in agentic RL is moving quickly, but the center of gravity is clear:
@@ -315,7 +345,7 @@ These tasks use paraphrased snapshot digests anchored to primary-source URLs, wh
 
 ## Real-Case Optimization
 
-The repository now also includes `benchmarks/real_cases_v1/`, a broader five-task suite used to tune the deterministic baseline against more realistic examples.
+The repository now also includes `benchmarks/real_cases_v1/`, an eight-task suite used to tune the deterministic baseline against more realistic examples.
 
 Run the suite optimizer:
 
@@ -326,7 +356,7 @@ PYTHONPATH=src python3 -m evidenceweaver.optimize.accuracy \
 
 Current repository snapshot:
 
-- suite size: `5` tasks
+- suite size: `8` tasks
 - saved sweep result: `benchmarks/real_cases_v1/results/baseline_sweep.json`
 - current best config aligns with the repository default baseline configuration
 - current best average `overall_score` on the expanded suite is about `0.9724`
@@ -364,14 +394,12 @@ This project is very early, so the best contributions are high-signal and concre
 - baselines, ablations, and failure analyses
 - critiques of the problem framing
 
-If you want to help, open an issue with one of these shapes:
+If you want to help, start with one of these issue or PR shapes:
 
-- `problem framing`
-- `benchmark proposal`
-- `reward idea`
-- `eval gap`
-- `implementation plan`
-- `related work note`
+- `benchmark:` - propose a new task family, snapshot recipe, or evaluation setup
+- `reward:` - add a reward term, anti-hacking check, or scoring rule
+- `failure-case:` - document a trajectory or behavior that broke in a useful way
+- `docs:` / `eval:` / `infra:` - tighten the artifact path, public narrative, or reproducibility story
 
 ## Status
 

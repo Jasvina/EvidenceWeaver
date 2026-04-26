@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EvidenceWeaver | Citation-grounded RL for research agents</title>
+    <meta
+      name="description"
+      content="EvidenceWeaver is an open-source research scaffold for training deep research agents that are correct, grounded, and traceable."
+    />
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="EvidenceWeaver home">
+          <span class="brand-mark">EW</span>
+          <span class="brand-copy">
+            <strong>EvidenceWeaver</strong>
+            <span>Citation-grounded RL for research agents</span>
+          </span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#thesis">Thesis</a>
+          <a href="#system">System</a>
+          <a href="#artifact">Artifact</a>
+          <a href="#contribute">Contribute</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero panel panel-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Research bootstrapping repo</p>
+            <h1>Train research agents that can show their work.</h1>
+            <p class="lede">
+              EvidenceWeaver turns agentic RL into an inspectable evidence loop: search, read,
+              structure claims, trace support, and score the answer with the evidence behind it.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="https://github.com/Jasvina/EvidenceWeaver">Read the repo</a>
+              <a class="button button-secondary" href="#artifact">See the executable scaffold</a>
+            </div>
+            <dl class="hero-metrics" aria-label="Project metrics">
+              <div>
+                <dt>Real-case score</dt>
+                <dd>0.9724</dd>
+              </div>
+              <div>
+                <dt>Benchmark tasks</dt>
+                <dd>8</dd>
+              </div>
+              <div>
+                <dt>Verified tests</dt>
+                <dd>18</dd>
+              </div>
+              <div>
+                <dt>Core layers</dt>
+                <dd>6</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="hero-visual">
+            <div class="signal-card signal-card-main">
+              <span class="signal-kicker">North star</span>
+              <h2>Correct, grounded, traceable</h2>
+              <p>
+                Strong answers are not enough. The next generation of research agents must make
+                their evidence legible.
+              </p>
+            </div>
+            <div class="signal-grid">
+              <article class="signal-card">
+                <span>1</span>
+                <h3>Evidence graph memory</h3>
+                <p>Track claims, sources, duplicates, support, and open questions explicitly.</p>
+              </article>
+              <article class="signal-card">
+                <span>2</span>
+                <h3>Decomposed reward heads</h3>
+                <p>Score correctness, citation quality, chain completeness, diversity, and budget.</p>
+              </article>
+              <article class="signal-card">
+                <span>3</span>
+                <h3>Inspectable runs</h3>
+                <p>Keep artifacts small, typed, and readable enough for human audit.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel banner-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Visual thesis</p>
+            <h2>The repo already ships a language for the project.</h2>
+          </div>
+          <img
+            class="banner-art"
+            src="assets/banner.svg"
+            alt="EvidenceWeaver banner showing a flow from query to rewards"
+          />
+        </section>
+
+        <section id="thesis" class="panel">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow">Why this matters</p>
+              <h2>EvidenceWeaver focuses on the part of agentic RL that still feels under-built.</h2>
+            </div>
+            <p>
+              Many long-horizon agents are optimized for task success while under-optimizing for
+              evidence quality, citation faithfulness, and multi-hop reasoning structure.
+            </p>
+          </div>
+          <div class="thesis-grid">
+            <article class="thesis-card">
+              <h3>Reward decomposition beats scalar outcome reward</h3>
+              <p>
+                Separate answer quality, support coverage, diversity, and efficiency so training
+                pressure is visible instead of hidden behind one number.
+              </p>
+            </article>
+            <article class="thesis-card">
+              <h3>Evidence should be structured</h3>
+              <p>
+                A research agent should maintain an evolving graph of claims, sources,
+                contradictions, and unresolved gaps instead of dumping text into flat context.
+              </p>
+            </article>
+            <article class="thesis-card">
+              <h3>Stability is a first-class problem</h3>
+              <p>
+                Long-horizon policy collapse is easy to miss. Diagnostics and honest failure cases
+                belong in the artifact, not in the appendix.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="system" class="panel system-panel">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow">System map</p>
+              <h2>A compact loop that stays legible as the repo grows.</h2>
+            </div>
+            <p>
+              EvidenceWeaver is intentionally small: a baseline agent, an evidence graph, a reward
+              bundle, an evaluator, and benchmark slices that can be read without private infra.
+            </p>
+          </div>
+          <div class="system-layout">
+            <img
+              class="loop-art"
+              src="assets/evidence-loop.svg"
+              alt="EvidenceWeaver evidence loop diagram"
+            />
+            <div class="layer-stack" aria-label="Core layers">
+              <article>
+                <span>Agent</span>
+                <p>Plans, searches, reads, writes, and emits a typed run artifact.</p>
+              </article>
+              <article>
+                <span>Environment</span>
+                <p>Exposes reproducible search and snapshot-style evidence interactions.</p>
+              </article>
+              <article>
+                <span>Evidence graph</span>
+                <p>Stores sources, claims, support edges, duplicates, and open questions.</p>
+              </article>
+              <article>
+                <span>Reward server</span>
+                <p>Breaks scoring into answer, citation, chain, diversity, and efficiency terms.</p>
+              </article>
+              <article>
+                <span>Trainer</span>
+                <p>Reserved for the next stage: online or hybrid RL over the same interfaces.</p>
+              </article>
+              <article>
+                <span>Evaluator</span>
+                <p>Keeps offline judgment separate so benchmark claims stay honest.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="artifact" class="panel artifact-panel">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow">What ships today</p>
+              <h2>The repository is already executable, inspectable, and easy to tour.</h2>
+            </div>
+            <p>
+              The current artifact is deliberately modest: enough code to run, score, diagnose, and
+              compare baseline trajectories without pretending the research is finished.
+            </p>
+          </div>
+
+          <div class="artifact-grid">
+            <article class="artifact-card">
+              <span class="artifact-tag">Baseline</span>
+              <h3>Deterministic baseline agent</h3>
+              <p>
+                The baseline can search, read, write claims, follow up on open questions, and emit
+                `run-artifact.v0` JSON.
+              </p>
+              <a href="https://github.com/Jasvina/EvidenceWeaver/blob/main/src/evidenceweaver/agent/baseline.py">Open agent code</a>
+            </article>
+            <article class="artifact-card">
+              <span class="artifact-tag">Graph</span>
+              <h3>Explicit evidence graph</h3>
+              <p>
+                Source nodes, claim nodes, edges, and open questions are materialized instead of
+                staying implicit in prompts.
+              </p>
+              <a href="https://github.com/Jasvina/EvidenceWeaver/blob/main/src/evidenceweaver/graph/core.py">Open graph code</a>
+            </article>
+            <article class="artifact-card">
+              <span class="artifact-tag">Reward</span>
+              <h3>Decomposed scoring path</h3>
+              <p>
+                Reward composition stays inspectable, with offline evaluation separated from future
+                trainer integration.
+              </p>
+              <a href="https://github.com/Jasvina/EvidenceWeaver/blob/main/src/evidenceweaver/reward/compose.py">Open reward code</a>
+            </article>
+            <article class="artifact-card">
+              <span class="artifact-tag">Benchmark</span>
+              <h3>Real-case optimization suite</h3>
+              <p>
+                Eight public-source-inspired tasks now drive weakness analysis instead of relying on
+                only synthetic examples.
+              </p>
+              <a href="https://github.com/Jasvina/EvidenceWeaver/blob/main/benchmarks/real_cases_v1/README.md">Open benchmark notes</a>
+            </article>
+          </div>
+
+          <div class="command-board" aria-label="Quickstart commands">
+            <article class="command-card">
+              <div class="command-head">
+                <h3>Run tests</h3>
+                <button class="copy-button" data-copy="PYTHONPATH=src python3 -m unittest discover -s tests -v">Copy</button>
+              </div>
+              <pre><code>PYTHONPATH=src python3 -m unittest discover -s tests -v</code></pre>
+            </article>
+            <article class="command-card">
+              <div class="command-head">
+                <h3>Run the baseline</h3>
+                <button class="copy-button" data-copy="PYTHONPATH=src python3 -m evidenceweaver.agent.baseline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json --output /tmp/evidenceweaver_run.json">Copy</button>
+              </div>
+              <pre><code>PYTHONPATH=src python3 -m evidenceweaver.agent.baseline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  --output /tmp/evidenceweaver_run.json</code></pre>
+            </article>
+            <article class="command-card">
+              <div class="command-head">
+                <h3>Score a run</h3>
+                <button class="copy-button" data-copy="PYTHONPATH=src python3 -m evidenceweaver.eval.offline benchmarks/snapshot_v0/tasks/agent_training_stack_task.json /tmp/evidenceweaver_run.json --emit-scored-run /tmp/evidenceweaver_scored_run.json">Copy</button>
+              </div>
+              <pre><code>PYTHONPATH=src python3 -m evidenceweaver.eval.offline \
+  benchmarks/snapshot_v0/tasks/agent_training_stack_task.json \
+  /tmp/evidenceweaver_run.json \
+  --emit-scored-run /tmp/evidenceweaver_scored_run.json</code></pre>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel reading-panel">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow">Read path</p>
+              <h2>If someone lands on the repo cold, these are the next best clicks.</h2>
+            </div>
+            <p>
+              The goal is to help an open-source visitor understand the thesis, inspect the code,
+              and decide quickly where they can contribute signal.
+            </p>
+          </div>
+
+          <div class="reading-grid">
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver">
+              <strong>README</strong>
+              <span>Project thesis, quickstart, roadmap, and benchmark snapshot.</span>
+            </a>
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver/blob/main/docs/progress-and-roadmap.md">
+              <strong>Progress + roadmap</strong>
+              <span>Current stage, latest benchmark state, and concrete next steps.</span>
+            </a>
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver/blob/main/docs/interfaces.md">
+              <strong>v0 interfaces</strong>
+              <span>Clean contracts for agent, graph, reward, evaluator, and logging.</span>
+            </a>
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver/blob/main/docs/reward-design.md">
+              <strong>Reward design</strong>
+              <span>The decomposed scoring story and anti-hacking mindset.</span>
+            </a>
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver/blob/main/docs/benchmark-slice.md">
+              <strong>Benchmark slice</strong>
+              <span>How the current task suites are shaped and why they are scoped this way.</span>
+            </a>
+            <a class="reading-card" href="https://github.com/Jasvina/EvidenceWeaver/blob/main/paper/draft.md">
+              <strong>Paper draft</strong>
+              <span>A pre-results narrative for the research artifact the repo is aiming toward.</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="contribute" class="panel contribute-panel">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow">Open-source ready lanes</p>
+              <h2>Contributions should sharpen the benchmark, not decorate around it.</h2>
+            </div>
+            <p>
+              EvidenceWeaver is designed to earn trust slowly. High-signal contributions improve
+              reproducibility, failure visibility, benchmark design, or reward clarity.
+            </p>
+          </div>
+
+          <div class="contribute-layout">
+            <div class="lane-list">
+              <article>
+                <span>benchmark:</span>
+                <p>Propose a task family, snapshot recipe, or evaluation setup that reveals a real gap.</p>
+              </article>
+              <article>
+                <span>reward:</span>
+                <p>Suggest a term, anti-hacking check, or scoring rule with explicit failure analysis.</p>
+              </article>
+              <article>
+                <span>failure-case:</span>
+                <p>Document a trajectory or policy behavior that broke in an interesting, reproducible way.</p>
+              </article>
+              <article>
+                <span>docs / infra / eval</span>
+                <p>Clarify the story, harden the artifact path, or make benchmark assumptions easier to inspect.</p>
+              </article>
+            </div>
+            <div class="roadmap-card">
+              <p class="eyebrow">Next open-source milestone</p>
+              <h3>Publish a repo that feels serious before it feels finished.</h3>
+              <ul>
+                <li>Keep the public story consistent across README, docs, and benchmark notes.</li>
+                <li>Show the executable path in three commands, not thirty.</li>
+                <li>Make contribution lanes explicit enough that newcomers can self-select.</li>
+                <li>Leave room for RL integration without pretending it already exists.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>EvidenceWeaver is a research-first, open-by-default scaffold for grounded research agents.</p>
+        <a href="https://github.com/Jasvina/EvidenceWeaver/blob/main/CONTRIBUTING.md">Read contributing guide</a>
+      </footer>
+    </div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>
