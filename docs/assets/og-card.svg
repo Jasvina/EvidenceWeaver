@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">EvidenceWeaver social card</title>
+  <desc id="desc">A social preview card for the EvidenceWeaver repository.</desc>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="40" x2="1092" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10243C"/>
+      <stop offset="0.52" stop-color="#1C4D63"/>
+      <stop offset="1" stop-color="#B9752F"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(246 120) rotate(26.5) scale(286 226)">
+      <stop stop-color="#57C2AC" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#57C2AC" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(930 520) rotate(-25.8) scale(320 236)">
+      <stop stop-color="#F0C17C" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#F0C17C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowA)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowB)"/>
+
+  <g opacity="0.16">
+    <path d="M66 132H1134" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M66 222H1134" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M66 312H1134" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M66 402H1134" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M66 492H1134" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M186 42V588" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M396 42V588" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M606 42V588" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M816 42V588" stroke="#F8FBF8" stroke-width="1"/>
+    <path d="M1026 42V588" stroke="#F8FBF8" stroke-width="1"/>
+  </g>
+
+  <rect x="76" y="74" width="174" height="174" rx="32" fill="rgba(248,251,248,0.12)"/>
+  <rect x="88" y="86" width="150" height="150" rx="26" fill="rgba(248,251,248,0.08)" stroke="rgba(248,251,248,0.24)"/>
+  <text x="163" y="174" text-anchor="middle" fill="#F8FBF8" font-family="Avenir Next, Segoe UI, Helvetica Neue, sans-serif" font-size="64" font-weight="700" letter-spacing="0.16em">EW</text>
+
+  <text x="290" y="138" fill="#D7EEE8" font-family="Avenir Next, Segoe UI, Helvetica Neue, sans-serif" font-size="24" font-weight="700" letter-spacing="0.18em">OPEN-SOURCE RESEARCH SCAFFOLD</text>
+  <text x="290" y="252" fill="#F8FBF8" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif" font-size="72" font-weight="700">
+    <tspan x="290" dy="0">Train research agents</tspan>
+    <tspan x="290" dy="82">that can prove their evidence.</tspan>
+  </text>
+  <text x="292" y="432" fill="#E8F0EB" font-family="Avenir Next, Segoe UI, Helvetica Neue, sans-serif" font-size="28" font-weight="500">
+    <tspan x="292" dy="0">Evidence graph memory • citation-aware evaluation</tspan>
+    <tspan x="292" dy="40">traceability-first rewards • grounded agentic RL</tspan>
+  </text>
+
+  <g transform="translate(824 414)">
+    <rect width="280" height="138" rx="24" fill="rgba(248,251,248,0.1)" stroke="rgba(248,251,248,0.18)"/>
+    <text x="28" y="42" fill="#D7EEE8" font-family="Avenir Next, Segoe UI, Helvetica Neue, sans-serif" font-size="18" font-weight="700" letter-spacing="0.14em">CURRENT LOOP</text>
+    <text x="28" y="78" fill="#F8FBF8" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif" font-size="26">search → read → graph</text>
+    <text x="28" y="112" fill="#F8FBF8" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif" font-size="26">score → optimize</text>
+  </g>
+</svg>

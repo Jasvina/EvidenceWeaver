@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: EvidenceWeaver
+message: If you use this repository, please cite it using this metadata.
+type: software
+version: 0.1.0
+license: MIT
+abstract: Research-first scaffold for citation-grounded reinforcement learning in deep research agents.
+repository-code: https://github.com/Jasvina/EvidenceWeaver
+url: https://github.com/Jasvina/EvidenceWeaver
+authors:
+  - name: EvidenceWeaver contributors

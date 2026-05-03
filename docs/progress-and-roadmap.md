@@ -80,7 +80,7 @@ The current test suite covers:
 - provenance coverage for real-case tasks
 
 Latest verified test count: 19 tests.
-Latest verified test count after the current graph-traceability pass: 21 tests.
+Latest verified test count after the current graph-traceability pass: 22 tests.
 
 ## Current Benchmarks
 
