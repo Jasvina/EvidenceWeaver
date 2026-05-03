@@ -1,3 +1,4 @@
+import json
 import re
 import sys
 import unittest
@@ -29,3 +30,27 @@ class RepositorySurfaceTests(unittest.TestCase):
         for relative_path in blob_links:
             with self.subTest(relative_path=relative_path):
                 self.assertTrue((REPO_ROOT / relative_path).exists(), msg=f"broken docs blob link: {relative_path}")
+
+        workflow_links = re.findall(r"https://github\\.com/Jasvina/EvidenceWeaver/actions/workflows/([^\"#]+)", html)
+        for workflow_file in workflow_links:
+            with self.subTest(workflow_file=workflow_file):
+                self.assertTrue((REPO_ROOT / ".github" / "workflows" / workflow_file).exists(), msg=f"broken workflow link: {workflow_file}")
+
+    def test_public_surface_claims_match_repository_state(self) -> None:
+        html = (REPO_ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+        changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+        real_case_task_count = len(list((REPO_ROOT / "benchmarks" / "real_cases_v1" / "tasks").glob("*.json")))
+        snapshot_task_count = len(list((REPO_ROOT / "benchmarks" / "snapshot_v0" / "tasks").glob("*.json")))
+        total_task_count = real_case_task_count + snapshot_task_count
+        test_count = sum(path.read_text(encoding="utf-8").count("def test_") for path in (REPO_ROOT / "tests").glob("test_*.py"))
+        best_score = json.loads((REPO_ROOT / "benchmarks" / "real_cases_v1" / "results" / "baseline_sweep.json").read_text(encoding="utf-8"))[
+            "best_config"
+        ]["average_overall_score"]
+
+        self.assertIn(f"{real_case_task_count} real-case tasks", html)
+        self.assertIn(f"{total_task_count} total tasks", html)
+        self.assertIn(f"{test_count} verified tests", html)
+        self.assertIn(f"{best_score:.4f} best average score", html)
+        self.assertNotIn("eight-task suite", changelog)
+        self.assertIn("twelve-task suite", changelog)

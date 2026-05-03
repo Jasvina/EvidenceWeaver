@@ -167,7 +167,7 @@ Per-task scores under the current best config:
 | `benchmark-reproducibility-task` | `0.75` |
 | `verifiable-environment-feedback-task` | `0.75` |
 
-The harder 12-task suite now exposes clear weakness clusters in trajectory-credit assignment and diagnostics synthesis. That is a better signal than the earlier near-saturated eight-task suite because the optimizer once again has room to reveal failure modes.
+The harder 12-task suite now exposes clear weakness clusters in trajectory-credit assignment and diagnostics synthesis. That is a better signal than the earlier smaller near-saturated suite because the optimizer once again has room to reveal failure modes.
 
 ## What Improved During This Stage
 

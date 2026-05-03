@@ -18,7 +18,7 @@ pre-release variant while the repository is still in a research-bootstrapping st
 
 ### Changed
 
-- synced public documentation to reflect the current `real_cases_v1` eight-task suite
+- synced public documentation to reflect the current `real_cases_v1` twelve-task suite
 - tightened README onboarding with `Start Here` and `Now / Next / Later` guidance
 - clarified the canonical first-run path in `benchmarks/real_cases_v1/README.md`
 

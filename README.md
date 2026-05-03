@@ -420,6 +420,6 @@ If you want to help, start with one of these issue or PR shapes:
 
 ## Status
 
-EvidenceWeaver is currently a **research bootstrapping repository**. There are no performance claims yet, no training results yet, and no stable API yet. This is deliberate: the project should earn trust by publishing clean reasoning, good baselines, and honest evidence as it grows.
+EvidenceWeaver is currently a **research bootstrapping repository**. There are no training-results claims yet and no stable API yet. This is deliberate: the project should earn trust by publishing clean reasoning, good baselines, and honest evidence as it grows.
 
 If we do this well, EvidenceWeaver can become more than a single paper. It can become a practical reference point for how to train research agents that are not just impressive, but inspectable.
