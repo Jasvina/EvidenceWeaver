@@ -124,6 +124,20 @@ def evaluate_run(task: TaskBundle, run: RunArtifact) -> EvalReport:
     else:
         chain_completeness = 1.0
 
+    graph_consistency = 1.0
+    focus_resolution = 1.0
+    if run.evidence_graph is not None:
+        graph_claim_count = max(1, len(run.evidence_graph.claim_nodes))
+        contradicted_claim_count = len(run.evidence_graph.contradicted_claim_ids)
+        graph_consistency = max(0.0, 1.0 - (contradicted_claim_count / graph_claim_count))
+        focus_resolution = run.evidence_graph.prompt_focus_coverage_ratio
+        if contradicted_claim_count:
+            notes.append("evidence graph contains contradictory claims")
+        if run.evidence_graph.open_questions and answer_coverage < 1.0:
+            notes.append("evidence graph still contains unresolved prompt-focus questions")
+
+    traceability_score = chain_completeness * graph_consistency
+
     source_pool = task.scorable_document_ids
     cited_docs = set(run.final_citations)
     for claim in run.claims:
@@ -146,7 +160,7 @@ def evaluate_run(task: TaskBundle, run: RunArtifact) -> EvalReport:
         (0.35 * answer_coverage)
         + (0.25 * citation_coverage)
         + (0.15 * citation_precision)
-        + (0.10 * chain_completeness)
+        + (0.10 * traceability_score)
         + (0.10 * source_diversity)
         + (0.05 * budget_efficiency)
     )
@@ -156,6 +170,9 @@ def evaluate_run(task: TaskBundle, run: RunArtifact) -> EvalReport:
         "citation_coverage": _round(citation_coverage),
         "citation_precision": _round(citation_precision),
         "chain_completeness": _round(chain_completeness),
+        "graph_consistency": _round(graph_consistency),
+        "focus_resolution": _round(focus_resolution),
+        "traceability_score": _round(traceability_score),
         "source_diversity": _round(source_diversity),
         "budget_efficiency": _round(budget_efficiency),
         "unsupported_claim_rate": _round(unsupported_claim_rate),

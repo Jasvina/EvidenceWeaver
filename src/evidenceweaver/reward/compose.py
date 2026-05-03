@@ -22,7 +22,7 @@ def compose_reward_bundle(report: EvalReport, weights: RewardWeights | None = No
     answer_score = float(report.metrics.get("answer_coverage", 0.0))
     citation_score = float(report.metrics.get("citation_coverage", 0.0))
     citation_precision = float(report.metrics.get("citation_precision", 0.0))
-    chain_score = float(report.metrics.get("chain_completeness", 0.0))
+    chain_score = float(report.metrics.get("traceability_score", report.metrics.get("chain_completeness", 0.0)))
     diversity_score = float(report.metrics.get("source_diversity", 0.0))
     efficiency_score = float(report.metrics.get("budget_efficiency", 0.0))
     total_score = (
@@ -49,8 +49,12 @@ def reward_notes(report: EvalReport) -> tuple[str, ...]:
         notes.append("citation coverage is still weak")
     if report.metrics.get("chain_completeness", 0.0) < 0.5:
         notes.append("claim chain coverage is incomplete")
+    if report.metrics.get("graph_consistency", 1.0) < 1.0:
+        notes.append("graph contains contradictory claims")
     if report.metrics.get("unsupported_claim_rate", 0.0) > 0.25:
         notes.append("unsupported claim rate is elevated")
+    if report.metrics.get("focus_resolution", 1.0) < 0.5 and report.metrics.get("answer_coverage", 1.0) < 1.0:
+        notes.append("prompt focus remains partially unresolved")
     if report.metrics.get("source_diversity", 0.0) < 0.5:
         notes.append("source diversity is narrow")
     return tuple(notes)

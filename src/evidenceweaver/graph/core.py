@@ -14,6 +14,8 @@ STOPWORDS = {
     "at",
     "be",
     "by",
+    "did",
+    "does",
     "for",
     "from",
     "how",
@@ -30,6 +32,22 @@ STOPWORDS = {
     "what",
     "why",
     "with",
+}
+
+NEGATION_TOKENS = {
+    "cannot",
+    "failed",
+    "fails",
+    "failing",
+    "lack",
+    "lacks",
+    "lacking",
+    "missing",
+    "never",
+    "no",
+    "none",
+    "not",
+    "without",
 }
 
 
@@ -76,6 +94,18 @@ def _jaccard(lhs: set[str], rhs: set[str]) -> float:
     if not union:
         return 0.0
     return len(lhs & rhs) / len(union)
+
+
+def _content_tokens(text: str) -> set[str]:
+    return {token for token in _tokenize(text) if token not in NEGATION_TOKENS}
+
+
+def _has_negation(text: str) -> bool:
+    return bool(set(_tokenize(text)) & NEGATION_TOKENS)
+
+
+def _contradiction_overlap(lhs_text: str, rhs_text: str) -> float:
+    return _jaccard(_content_tokens(lhs_text), _content_tokens(rhs_text))
 
 
 @dataclass(frozen=True, slots=True)
@@ -170,6 +200,24 @@ class EvidenceGraph:
         return tuple(claim_ids)
 
     @property
+    def unsupported_claim_ids(self) -> tuple[str, ...]:
+        return tuple(claim.claim_id for claim in self.claim_nodes if not claim.citations)
+
+    @property
+    def contradicted_claim_ids(self) -> tuple[str, ...]:
+        claim_ids: list[str] = []
+        seen_ids: set[str] = set()
+        claim_node_ids = {claim.claim_id for claim in self.claim_nodes}
+        for edge in self.edges:
+            if edge.kind != "contradicts":
+                continue
+            for claim_id in (edge.from_id, edge.to_id):
+                if claim_id in claim_node_ids and claim_id not in seen_ids:
+                    seen_ids.add(claim_id)
+                    claim_ids.append(claim_id)
+        return tuple(claim_ids)
+
+    @property
     def covered_focus_tokens(self) -> tuple[str, ...]:
         tokens: list[str] = []
         for claim in self.claim_nodes:
@@ -187,6 +235,13 @@ class EvidenceGraph:
     @property
     def opened_source_count(self) -> int:
         return len(self.opened_source_ids)
+
+    @property
+    def edge_counts(self) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for edge in self.edges:
+            counts[edge.kind] = counts.get(edge.kind, 0) + 1
+        return counts
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -304,10 +359,17 @@ class EvidenceGraphBuilder:
                 previous_tokens = set(_tokenize(previous.text))
                 previous_citations = set(previous.citations)
                 token_overlap = _jaccard(current_tokens, previous_tokens)
+                contradiction_overlap = _contradiction_overlap(current.text, previous.text)
                 focus_overlap = set(current.focus_tokens) & set(previous.focus_tokens)
                 citation_overlap = current_citations & previous_citations
                 kind = None
-                if citation_overlap and token_overlap >= 0.65:
+                if (
+                    _has_negation(current.text) != _has_negation(previous.text)
+                    and contradiction_overlap >= 0.6
+                    and (focus_overlap or token_overlap >= 0.45)
+                ):
+                    kind = "contradicts"
+                elif citation_overlap and token_overlap >= 0.65:
                     kind = "duplicates"
                 elif (citation_overlap and focus_overlap) or token_overlap >= 0.35:
                     kind = "derived_from"

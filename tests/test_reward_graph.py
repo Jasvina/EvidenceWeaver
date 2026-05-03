@@ -10,7 +10,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from evidenceweaver.agent.baseline import run_task
 from evidenceweaver.eval.offline import evaluate_run
 from evidenceweaver.graph.analyze import summarize_graph
+from evidenceweaver.graph import EvidenceGraphBuilder
 from evidenceweaver.models import load_task_bundle
+from evidenceweaver.models import Document
 from evidenceweaver.reward.compose import compose_reward_bundle, reward_notes
 
 
@@ -84,6 +86,22 @@ class RewardAndGraphTests(unittest.TestCase):
         payload = json.loads(result.stdout)
         self.assertEqual(payload["task_id"], "agentic-rl-stability-task")
         self.assertIn("prompt_focus_coverage_ratio", payload)
+        self.assertIn("unsupported_claim_ids", payload)
+        self.assertIn("contradicted_claim_ids", payload)
+        self.assertIn("open_question_count", payload)
+
+    def test_graph_builder_detects_contradiction_edges(self) -> None:
+        documents = [
+            Document(doc_id="doc-1", title="Support", url="https://example.com/1", content="Tool use improves reliability."),
+            Document(doc_id="doc-2", title="Challenge", url="https://example.com/2", content="Tool use does not improve reliability."),
+        ]
+        graph = EvidenceGraphBuilder(graph_id="graph-contradiction", prompt="Does tool use improve reliability?", documents=documents)
+        graph.add_claim("claim-1", "Tool use improves reliability.", ("doc-1",))
+        graph.add_claim("claim-2", "Tool use does not improve reliability.", ("doc-2",))
+        built = graph.build()
+        edge_kinds = {edge.kind for edge in built.edges}
+        self.assertIn("contradicts", edge_kinds)
+        self.assertEqual(set(built.contradicted_claim_ids), {"claim-1", "claim-2"})
 
 
 if __name__ == "__main__":

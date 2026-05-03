@@ -55,6 +55,10 @@ class OptimizerTests(unittest.TestCase):
         self.assertIn("missed_claim_ids", best["failure_summary"])
         self.assertIn("unsupported_claim_ids", best["failure_summary"])
         self.assertIn("missing_source_ids", best["failure_summary"])
+        self.assertIn("graph_edge_counts", best["failure_summary"])
+        self.assertIn("open_question_count", best["failure_summary"])
+        self.assertIn("duplicate_edge_count", best["failure_summary"])
+        self.assertIn("contradiction_edge_count", best["failure_summary"])
 
     def test_optimizer_cli_emits_json(self) -> None:
         env = dict(os.environ)

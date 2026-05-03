@@ -51,6 +51,7 @@ The project is now in a **real-example-driven accuracy optimization** stage. The
 - `src/evidenceweaver/eval/offline.py`
   - offline evaluator
   - scored-run emission
+  - traceability-aware graph penalties and notes
 - `src/evidenceweaver/graph/core.py`
   - source nodes
   - claim nodes
@@ -79,6 +80,7 @@ The current test suite covers:
 - provenance coverage for real-case tasks
 
 Latest verified test count: 19 tests.
+Latest verified test count after the current graph-traceability pass: 21 tests.
 
 ## Current Benchmarks
 
@@ -192,7 +194,7 @@ Fixes applied:
 - The optimizer is deterministic and heuristic, not learned.
 - Current scores are still heuristic and the new 12-task suite remains small enough that overfitting risk persists.
 - The evaluator is keyword/citation based and should not be treated as a human-quality reward model.
-- Graph relationships are still heuristic; `contradicts` is not yet implemented.
+- Graph relationships are still heuristic, including a lightweight `contradicts` edge based on overlap plus negation cues.
 - There is no RL trainer integration yet.
 
 ## Recommended Next Optimization Steps

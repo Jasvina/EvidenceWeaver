@@ -13,6 +13,9 @@ artifacts/
 outputs/
 logs/
 tmp/
+build/
+dist/
+*.egg-info/
 
 # OS / editor
 .DS_Store

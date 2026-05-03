@@ -22,6 +22,9 @@ class SuiteTaskMetric:
     missed_claim_ids: tuple[str, ...] = ()
     unsupported_claim_ids: tuple[str, ...] = ()
     missing_source_ids: tuple[str, ...] = ()
+    contradicted_claim_ids: tuple[str, ...] = ()
+    open_question_count: int = 0
+    graph_edge_counts: dict[str, int] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,6 +76,7 @@ def build_suite_task_metric(task, run, report) -> SuiteTaskMetric:
         for doc_id in claim_by_id[claim_id].supported_by
         if doc_id not in cited_doc_ids
     )
+    evidence_graph = run.evidence_graph
     return SuiteTaskMetric(
         task_id=task.task_id,
         overall_score=float(report.metrics["overall_score"]),
@@ -83,6 +87,9 @@ def build_suite_task_metric(task, run, report) -> SuiteTaskMetric:
         missed_claim_ids=missed_claim_ids,
         unsupported_claim_ids=unsupported_claim_ids,
         missing_source_ids=missing_source_ids,
+        contradicted_claim_ids=evidence_graph.contradicted_claim_ids if evidence_graph is not None else (),
+        open_question_count=len(evidence_graph.open_questions) if evidence_graph is not None else 0,
+        graph_edge_counts=evidence_graph.edge_counts if evidence_graph is not None else {},
     )
 
 
@@ -137,12 +144,21 @@ def failure_summary(result: ConfigEvaluation) -> dict[str, object]:
         recommendations.append("increase answer coverage with task-family-aware follow-up search or broader first-pass retrieval")
     if weakest.citation_coverage < 1.0:
         recommendations.append("improve citation coverage by ensuring each major claim is grounded in at least one selected document")
+    if weakest.open_question_count > 0:
+        recommendations.append("close remaining graph open questions with a more targeted follow-up search query")
+    if weakest.contradicted_claim_ids:
+        recommendations.append("review contradictory claims and tighten claim selection before turning overlaps into final answers")
     return {
         "weakest_task_id": weakest.task_id,
         "weakest_task_score": weakest.overall_score,
         "missed_claim_ids": list(weakest.missed_claim_ids),
         "unsupported_claim_ids": list(weakest.unsupported_claim_ids),
         "missing_source_ids": list(weakest.missing_source_ids),
+        "contradicted_claim_ids": list(weakest.contradicted_claim_ids),
+        "open_question_count": weakest.open_question_count,
+        "graph_edge_counts": dict(weakest.graph_edge_counts or {}),
+        "duplicate_edge_count": int((weakest.graph_edge_counts or {}).get("duplicates", 0)),
+        "contradiction_edge_count": int((weakest.graph_edge_counts or {}).get("contradicts", 0)),
         "recommendations": recommendations,
     }
 

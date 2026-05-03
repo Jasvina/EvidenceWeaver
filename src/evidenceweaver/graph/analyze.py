@@ -16,10 +16,6 @@ def summarize_graph(run: RunArtifact) -> dict[str, object]:
             "notes": ["run artifact does not include evidence_graph"],
         }
 
-    edge_counts: dict[str, int] = {}
-    for edge in run.evidence_graph.edges:
-        edge_counts[edge.kind] = edge_counts.get(edge.kind, 0) + 1
-
     return {
         "run_id": run.run_id,
         "task_id": run.task_id,
@@ -28,11 +24,14 @@ def summarize_graph(run: RunArtifact) -> dict[str, object]:
         "opened_source_ids": list(run.evidence_graph.opened_source_ids),
         "claim_count": len(run.evidence_graph.claim_nodes),
         "supported_claim_ids": list(run.evidence_graph.supported_claim_ids),
+        "unsupported_claim_ids": list(run.evidence_graph.unsupported_claim_ids),
+        "contradicted_claim_ids": list(run.evidence_graph.contradicted_claim_ids),
         "prompt_focus": list(run.evidence_graph.prompt_focus),
         "covered_focus_tokens": list(run.evidence_graph.covered_focus_tokens),
         "prompt_focus_coverage_ratio": round(run.evidence_graph.prompt_focus_coverage_ratio, 4),
+        "open_question_count": len(run.evidence_graph.open_questions),
         "open_questions": [question.text for question in run.evidence_graph.open_questions],
-        "edge_counts": edge_counts,
+        "edge_counts": run.evidence_graph.edge_counts,
         "diagnostics": run.diagnostics.to_dict() if run.diagnostics is not None else None,
         "reward_bundle": run.reward_bundle.to_dict() if run.reward_bundle is not None else None,
     }

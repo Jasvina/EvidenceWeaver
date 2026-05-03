@@ -62,7 +62,7 @@ Now / Next / Later:
 
 - `Baseline agent` - deterministic search-read-write loop that emits `run-artifact.v0` JSON
 - `Evidence graph` - explicit source, claim, duplicate, support, and open-question structure
-- `Offline evaluator` - decomposed scoring for answer quality and citation quality
+- `Offline evaluator` - decomposed scoring for answer quality, citation quality, and traceability
 - `Reward composition` - inspectable reward bundle construction from evaluation metrics
 - `Benchmarks` - `snapshot_v0` plus a twelve-task `real_cases_v1` tuning suite
 - `Open-source surface` - static landing page, CI, Pages deployment, issue templates, PR template, changelog, conduct, and security policy
@@ -156,7 +156,7 @@ The long-term system has six core layers:
 | `Agent` | plans, searches, reads, writes | the policy we want to improve |
 | `Environment` | exposes search, browse, snapshot, and evaluation tools | long-horizon behavior needs realistic interaction |
 | `Evidence graph` | stores claims, evidence, support, contradiction, and open gaps | helps the agent reason over structure instead of raw text blobs |
-| `Reward server` | scores correctness, citation quality, chain completeness, diversity, and budget use | makes agentic RL more informative and controllable |
+| `Reward server` | scores correctness, citation quality, traceability, diversity, and budget use | makes agentic RL more informative and controllable |
 | `Trainer` | runs online or hybrid RL | connects environment outcomes back to the policy |
 | `Evaluator` | measures answer quality and evidence quality separately | keeps the project honest |
 
@@ -210,7 +210,7 @@ That first version is intentionally modest. The goal is not to solve all agentic
 - [x] Build a simple search-read-write agent loop
 - [ ] Implement evidence graph memory
 - [ ] Implement citation grounding reward
-- [x] Add offline evaluation for answer quality and citation quality
+- [x] Add offline evaluation for answer quality, citation quality, and traceability
 - [ ] Publish first reproducible baseline trajectories
 
 ### Phase 2 - Agentic RL
@@ -340,6 +340,7 @@ The run artifact now also includes `diagnostics`, including:
 The graph layer also now emits simple claim-to-claim relationship edges:
 
 - `supports`
+- `contradicts`
 - `derived_from`
 - `duplicates`
 

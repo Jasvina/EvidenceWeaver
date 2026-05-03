@@ -81,7 +81,7 @@ Current repository status:
 
 - implemented as `src/evidenceweaver/graph/`
 - current node types are `SourceNode`, `ClaimNode`, and `OpenQuestion`
-- current edge types implemented are `supports`, `derived_from`, and `duplicates`
+- current edge types implemented are `supports`, `contradicts`, `derived_from`, and `duplicates`
 - the baseline agent already emits an `evidence_graph` inside `run-artifact.v0`
 - the baseline agent now uses `open_questions` to drive a follow-up search iteration when budget allows
 
@@ -109,6 +109,7 @@ Current repository status:
 - reward composition now also lives in `src/evidenceweaver/reward/compose.py`
 - the baseline agent attaches a reward bundle automatically after self-evaluation
 - the evaluator CLI can also emit a scored copy of any run via `--emit-scored-run`
+- `chain_score` now follows traceability-aware scoring when graph contradiction signals are present
 
 ## 5. Evaluator Interface
 
@@ -143,6 +144,7 @@ Current repository status:
 - `run-artifact.v0` now also supports `diagnostics`
 - the baseline agent writes all three fields
 - `python -m evidenceweaver.graph.analyze <run.json>` can summarize graph structure, coverage, and diagnostics from a saved artifact
+- `EvalReport.metrics` now also surfaces `graph_consistency`, `focus_resolution`, and `traceability_score`
 
 If these artifacts are easy to read, the project will be much easier to debug and much easier to trust.
 

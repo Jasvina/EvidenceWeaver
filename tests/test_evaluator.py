@@ -7,8 +7,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from evidenceweaver.eval.offline import evaluate_paths
-from evidenceweaver.models import load_run_artifact, load_task_bundle
+from evidenceweaver.eval.offline import evaluate_paths, evaluate_run
+from evidenceweaver.graph import EvidenceGraphBuilder
+from evidenceweaver.models import RunArtifact, load_run_artifact, load_task_bundle
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +54,35 @@ class EvaluatorTests(unittest.TestCase):
         payload = json.loads(result.stdout)
         self.assertEqual(payload["task_id"], "synthetic-delay-task")
         self.assertIn("overall_score", payload["metrics"])
+
+    def test_graph_contradictions_reduce_traceability_score(self) -> None:
+        task = load_task_bundle(TASK_PATH)
+        good_run = load_run_artifact(GOOD_RUN_PATH)
+        base_report = evaluate_paths(TASK_PATH, GOOD_RUN_PATH)
+
+        graph = EvidenceGraphBuilder(graph_id="graph-contradiction", prompt=task.prompt, documents=task.documents)
+        graph.add_claim("claim-1", "The delay is caused by synchronous audit writes.", ("doc-1",))
+        graph.add_claim("claim-2", "The delay is not caused by synchronous audit writes.", ("doc-2",))
+        contradictory_run = RunArtifact(
+            schema_version=good_run.schema_version,
+            run_id=f"{good_run.run_id}-contradiction",
+            task_id=good_run.task_id,
+            answer=good_run.answer,
+            claims=good_run.claims,
+            actions=good_run.actions,
+            final_citations=good_run.final_citations,
+            evidence_graph=graph.build(),
+            diagnostics=good_run.diagnostics,
+            reward_bundle=good_run.reward_bundle,
+        )
+
+        contradictory_report = evaluate_run(task, contradictory_run)
+
+        self.assertEqual(base_report.metrics["graph_consistency"], 1.0)
+        self.assertLess(contradictory_report.metrics["graph_consistency"], 1.0)
+        self.assertLess(contradictory_report.metrics["traceability_score"], base_report.metrics["traceability_score"])
+        self.assertLess(contradictory_report.metrics["overall_score"], base_report.metrics["overall_score"])
+        self.assertIn("contradictory claims", " ".join(contradictory_report.notes))
 
 
 if __name__ == "__main__":
