@@ -43,7 +43,7 @@ class RepositorySurfaceTests(unittest.TestCase):
         real_case_task_count = len(list((REPO_ROOT / "benchmarks" / "real_cases_v1" / "tasks").glob("*.json")))
         snapshot_task_count = len(list((REPO_ROOT / "benchmarks" / "snapshot_v0" / "tasks").glob("*.json")))
         total_task_count = real_case_task_count + snapshot_task_count
-        test_count = sum(path.read_text(encoding="utf-8").count("def test_") for path in (REPO_ROOT / "tests").glob("test_*.py"))
+        test_count = unittest.defaultTestLoader.discover(str(REPO_ROOT / "tests")).countTestCases()
         best_score = json.loads((REPO_ROOT / "benchmarks" / "real_cases_v1" / "results" / "baseline_sweep.json").read_text(encoding="utf-8"))[
             "best_config"
         ]["average_overall_score"]
